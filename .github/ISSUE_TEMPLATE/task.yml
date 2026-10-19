@@ -1,0 +1,28 @@
+name: Task
+description: One piece of work a person or an agent can take on.
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What to do
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      description: What exists when this is finished, such as a file, a table or a certificate.
+    validations:
+      required: true
+  - type: textarea
+    id: check
+    attributes:
+      label: How the result is checked
+      description: How someone else can confirm it, ideally by re-running a command.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Sources, related issues and earlier results.
