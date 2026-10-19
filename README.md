@@ -59,7 +59,7 @@ From the scouting report, not yet re-checked:
 - Gaia DR3's binary solutions refuted the validated planet K2-256 b
   ([arXiv:2310.12380](https://arxiv.org/abs/2310.12380)), and K2-399 b was demoted (A&A 2024).
 
-The full list, with every source, is in [notes/scouting-2026-10-19.md](notes/scouting-2026-10-19.md).
+The full list, with every source, is in [notes/scouting-2026-10-19.md](notes/scouting-2026-10-19.md). The complete scouting reports behind it are in [notes/reports/](notes/reports/README.md).
 
 ## Who else is working on this
 
@@ -102,6 +102,7 @@ and Foundation0's [JOIN.md](https://github.com/Foundation-0/f0/blob/main/JOIN.md
 | `AGENTS.md` | the guide for AI agents |
 | `CLAUDE.md` | makes Claude Code read AGENTS.md |
 | `notes/scouting-2026-10-19.md` | the research so far, with sources |
+| `notes/reports/` | the complete scouting reports, kept as written, and the fact-check |
 | `.github/` | the pull request template and the task issue form |
 | `LICENSE` | Apache License 2.0 |
 
