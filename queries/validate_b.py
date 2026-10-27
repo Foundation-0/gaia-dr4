@@ -223,6 +223,15 @@ def report():
         kept = sum(1 for r in tin if bc.passes_bcut(r["phot_g_mean_mag"], r["bp_rp"]))
         out("| %.1f to %.1f | %d | %.2f | %.2f | %+.2f | %.2f | %d of %d |" % (
             lo, hi, len(sel), bg[0], bg[len(bg) // 2], s2["mean"], s2["std"], kept, len(tin)))
+    # The margin for very red stars rests on the smallest B - G. Show it over every sample star that is
+    # that red, from both sets, and from the main sample alone.
+    very_red = [r for r in allrows if r["role"] in ("test", "train", "redbright") and r["bp_rp"] >= 2.5]
+    main_red = [r for r in very_red if r["role"] in ("test", "train")]
+    bg_all = sorted(r["bmag"] - r["phot_g_mean_mag"] for r in very_red)
+    bg_main = sorted(r["bmag"] - r["phot_g_mean_mag"] for r in main_red)
+    out("\nSmallest B - G over all %d sample stars with BP-RP 2.5 and above (main sample and bright red set): "
+        "%.2f. Smallest in the main sample alone (%d stars): %.2f. This sets MIN_B_MINUS_G_VERY_RED in "
+        "b_conversion.py." % (len(bg_all), bg_all[0], len(bg_main), bg_main[0]))
     with open(os.path.join(RESULTS, "b_validation.md"), "w") as f:
         f.write("\n".join(lines) + "\n")
     print("\n".join(lines))

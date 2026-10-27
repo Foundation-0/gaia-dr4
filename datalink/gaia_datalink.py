@@ -302,19 +302,46 @@ FATAL_PHRASES = (
 )
 
 
+OWNER_BLOCK = "UwsJobOwner{"
+# Fields that can name or locate a caller. They are removed wherever they appear, not only inside the owner block.
+PERSONAL_FIELD = re.compile(r"\b(name|mail|authUsername|pseudo|authGroups|session|ip)="
+                            r"(?:'[^']*'|\"[^\"]*\"|\[[^\]]*\]|[^\s,;)}\]]+)")
+
+
+def _cut_owner_blocks(txt):
+    """Replace each UwsJobOwner{...} block with a marker. Braces are counted, so a nested brace does not end
+    the block early. A block with no closing brace (cut off) is removed to the end of the text."""
+    out, i = [], 0
+    while True:
+        j = txt.find(OWNER_BLOCK, i)
+        if j < 0:
+            out.append(txt[i:])
+            return "".join(out)
+        out.append(txt[i:j] + "UwsJobOwner{<removed>}")
+        depth, k = 1, j + len(OWNER_BLOCK)
+        while k < len(txt) and depth:
+            if txt[k] == "{":
+                depth += 1
+            elif txt[k] == "}":
+                depth -= 1
+            k += 1
+        i = k
+
+
 def scrub_personal(txt):
     """Remove what could name or locate the caller from an archive message.
 
     The archive's error pages carry a block `UwsJobOwner{id=..., name=..., mail=..., session=..., ip=...}`
     and a request ID `Reqid: <user>-<uuid>`. For anonymous users the values are 'null' or 'anonymous'.
     For a signed-in user they probably hold real values. Whether they do was NOT checked (no account was
-    used), so the whole block and the whole request ID are removed, and so is any e-mail address.
+    used). So the whole block is removed, and so is each personal field (name, mail, user name, groups,
+    session, address) wherever it appears, the whole request ID, and any e-mail address.
+    Checked on synthetic pages only (see test_gaia_datalink.py).
     """
-    txt = re.sub(r"UwsJobOwner\{[^}]*(\}|$)", "UwsJobOwner{<removed>}", txt)
+    txt = _cut_owner_blocks(txt)
     txt = re.sub(r"Reqid: [^\s,;)\]}]+", "Reqid: <removed>", txt)
     txt = re.sub(r"(?i)\bfor user:? (?!UwsJobOwner)[^\s,;}]+", "for user: <removed>", txt)
-    txt = re.sub(r"ip='[^']*'", "ip='<removed>'", txt)
-    txt = re.sub(r"session='[^']*'", "session='<removed>'", txt)
+    txt = PERSONAL_FIELD.sub(lambda m: m.group(1) + "=<removed>", txt)
     txt = re.sub(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+", "<removed>", txt)
     return txt
 
@@ -693,7 +720,8 @@ class Fetcher:
         self._next_start = 0.0
         self._cooldown_until = 0.0
         self.requests = 0
-        self.bad_streak = 0
+        self.bad_streak = 0          # failed requests and unusable answers in a row (see _answer_bad)
+        self.check_reasons = {}      # source ID -> why its file failed the checks, for the 'failed' log line
         self.counts = collections.Counter()
         self.rows = 0
         self.request_seconds = []
@@ -752,9 +780,26 @@ class Fetcher:
                     self.stop.set()
                     raise Aborted("%d requests in a row failed; the service looks unavailable. "
                                   "Start the same command later to resume." % self.bad_streak)
-            elif outcome.kind in ("data", "empty"):
-                self.bad_streak = 0
+            elif outcome.kind == "empty":
+                self.bad_streak = 0  # an empty answer is a valid answer. A data answer counts only once it is accepted
         return resp, outcome
+
+    def _answer_bad(self, why):
+        """An answer came back but could not be used. It counts like a failed request: after `abort_after` in a
+        row the run stops, because the archive is down or its files no longer look as expected."""
+        with self._lock:
+            self.bad_streak += 1
+            streak = self.bad_streak
+        self.log.warning("unusable answer, %d in a row: %s", streak, why)
+        if streak >= self.cfg.abort_after:
+            self.stop.set()
+            raise Aborted("%d answers in a row were unusable (failed requests, or files that failed their checks). "
+                          "If the files are the problem, check rejected/ and the release. Otherwise start the same "
+                          "command later to resume." % streak)
+
+    def _answer_good(self):
+        with self._lock:
+            self.bad_streak = 0
 
     def _backoff(self, attempt, outcome):
         """Set a cool-down for all workers: exponential, with jitter, at least Retry-After, at most max_wait."""
@@ -810,9 +855,14 @@ class Fetcher:
                     again, absent = self._accept(pending, resp, second_look)
                 except ValidationError as e:
                     self.store.keep_rejected(pending, resp.body, str(e))
+                    self._answer_bad("the whole answer failed its checks: %s" % e)
                     outcome = Outcome("retry", "invalid answer: %s" % e)
                     k = "retry"
                 else:
+                    if again:
+                        self._answer_bad("%d sources failed their checks" % len(again))
+                    else:
+                        self._answer_good()
                     if absent:  # missing from a non-empty answer: ask for them once more before calling it "no data"
                         self.fetch_ids(absent, second_look=True)
                     pending = again
@@ -869,7 +919,7 @@ class Fetcher:
                     info = check_standard_csv(parts[sid], sid, self.profile)
                 except ValidationError as e:
                     self.store.keep_rejected([sid], parts[sid], str(e))
-                    self.log.warning("source %s failed its checks: %s", sid, e)
+                    self._failed_check(sid, e)
                     again.append(sid)
                     continue
                 self._record_ok(sid, parts[sid], info, resp, len(pending))
@@ -881,17 +931,19 @@ class Fetcher:
             for sid in pending:
                 if sid not in rows:
                     continue
-                try:
-                    info = check_gaia_row(header, rows[sid], sid, self.profile)
-                except ValidationError as e:
-                    self.log.warning("source %s failed its checks: %s", sid, e)
-                    again.append(sid)
-                    continue
                 buf = io.StringIO()
                 w = csv.writer(buf, lineterminator="\n")
                 w.writerow(header)
                 w.writerow(rows[sid])
-                self._record_ok(sid, buf.getvalue().encode("utf-8"), info, resp, len(pending))
+                data = buf.getvalue().encode("utf-8")  # this source's row as a one-row CSV, the same as a saved file
+                try:
+                    info = check_gaia_row(header, rows[sid], sid, self.profile)
+                except ValidationError as e:
+                    self.store.keep_rejected([sid], data, str(e))
+                    self._failed_check(sid, e)
+                    again.append(sid)
+                    continue
+                self._record_ok(sid, data, info, resp, len(pending))
         # Sources missing from a non-empty answer have no epoch photometry.
         got = set(parts) if self.cfg.structure == "DATAMODEL_STANDARD" else set(rows)
         absent = [s for s in pending if s not in got]
@@ -902,18 +954,27 @@ class Fetcher:
             absent = []
         return again, absent
 
+    def _failed_check(self, sid, err):
+        self.log.warning("source %s failed its checks: %s", sid, err)
+        with self._lock:
+            self.check_reasons[sid] = str(err)
+
     def _record_ok(self, sid, data, info, resp, batch_size):
         rel, path = self.store.source_file(self.cfg.release, self.cfg.structure, sid)
         self.store.save_atomic(path, data)
         self._source_event(sid, "ok", resp, batch_size, file=rel, bytes=len(data),
                            sha256=hashlib.sha256(data).hexdigest(), **info)
         with self._lock:
+            self.check_reasons.pop(sid, None)
             self.counts["ok"] += 1
             self.rows += info["rows"]
 
     def _record_all(self, ids, status, resp, message, batch_size=None):
         for sid in ids:
-            self._source_event(sid, status, resp, batch_size or len(ids), message=message)
+            msg = message
+            if status == "failed" and sid in self.check_reasons:  # say why its file was refused, not only that it was
+                msg = "%s (last check: %s)" % (message, self.check_reasons[sid])
+            self._source_event(sid, status, resp, batch_size or len(ids), message=msg)
         with self._lock:
             self.counts[status] += len(ids)
 
@@ -980,8 +1041,12 @@ class Fetcher:
 # Reading ID files, checking a finished run, the command line
 # --------------------------------------------------------------------------
 
-def read_ids(path):
-    """Gaia source IDs from a text or CSV file. Accepts 123, 'Gaia DR3 123', and a CSV with a source_id column."""
+def read_ids(path, release="Gaia DR3"):
+    """Gaia source IDs from a text or CSV file. Accepts 123, 'Gaia DR3 123', and a CSV with a source_id column.
+
+    A designation that names another release ('Gaia DR2 123' in a DR3 run) is refused. Otherwise the
+    number would be fetched from the wrong release without any warning.
+    """
     ids, seen = [], set()
     with open(path, newline="") as f:
         lines = [ln.strip() for ln in f if ln.strip() and not ln.lstrip().startswith("#")]
@@ -992,12 +1057,16 @@ def read_ids(path):
             raise ValueError("the first line is not an ID and not a CSV header with a source_id column")
         column = header.index("source_id")
         lines = lines[1:]
+    run_dr = release.split()[-1].upper()  # 'DR3' for 'Gaia DR3'
     for ln in lines:
         raw = next(csv.reader([ln]))[column] if column is not None else ln
-        m = re.fullmatch(r"(?:Gaia\s+DR\d\s+)?(\d{1,19})", raw.strip(), flags=re.I)
-        if not m or not 0 < int(m.group(1)) < 2 ** 63:
+        m = re.fullmatch(r"(?:Gaia\s+(DR\d)\s+)?(\d{1,19})", raw.strip(), flags=re.I)
+        if not m or not 0 < int(m.group(2)) < 2 ** 63:
             raise ValueError("not a Gaia source ID: %r" % raw[:40])
-        sid = str(int(m.group(1)))
+        if m.group(1) and m.group(1).upper() != run_dr:
+            raise ValueError("%r is a %s designation, but this run is for %s (--release). "
+                             "Use IDs of that release, or a plain number." % (raw[:40], m.group(1).upper(), release))
+        sid = str(int(m.group(2)))
         if sid not in seen:
             seen.add(sid)
             ids.append(sid)
@@ -1027,7 +1096,9 @@ def check_run(out, release, structure):
             if structure == "DATAMODEL_STANDARD":
                 check_standard_csv(data, sid, profile)
             else:
-                rows = list(csv.reader(io.StringIO(data.decode("utf-8"), newline="")))
+                rows = read_csv_rows(data.decode("utf-8"))  # a cell the csv module cannot read is a problem, not a crash
+                if len(rows) != 2:
+                    raise ValidationError("expected a header and one row, found %d lines" % len(rows))
                 check_gaia_row(rows[0], rows[1], sid, profile)
             ok += 1
         except (ValidationError, IndexError, UnicodeDecodeError) as ex:
@@ -1087,7 +1158,9 @@ def main(argv=None):
                      timeout=args.timeout, max_requests=args.max_requests, retry_no_data=args.retry_no_data,
                      confirm_empty=not args.no_second_look, confirm_missing=not args.no_second_look,
                      slots_dir=args.slots_dir, max_ids=max_ids)
-        ids = read_ids(args.ids_file)
+        ids = read_ids(args.ids_file, args.release)
+        if not ids:
+            raise ValueError("the file holds no source IDs")
     except (ValueError, OSError) as e:
         print("error: %s" % e, file=sys.stderr)
         return 3
@@ -1122,7 +1195,14 @@ def main(argv=None):
     if err:
         print("stopped: %s" % err, file=sys.stderr)
         return 4
-    return 2 if summary["failed"] else 0
+    if summary["failed"]:
+        return 2
+    if summary["sources_asked"] > 5 and summary["ok"] == 0 and summary["already_done_before_run"] == 0:
+        # Not an error in the log, but a wrong release or wrong IDs look exactly like this, so say so.
+        print("warning: none of the %d sources has data in %s (%s). Check the IDs and --release."
+              % (summary["sources_asked"], cfg.release, cfg.structure), file=sys.stderr)
+        return 5
+    return 0
 
 
 if __name__ == "__main__":

@@ -315,9 +315,10 @@ ORDER BY pt.source_id""".format(select=PT_SELECT, frm=PT_FROM),
     "Whether the DR3-to-DR4 ID mapping finds the same stars.")
 
 add("flags_in_cone", "template",
-    "Question B support. Every Gaia source in a circle (a TESS aperture) with its variability flag, and its eclipsing-binary and "
-    "planetary-transit rows if it has them. Replace @RA@ and @DEC@ (degrees, ICRS) and @RADIUS_DEG@ (degrees; "
-    "one TESS pixel is 21 arcseconds, 0.00583 degrees).",
+    "Question B support. Every Gaia source in a circle with its variability flag, and its eclipsing-binary and "
+    "planetary-transit rows if it has them. Replace @RA@ and @DEC@ (degrees, ICRS) and @RADIUS_DEG@ (degrees). "
+    "The run used 0.0175 degrees (63 arcseconds, three TESS pixels of 21 arcseconds each). A real TESS aperture "
+    "is not a circle of that size and needs its own radius.",
     """SELECT
     gs.source_id,
     gs.ra,
@@ -415,13 +416,24 @@ def relied_on(body):
     return {t: sorted(c) for t, c in found.items()}
 
 
+WRAP_WIDTH = 118
+WRAP_PREFIX = "--   "
+
+
 def wrap(lines):
+    """Break comment lines longer than WRAP_WIDTH. Breaks at the last space that comes after the
+    prefix of a continuation line. A word with no such space is cut at WRAP_WIDTH, so the loop always
+    gets shorter and cannot hang."""
     out = []
     for text in lines:
-        while len(text) > 118:
-            cut = text.rfind(" ", 0, 118)
-            out.append(text[:cut])
-            text = "--   " + text[cut + 1:]
+        while len(text) > WRAP_WIDTH:
+            cut = text.rfind(" ", len(WRAP_PREFIX), WRAP_WIDTH)
+            if cut < 0:
+                out.append(text[:WRAP_WIDTH])
+                text = WRAP_PREFIX + text[WRAP_WIDTH:]
+            else:
+                out.append(text[:cut])
+                text = WRAP_PREFIX + text[cut + 1:]
         out.append(text)
     return out
 

@@ -40,13 +40,13 @@ PAUSE = 1.5
 
 
 def read_sources():
-    """First three 'regular' sources of the test list."""
+    """The 'pool' sources of the test list (see select_sources.py for what the role means)."""
     ids = []
     with open(os.path.join(HERE, "sources", "test_sources.csv")) as f:
         next(f)
         for line in f:
             role, sid = line.split(",")[:2]
-            if role == "regular":
+            if role == "pool":
                 ids.append(sid)
     return ids
 
@@ -103,7 +103,7 @@ def groups(ids):
               ("n051_a", pool[61:112]), ("n100_a", pool[0:100]), ("n200_a", pool[0:200]),
               ("n010_b", pool[61:71]), ("n050_b", pool[100:150])]
     roles = read_roles()
-    reg, noep, fake = roles["regular"], roles["no_epoch"], roles["not_found"]
+    reg, noep, fake = roles["pool"], roles["no_epoch"], roles["not_found"]
     g["failure"] = [
         ("fail_no_epoch_single", req(ID=noep[0], FORMAT="CSV", DATA_STRUCTURE=ds)),
         ("fail_not_found_single", req(ID=fake[0], FORMAT="CSV", DATA_STRUCTURE=ds)),

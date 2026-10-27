@@ -12,8 +12,16 @@ Line through all requests with data: seconds = 1.25 + 0.0342 * rows  (41 request
 Line against number of IDs:          seconds = 0.19 + 1.41 * ids  (R squared 0.932)
 Seconds per ID in requests of 10 or more: median 1.43, range 1.15 to 2.46
 Rows per ID in these answers: mean 37.3 (12505 rows, 335 IDs)
+Different IDs among these requests: 175 (the same IDs were asked for in several runs)
 
 Requests that came back empty (no epoch photometry): 12, median 0.65 s, range 0.54 to 0.90 s
+
+The same 10-ID batches with one job and with two (run40_b10_j1, run40_b10_j2, answers with data):
+   12.1 s with 1 job,  12.9 s with 2 jobs:  +6.8 %
+   13.7 s with 1 job,  14.2 s with 2 jobs:  +4.1 %
+   16.1 s with 1 job,  17.8 s with 2 jobs: +10.8 %
+   22.2 s with 1 job,  24.6 s with 2 jobs: +11.2 %
+  median change +8.8 %, range +4.1 % to +11.2 %
 
 Whole runs (wall-clock seconds, including pauses and the second look for missing sources):
 run                structure           jobs  batch sources   ok  requests  seconds sources/min

@@ -12,7 +12,9 @@ DR4, which does not exist yet. The DR4 names come from ESA's draft data model of
 | Date | What happens |
 |---|---|
 | Wednesday 25 November 2026, 12:00 CET | The Gaia ESA Archive goes down until DR4. |
-| Wednesday 2 December 2026, about 12:00 CET | DR4 is released and the archive reopens. |
+| Wednesday 2 December 2026, 12:00 CET | DR4 is released and the archive reopens. |
+
+Both dates come from ESA's news item "Advance warning: Gaia ESA Archive downtime", posted 8 October 2026, on the [Gaia news page](https://www.cosmos.esa.int/web/gaia/news-2026), read on 27 October 2026. A TU Dresden notice ([news item](https://tu-dresden.de/bu/umwelt/geo/ipg/astro/observatorium/news/gaia-data-release-4), read on 27 October 2026) gives the same 12:00 CET time for 2 December.
 
 ## Reproduce
 
@@ -36,7 +38,7 @@ python3 -I build_column_map.py               # column_map.tsv
 The rest:
 
 ```sh
-python3 -m unittest discover                 # 50 tests, no network
+python3 -m unittest discover                 # 59 tests, no network
 python3 -I run_dr3_checks.py                 # run the 17 DR3 stand-ins, anonymous, one request at a time
 python3 -I run_dr3_checks.py --verify        # ask again, bypass the cache, compare answers (all 21 were the same)
 python3 -I check_columns.py dr3 --live       # every table and column in dr3/ exists in the live archive
@@ -77,20 +79,19 @@ their model (model type ELLIPSOIDAL, no eclipse phase). The count in DR4 may dif
 span almost twice as long. That cannot be tested before release.
 
 **Model types** among the 2,588: TWOGAUSSIANS 2,037, ONEGAUSSIAN_WITH_ELLIPSOIDAL 92, ELLIPSOIDAL 82, ONEGAUSSIAN 75,
-and 302 more with a Gaussian plus an ellipsoidal term. Two Gaussians means two eclipses per orbit are modelled.
+TWOGAUSSIANS_WITH_ELLIPSOIDAL_ON_ECLIPSE1 152 and TWOGAUSSIANS_WITH_ELLIPSOIDAL_ON_ECLIPSE2 150 (two Gaussians and a half-period cosine term, as the draft data model names them). Two Gaussians means two eclipses per orbit are modelled.
 
 **Can an eclipse time be carried back to the Harvard plates (1890 to 1989)?** Only with difficulty on DR3 data. The error on the phase of an
-eclipse after `dt` days is about `dt * frequency_error` cycles. This uses the formal error and ignores aliasing, so it is a lower bound.
-Carried back to 1950 (24,106 days), only 345 of the 2,588 stars (17 of the 86 after the B cut) have a phase error under
-0.1 cycle. Back to 1890 it is 258 (11 of 86). The median error at 1950 is 0.67 cycle. DR4's longer span should shrink these errors.
+eclipse after `dt` days is about `dt * frequency_error` cycles. `dt` is counted from each star's own `reference_time` to 1 January of the plate year. This uses the formal error and ignores aliasing, so it is a lower bound.
+Carried back to 1950 (about 24,200 days, from 23,700 to 24,600 by star), only 344 of the 2,588 stars (17 of the 86 after the B cut) have a phase error under
+0.1 cycle. Back to 1890 it is 258 (11 of 86). The median error at 1950 is 0.68 cycle. Counting every star from 2016.0 instead, as the first run did, gives 0.67 and 345 stars; the per-star count is the one reported. DR4's longer span should shrink these errors.
 By how much is not known until DR4.
 
 **Do the table's columns predict the eclipse in the star's own light curve?** On the 10 brightest DR3 stars that meet fixed rules
-([results/ephemeris_check.md](results/ephemeris_check.md)), the predicted primary-eclipse window is among the faintest 20% of
-50 windows for 8 stars with the table's phase and for 1 star with the sign reversed (chance: 2.2). The median rank is 6 against 25. This supports
+([results/ephemeris_check.md](results/ephemeris_check.md)), the predicted primary-eclipse window is among the 11 faintest of 50 windows (22%) for 8 stars with the table's phase and for 1 star with the sign reversed. Chance alone gives 2.2 stars of 10 in that range. The median rank is 6 against 25. This supports
 the convention below, including the sign. It is a weak test: each window holds few points and the dimming rests on one or two visits.
 
-**Transit table (DR3, 214 rows).** Periods run from 0.51 to 32.9 days. 66 of the 214 are between 0.6 and 1.0 day.
+**Transit table (DR3, 214 rows).** Periods run from 0.51 to 32.9 days. 66 of the 214 are in the quarter-decade bin from 0.56 to 1.00 day (bin edges are powers of ten, 10^-0.25 to 10^0), and 55 are between 0.6 and 1.0 day.
 Every candidate has a `gaia_source` row. The neighbourhood stand-in returns 218 rows for 214 candidates, so some have two.
 
 ## The queries
@@ -117,7 +118,7 @@ that stood in, the DR4 columns relied on, the last error-free DR3 run with its r
 | `pt_candidates` | the 1,007 candidates with transit time, period, duration, depth, and `gaia_source` columns | 214 |
 | `pt_candidates_neighbours` | the same, with the table that links IDs between releases | 218 |
 | `pt_by_source_ids` | the same columns for a list of source IDs (template) | 5 |
-| `flags_in_cone` | question B: every source in a circle (a TESS aperture) with its variability flag and its binary and transit rows (template) | 2 |
+| `flags_in_cone` | question B: every source in a circle with its variability flag and its binary and transit rows (template). The DR3 run used a circle of 0.0175 degrees (63 arcseconds, three TESS pixels). A real TESS aperture needs its own radius | 2 |
 | `dr4_only/eb_long_period_all_source` | question C fallback, DR4 only: position and magnitudes from `all_source_astrometry` and `all_source_photometry` | not testable |
 
 Templates contain `@...@` words (`@SOURCE_IDS@`, `@RA@`, `@DEC@`, `@RADIUS_DEG@`) to fill in. `run_dr3_checks.py` fills them from earlier answers.
@@ -173,8 +174,8 @@ Gaia does not measure Johnson B. The Harvard plates and DASCH use B-like magnitu
 **Method A, the published chain** (used by the queries):
 
 1. V = G - f(BP-RP), where `f = -0.02704 + 0.01424 c - 0.2156 c^2 + 0.01426 c^3` and `c = BP-RP`.
-   Riello et al. 2021, [A&A 649, A3](https://arxiv.org/abs/2012.01916), Table C.2. Valid for -0.5 < c < 5.0. Published scatter 0.030 mag.
-2. The Tycho-2 colour `BT - VT` is `(G - VT) - (G - BT)`, two more relations of the same table, valid for -0.3 < c < 3.0 (scatter 0.054 and 0.071 mag).
+   Riello et al. 2021, [A&A 649, A3](https://arxiv.org/abs/2012.01916), coefficients in Table 8 of Appendix C of the arXiv version (the A&A table number was not checked). Valid for -0.5 < c < 5.0. Published scatter 0.030 mag. The validity ranges are in Table 7 of the same appendix (arXiv version).
+2. The Tycho-2 colour `BT - VT` is `(G - VT) - (G - BT)`, from two more relations of the same table: `G - VT` is valid for -0.35 < c < 4.0 (scatter 0.054 mag) and `G - BT` for -0.3 < c < 3.0 (scatter 0.071 mag).
 3. B - V = 0.850 (BT - VT). ESA SP-1200 (1997), section 2.2, Eq. 2.2.2
    ([ESA document](https://www.cosmos.esa.int/documents/532822/553204/sect2_02.pdf/9f2b5393-bc66-4480-89d2-88200aecf5c8)). ESA states it for
    -0.2 < BT - VT < 1.8, with a systematic error up to 0.05 mag, for unreddened main-sequence stars.
@@ -207,29 +208,41 @@ For BP-RP below 2.0 method A is within 0.2 mag of APASS for every test star (lar
 
 **Where it fails.**
 
-- **BP-RP 2.5 and above (very red stars): method A fails.** It is too bright by 0.57 mag on average and by up to 1.5 mag. The Tycho-based relations stop at 3.0, and ESA's step is stated for BT - VT up to 1.8 and was derived for main-sequence stars.
+- **BP-RP 2.5 and above (very red stars): method A fails.** It is too bright by 0.57 mag on average and by up to 1.5 mag. The G - BT relation stops at 3.0 (G - VT at 4.0), and ESA's step is stated for BT - VT up to 1.8 and was derived for main-sequence stars.
   Riello's table also marks some of its other relations as valid only for M giants at red colours. Method B is better on average but has a scatter of 0.35 mag. B cannot be
   estimated from G and BP-RP for these stars to better than a few tenths of a magnitude. The cut uses G alone there.
-- **BP-RP 2.0 to 2.5: usable with a wide margin.** The scatter is 0.14 mag and the worst error 0.47 mag.
-- **Bluer than BP-RP = 0 (hot stars): not tested.** Only one test star is that blue. The polynomials are valid down to -0.3 or -0.5.
+- **BP-RP 2.0 to 2.5: a 0.50 margin, chosen rather than derived.** The scatter is 0.14 mag. The worst error, 0.47 mag, is too bright, which cannot make a star be missed. The worst too-faint error is +0.23 mag, on 25 test stars, none of them below B 13.5 (see The ADQL cut).
+- **Bluer than BP-RP = 0 (hot stars): not tested.** Only two sample stars have BP-RP below 0. The polynomials are valid down to -0.3 (G - BT) or -0.5 (G - V). The cut does not check these limits (see below).
 - **Brighter than G = 10: not tested** (APASS saturates). The bright red set reaches G = 8.
-- **Stars with no BP-RP** get no estimate. The cut keeps them if G is below 13.8.
+- **Stars with no BP-RP** get no estimate. The cut keeps them if G is below 13.8, using a rounded guess of -0.3 for B - G. That guess is not tested.
 - **Eclipsing binaries are not ordinary stars.** G is a mean over observations, which includes some eclipse light. In the DR3 list, mean G minus the model's out-of-eclipse level has a median of +0.045 mag and a 95th percentile of +0.216 mag
   (results/dr3_checks.md). `b_mag_estimate_out_of_eclipse` gives B from the out-of-eclipse level. The APASS sample is of ordinary stars.
 
-**The ADQL cut** keeps every star that might truly pass B < 13.5. It adds margins taken from the largest "too faint" errors of method A on the test stars, rounded up:
+**The ADQL cut** keeps every star that might truly pass B < 13.5. It adds a margin to the limit:
 
 ```
 BP-RP below 2.0:       B estimate < 13.5 + 0.25
 BP-RP 2.0 to 2.5:      B estimate < 13.5 + 0.50
-BP-RP 2.5 and above:   G + 2.5 < 13.5        (the smallest B - G among 100 such stars was 2.71)
+BP-RP 2.5 and above:   G + 2.5 < 13.5        (see how each value was chosen, below)
 no BP-RP:              G - 0.3 < 13.5
 ```
 
 The text is in `dr4/eb_long_period_bcut.adql`, written by `b_conversion.adql_bcut()`. Python and ADQL forms are tested against each other.
 On the 200 other stars (the check set) the cut keeps 69 of 69 stars with APASS B below 13.5 and lets in 29 of 131 fainter ones.
 On the 100 bright red stars it keeps 58 of 58. Few red stars with B below 13.5 are in the sample, so the red end rests on those 58 and on the B - G argument.
+
+**Red binaries outside the cut.** The red branches admit no DR3 star. All 86 stars in the cut have BP-RP between 0.17 and 1.79. Of the 210 long-period binaries with BP-RP of 2.0 or more, none of the 42 with BP-RP of 2.5 or more has G below 11. Four are brighter than G = 13.5 (G 11.2 to 12.2), with estimated B from 14.07 to 14.65. Three of them have BP-RP from 2.0 to 2.5, where the limit is 14.0, so they are excluded by 0.11 to 0.65 mag. The fourth has BP-RP 2.57 and needs G below 11, and its G is 11.24. Their source IDs are 1987382183634679808, 4066629757754681216, 5303656789425961728 and 5304977513355824512. These cannot be tested without a measured B. A person should look at them.
+
+How each value was chosen:
+
+- **Below 2.0: 0.25.** The largest too-faint error of method A on the blue test stars is +0.18 mag, rounded up to 0.25. The stated rule gives this value.
+- **2.0 to 2.5: 0.50 is a choice.** It is about twice the largest too-faint error in this bin (+0.23 mag on 25 test stars). The rule does not give it. None of those test stars has APASS B below 13.5, so the margin was not set from a star below the limit. The bin was checked on 47 stars with APASS B below 13.5 (43 bright red, 4 train), and all were kept.
+- **2.5 and above: G + 2.5.** A star with B below 13.5 and B - G of at least 2.5 has G below 11, so G + 2.5 < 13.5 keeps it. The smallest B - G among the 100 sample stars with BP-RP of 2.5 and above was 2.71 (50 bright red, 50 from the main sample; the main sample alone gives 2.74). The margin rests on that one set of 100 stars. All 15 bright red stars in this bin with APASS B below 13.5 were kept.
+- **No BP-RP: G - 0.3.** The 0.3 is a rounded guess for the hottest stars. It is not tested: only two sample stars have BP-RP below 0.
+
 The margins are choices. A person should confirm them or change `MARGIN_BLUE`, `MARGIN_RED` and the other constants at the top of `b_conversion.py`.
+
+Nothing in the cut checks the validity ranges of the relations. Stars with BP-RP below 0 get the same formula. 31 long-period binaries have BP-RP below 0 (the lowest is -0.27). None of them is in the cut, which starts at BP-RP 0.17, and -0.27 is inside the lower limits of all three relations (-0.3, -0.35 and -0.5).
 
 ## What was checked, and how
 
@@ -241,7 +254,8 @@ The margins are choices. A person should confirm them or change `MARGIN_BLUE`, `
 - **DR4 and DR3 queries differ in names only.** `test_queries.py` masks every table and column name and compares the rest of each DR4 and DR3 file (17 pairs). It also
   restores the DR4 names from the DR3 text through the map and compares with the DR4 file.
 - **Names exist.** Every DR4 name is in the draft data model's column list (`check_columns.py dr4`) and every DR3 name is in the live archive's `TAP_SCHEMA` (`check_columns.py dr3 --live`).
-  The same program with `dr4 --live` on 27 Oct 2026 reported the three DR4 tables as not found, as it should.
+  The same program with `dr4 --live` on 27 Oct 2026 reported six tables as not found (`gaiadr4.gaia_source`, `vari_eclipsing_binary`, `vari_planetary_transit`, `dr3_neighbourhood`, `all_source_astrometry` and `all_source_photometry`). That shows only that these names are absent from the archive today. A schema name other than `gaiadr4` would give the same result.
+  Every query file is also checked for names written without an alias: each table after FROM or JOIN must have an AS alias, and each `alias.column` must use an alias or a table name. The check is in `check_columns.py` and `make_standin.py` and is tested (`test_tools.py`, `test_queries.py`).
 - **The draft data model was read as text.** The zip (2.8 MB, one PDF of 1,231 pages) downloaded from the container without trouble.
   `datamodel_columns.py` turns it into [datamodel/dr4_draft_columns.tsv](datamodel/dr4_draft_columns.tsv). The parser reads headings that wrap over lines and drops the PDF's
   "Draft" watermark letters. One heading (`delta_global_ranking_bp_min_g`) had its type on another line and was set by hand. The columns, types, units and
@@ -302,19 +316,19 @@ The margins are choices. A person should confirm them or change `MARGIN_BLUE`, `
 | `datamodel_columns.py`, `datamodel/dr4_draft_columns.tsv` | the draft data model as a column list |
 | `fetch_schema.py` | the archive's table list and the DR3 column lists (`results/archive_tables.csv`, `results/dr3_tap_schema_columns.csv`) |
 | `common.py` | polite web client: identifying User-Agent, one request at a time with 1 second between, disk cache, request log |
-| `test_*.py` | 50 tests, no network |
+| `test_*.py` | 59 tests, no network |
 | `results/` | `run_log.tsv`, `request_log.tsv`, `dr3_checks.md`, `ephemeris_check.md`, `b_validation.md`, `b_sample.csv`, `b_minus_v_fit.json`, `dr3_tap_schema_columns.csv`, `out/` |
 | `data/` | cached downloads, not committed |
 
-Downloads: 108 requests in all, all anonymous, with the User-Agent `Foundation0-gaia-dr4/0.1 (+https://github.com/Foundation-0/gaia-dr4)`.
-The request log lists 106: 75 Gaia archive queries answered, 4 refused for syntax (a test of what ADQL accepts, run twice), 5 timed out,
+Downloads: 109 requests in all, all anonymous, with the User-Agent `Foundation0-gaia-dr4/0.1 (+https://github.com/Foundation-0/gaia-dr4)`.
+The request log lists 107: 76 Gaia archive queries answered (the last is the `check_columns.py dr4 --live` run of 27 Oct 2026 made after the fixes), 4 refused for syntax (a test of what ADQL accepts, run twice), 5 timed out,
 13 DataLink epoch-photometry files and 1 refused (the old structure name), 3 VizieR cone searches, 3 pages or papers and 2 documentation fetches that returned HTTP 503.
-The other two were done outside the logger: the draft data model zip and the text of issue #4. A few web searches and page reads
-through the assistant's web tools are not counted.
+The other two were done outside the logger: the draft data model zip and the text of issue #4. Web searches and page reads
+through the assistant's web tools are not counted. On 27 October 2026 these included the ESA news page, the TU Dresden notice and the arXiv HTML render of Riello et al. 2021 (for the table numbers and validity ranges). The arXiv PDF was too large to read.
 Requests went one at a time, so the archive never saw more than one job from this work at once.
 
 ## Acknowledgements
 
 This work has made use of data from the European Space Agency (ESA) mission Gaia (https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium).
-APASS DR9 magnitudes (Henden et al. 2016) were read from the Gaia archive's copy and, for three stars, from the VizieR service at CDS, Strasbourg.
+APASS DR9 magnitudes (Henden et al. 2016) were read from the Gaia archive's copy and, for three stars, from the VizieR service at CDS, Strasbourg. This research has made use of the VizieR catalogue access tool, CDS, Strasbourg, France (DOI: 10.26093/cds/vizier). The original description of the VizieR service was published in A&AS 143, 23 (Ochsenbein, Bauer and Marcout, 2000). The wording follows VizieR's citation pages (for example [a citation page](https://vizier.cds.unistra.fr/viz-bin/cite/J/AJ/120/333)), read by search on 27 October 2026. The details of the 2000 paper were not checked against ADS.
 No MAST/TESS or NASA Exoplanet Archive data were used.

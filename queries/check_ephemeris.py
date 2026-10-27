@@ -92,7 +92,7 @@ def main():
              "|---|---|---|---|---|---|---|---|---|---|"]
     good = {"table": 0, "minus": 0, "half": 0}
     ranks = {"table": [], "minus": []}
-    wide = {"table": 0, "minus": 0}   # rank 11 or better: the faintest 20 per cent of windows
+    wide = {"table": 0, "minus": 0}   # rank 11 or better of 50 windows: the faintest 22 per cent
     used = 0
     for r in choose():
         sid = r["source_id"]
@@ -121,17 +121,20 @@ def main():
         if rk_m is not None:
             ranks["minus"].append(rk_m)
             wide["minus"] += rk_m <= 11
+        na = lambda v: "n/a" if v is None else str(v)
         lines.append("| %s | %.2f | %.1f | %d | %d | %+.2f | %.2f | %d | %s | %s |" % (
             sid, float(r["phot_g_mean_mag"]), 1 / f0, len(t), n0, d0, float(r["derived_primary_ecl_depth"]), rk,
-            rk_m, rk_h))
+            na(rk_m), na(rk_h)))
     lines.append("")
     med = lambda v: sorted(v)[len(v) // 2] if v else None
     lines.append("Predicted window among the %d faintest of %d: **%d of %d stars** with the table's phase, %d with the sign of the "
-                 "phase reversed, %d at phase plus 0.5. Among the 11 faintest (20 per cent): %d with the table's phase, %d with "
-                 "the sign reversed. Median rank: %s with the table's phase, %s reversed. Chance alone gives %.1f stars in the "
-                 "top %d, %.1f in the top 11, and a median rank near 25." % (
-                     TOP_RANK, N_WINDOWS, good["table"], used, good["minus"], good["half"], wide["table"], wide["minus"],
-                     med(ranks["table"]), med(ranks["minus"]), used * TOP_RANK / float(N_WINDOWS), TOP_RANK, used * 0.22))
+                 "phase reversed, %d at phase plus 0.5. Among the 11 faintest of %d (22 per cent): %d with the table's phase, %d "
+                 "with the sign reversed. Median rank: %s with the table's phase, %s reversed. Chance alone gives %.1f stars in the "
+                 "top %d and %.1f in the top 11 (%d stars times 11 of %d windows), and a median rank near 25. "
+                 "n/a means the window held too few points to rank." % (
+                     TOP_RANK, N_WINDOWS, good["table"], used, good["minus"], good["half"], N_WINDOWS, wide["table"], wide["minus"],
+                     med(ranks["table"]), med(ranks["minus"]), used * TOP_RANK / float(N_WINDOWS), TOP_RANK,
+                     used * 11 / float(N_WINDOWS), used, N_WINDOWS))
     lines.append("")
     lines.append("Each window holds only a few points, because Gaia observes a given star about once every 20 to 30 days on "
                  "average, and in several stars the dimming rests on one or two visits. This is a weak test of the phase "

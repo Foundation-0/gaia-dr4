@@ -15,7 +15,8 @@ Rules the query files follow so that this is safe:
   * the last item of a SELECT list is never a DR4ONLY line.
 
 The script stops with an error if a column is missing from the map, if an untagged line uses a
-column that has no DR3 equivalent, or if a tagged line uses one that has.
+column that has no DR3 equivalent, or if a tagged line uses one that has. It also stops if a table
+after FROM or JOIN has no AS alias, or if a qualifier (such as `xx.ra`) is neither an alias nor a table.
 
 On release day the same map, read the other way, tells which names to compare with the real DR4
 tables (check_columns.py).
@@ -30,6 +31,8 @@ MAP = os.path.join(HERE, "column_map.tsv")
 TAG = "DR4ONLY"
 
 ALIAS = re.compile(r"\b(?:FROM|JOIN)\s+((?:[A-Za-z_]\w*\.)?[A-Za-z_]\w*)\s+AS\s+([A-Za-z_]\w*)", re.I)
+TABLE_REF = re.compile(r"\b(?:FROM|JOIN)\s+((?:[A-Za-z_]\w*\.)?[A-Za-z_]\w*)(\s+AS\s+[A-Za-z_]\w*)?", re.I)
+AS_NAME = re.compile(r"\bAS\s+([A-Za-z_]\w*)", re.I)
 QUALIFIED = re.compile(r"\b([A-Za-z_]\w*)\.([A-Za-z_]\w*)\b")
 
 
@@ -57,11 +60,22 @@ def columns_used(line, aliases):
     return [(aliases[a], c) for a, c in QUALIFIED.findall(line) if a in aliases]
 
 
+def unaliased_tables(text):
+    """Tables written after FROM or JOIN with no AS alias (comments ignored)."""
+    code = "\n".join(line.split("--", 1)[0] for line in text.split("\n"))
+    return [m.group(1) for m in TABLE_REF.finditer(code) if not m.group(2)]
+
+
 def convert(text, map_path=MAP):
     tables, cols = load_map(map_path)
+    bare = unaliased_tables(text)
+    if bare:
+        raise ValueError("table(s) written without an AS alias, so their columns would not be renamed: %s"
+                         % ", ".join(bare))
     aliases = aliases_of(text, tables)
     if not aliases:
         raise ValueError("no table with an alias found")
+    names = {n.lower() for n in AS_NAME.findall(text)}
     kept = []
     for line in text.split("\n"):
         tagged = ("--" in line) and (line.split("--", 1)[1].strip().startswith(TAG))
@@ -89,7 +103,9 @@ def convert(text, map_path=MAP):
         qualified = "%s.%s" % (first, second)
         if qualified in tables:
             return tables[qualified]
-        return m.group(0)
+        if first.lower() in names:
+            return m.group(0)          # a subquery alias or an output name, left as it is
+        raise ValueError("%s is neither a table alias nor a known table" % qualified)
 
     body = QUALIFIED.sub(sub, body)
     if re.search(r",\s*(FROM|WHERE)\b", body, re.I):

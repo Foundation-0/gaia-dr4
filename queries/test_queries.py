@@ -142,6 +142,15 @@ class NamesExistTests(unittest.TestCase):
         bad = {"gaiadr3.vari_eclipsing_binary": {"period"}, "gaiadr3.nothing": {"x"}}
         self.assertEqual(len(cc.compare(bad, cc.known_dr3())), 2)
 
+    def test_every_table_has_an_alias_and_every_qualifier_resolves(self):
+        files = (glob.glob(os.path.join(HERE, "dr4", "*.adql")) + glob.glob(os.path.join(HERE, "dr4_only", "*.adql"))
+                 + glob.glob(os.path.join(HERE, "dr3", "*.adql")))
+        problems = []
+        for path in files:
+            with open(path, encoding="utf-8") as f:
+                problems += cc.name_problems(f.read())
+        self.assertEqual(problems, [])
+
 
 class ArchiveTablesTests(unittest.TestCase):
     def test_no_tess_table_in_the_archive_on_27_oct_2026(self):

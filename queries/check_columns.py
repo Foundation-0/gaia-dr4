@@ -23,7 +23,34 @@ import common  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ALIAS = re.compile(r"\b(?:FROM|JOIN)\s+([A-Za-z_]\w*\.[A-Za-z_]\w*)\s+AS\s+([A-Za-z_]\w*)", re.I)
+TABLE_REF = re.compile(r"\b(?:FROM|JOIN)\s+([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)?)(\s+AS\s+[A-Za-z_]\w*)?", re.I)
+AS_NAME = re.compile(r"\bAS\s+([A-Za-z_]\w*)", re.I)
 QUALIFIED = re.compile(r"\b([A-Za-z_]\w*)\.([A-Za-z_]\w*)\b")
+
+
+def code_only(text):
+    """The query text without comments (`--` to the end of the line)."""
+    return "\n".join(line.split("--", 1)[0] for line in text.split("\n"))
+
+
+def name_problems(text):
+    """Problems with how names are written in one query file, found without any archive:
+      * a table after FROM or JOIN with no AS alias (then its columns cannot be checked),
+      * a qualifier such as `gs.ra` that is neither an alias (table or subquery) nor a table name.
+    Returns a list of messages, empty if the file is fine."""
+    code = code_only(text)
+    problems, tables = [], set()
+    for m in TABLE_REF.finditer(code):
+        tables.add(m.group(1).lower())
+        if not m.group(2):
+            problems.append("table written without an AS alias: %s" % m.group(1))
+    aliases = {n.lower() for n in AS_NAME.findall(code)}
+    for a, c in QUALIFIED.findall(code):
+        if ("%s.%s" % (a, c)).lower() in tables:
+            continue
+        if a.lower() not in aliases:
+            problems.append("qualifier is not an alias: %s.%s" % (a, c))
+    return problems
 
 
 def used_columns(files):
@@ -97,7 +124,11 @@ def main(argv):
         known, source = known_dr3(), "results/dr3_tap_schema_columns.csv"
     else:
         known, source = known_dr4_draft(), "the draft DR4 data model"
-    problems = compare(used, known)
+    problems = []
+    for path in files:
+        with open(path, encoding="utf-8") as f:
+            problems += ["%s: %s" % (os.path.relpath(path, HERE), p) for p in name_problems(f.read())]
+    problems += compare(used, known)
     n_cols = sum(len(v) for v in used.values())
     print("%d files, %d tables, %d columns, checked against %s" % (len(files), len(used), n_cols, source))
     for p in problems:

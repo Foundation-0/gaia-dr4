@@ -7,21 +7,24 @@ B = 13.5", so the cut needs an estimate of B from what Gaia does measure.
 Two estimates of B are provided.
 
 Method A, "published chain". Built only from published relations.
-  1. V = G - (G - V)(BP-RP). Riello et al. 2021, A&A 649, A3, Table C.2,
-     row G - V = f(G_BP - G_RP). Valid for -0.5 < BP-RP < 5.0. Scatter 0.030 mag
-     (as published, on the stars of their fit).
+  1. V = G - (G - V)(BP-RP). Riello et al. 2021, A&A 649, A3, the coefficients in
+     Table 8 of Appendix C of the arXiv version (arXiv:2012.01916). The A&A table number
+     was not checked. Row G - V = f(G_BP - G_RP). Valid for -0.5 < BP-RP < 5.0.
+     Scatter 0.030 mag (as published, on the stars of their fit).
   2. Tycho-2 colour BT - VT from two relations of the same table:
        G - VT = f(BP-RP)  (valid -0.35 < BP-RP < 4.0, scatter 0.054)
        G - BT = f(BP-RP)  (valid -0.3 < BP-RP < 3.0, scatter 0.071)
        BT - VT = (G - VT) - (G - BT)
+     The validity ranges are in Table 7 of the same appendix (arXiv version).
   3. B - V = 0.850 (BT - VT). ESA SP-1200 (1997), section 2.2, Eq. 2.2.2. Valid
      for -0.2 < BT - VT < 1.8, systematic error up to 0.05 mag in B - V, stated
      for unreddened main-sequence stars only.
   4. B = V + (B - V).
   Riello et al. publish no direct Johnson B relation, so step 2 and 3 are needed.
-  Riello Table C.1 marks some of its other relations "only valid for M giants" at
-  red colours. The ones used here carry no such note, but the ESA step was
-  derived for main-sequence stars.
+  Some of Riello's other relations are marked as valid only for M giants at red
+  colours. The ones used here carry no such mark, but the ESA step was derived for
+  main-sequence stars. The validity ranges above are written here only: the code
+  does not enforce them (see "The ADQL cut" in README.md).
 
 Method B, "APASS fit". B - V is a cubic polynomial in BP-RP fitted by us to
   stars with APASS DR9 B and V magnitudes (see validate_b.py and results/).
@@ -33,7 +36,7 @@ Every function works on plain floats, so it can be tested without any data.
 Python code cannot drift apart (test_b_conversion.py checks this).
 """
 
-# Riello et al. 2021, Table C.2 (coefficients of the polynomial, lowest power first).
+# Riello et al. 2021, Table 8 of Appendix C (arXiv version): polynomial coefficients, lowest power first.
 GV_FROM_BPRP = (-0.02704, 0.01424, -0.2156, 0.01426)            # G - V
 GVT_FROM_BPRP = (-0.01077, -0.0682, -0.2387, 0.02342)            # G - VT
 GBT_FROM_BPRP = (-0.004288, -0.8547, 0.1244, -0.9085, 0.4843, -0.06814)  # G - BT
@@ -41,24 +44,26 @@ GBT_FROM_BPRP = (-0.004288, -0.8547, 0.1244, -0.9085, 0.4843, -0.06814)  # G - B
 # ESA SP-1200 section 2.2, Eq. 2.2.2
 BV_PER_BTVT = 0.850
 
-# Published validity ranges, in BP-RP
-RANGE_V = (-0.5, 5.0)
-RANGE_BT = (-0.3, 3.0)      # the narrowest range of the three relations used for B (method A)
-
 # Method B: B - V = sum(c[i] * (BP-RP)**i). Filled in from results/b_minus_v_fit.json
 # by validate_b.py. See that file for the sample size, date and fit statistics.
 BV_APASS_FIT = (-0.006829, 0.609467, 0.280520, -0.082327)
 
 # The cut "brighter than B = 13.5", written so that it keeps every star that might truly pass.
-# Margins come from results/b_validation.md (largest "too faint" errors of method A on the 200
-# test stars, rounded up) and were checked on the 200 other stars. Details in README.md.
+# The margins are choices, not a derived rule. MARGIN_BLUE is the largest "too faint" error of
+# method A on the blue test stars (+0.18), rounded up to 0.25. MARGIN_RED (0.50) is about twice the
+# largest too-faint error in its bin (+0.23), a chosen value. MIN_B_MINUS_G_VERY_RED is the smallest
+# B - G seen (2.71), rounded down. The no-colour value is a guess. The blue and red margins were
+# checked on 200 train stars and 100 bright red stars (results/b_validation.md). Details in README.md.
 B_LIMIT = 13.5
 RED_EDGE_1 = 2.0         # BP-RP below this: the published chain works (bias +0.01, scatter 0.05)
 RED_EDGE_2 = 2.5         # BP-RP from here on: the chain fails, B is bounded from G alone
 MARGIN_BLUE = 0.25       # BP-RP < 2.0
 MARGIN_RED = 0.5         # 2.0 <= BP-RP < 2.5
-MIN_B_MINUS_G_VERY_RED = 2.5   # smallest B - G seen for BP-RP >= 2.5 was 2.71 (100 stars, results/b_validation.md)
-MIN_B_MINUS_G_NO_COLOUR = -0.3  # hottest stars have B - G of about -0.3. Used when BP-RP is missing.
+# Smallest B - G among the 100 sample stars with BP-RP >= 2.5 (50 main sample, 50 bright red) was 2.71.
+MIN_B_MINUS_G_VERY_RED = 2.5
+# Used when BP-RP is missing. A rounded guess for the hottest stars, NOT tested: the sample has
+# only 2 stars with BP-RP below 0 and the smallest B - G in its bluest bin (BP-RP below 0.3) was 0.00.
+MIN_B_MINUS_G_NO_COLOUR = -0.3
 
 
 def poly(coeffs, x):
@@ -100,10 +105,6 @@ def bv_fit(bp_rp, coeffs=None):
 def b_mag_fit(g, bp_rp, coeffs=None):
     """Johnson B by method B."""
     return v_mag(g, bp_rp) + bv_fit(bp_rp, coeffs)
-
-
-def in_range(bp_rp, lo, hi):
-    return lo < bp_rp < hi
 
 
 def passes_bcut(g, bp_rp, b_limit=B_LIMIT):

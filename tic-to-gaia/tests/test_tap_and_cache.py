@@ -1,3 +1,4 @@
+import codecs
 import http.server
 import json
 import os
@@ -97,6 +98,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
             body = EMPTY_VOTABLE
         elif self.path == "/votable_ok":
             body = VOTABLE
+        elif self.path == "/html":  # a maintenance page sent with status 200
+            body = b"<!DOCTYPE html><html><body>Down for maintenance</body></html>"
+        elif self.path == "/empty":
+            body = b""
+        elif self.path == "/bom":
+            body = codecs.BOM_UTF8 + b"a,b\n1,2\n"
+        elif self.path == "/other_columns":
+            body = b"x,y\n1,2\n"
         self.send_response(status)
         self.end_headers()
         self.wfile.write(body)
@@ -228,6 +237,39 @@ class CacheTests(unittest.TestCase):
     def test_csv_query_parses(self):
         names, rows, _ = tap.csv_query(self.dir, "k", self.url(), "SELECT 1")
         self.assertEqual((names, rows), (["a", "b"], [["1", "2"]]))
+
+    def test_csv_page_that_is_html_with_status_200_is_refused_and_not_saved(self):
+        for _ in range(2):
+            with self.assertRaises(httpcache.FetchError) as ctx:
+                tap.csv_query(self.dir, "k", self.url("/html"), "SELECT 1")
+        self.assertIn("XML or HTML", str(ctx.exception))
+        self.assertEqual(Handler.calls, 2)  # asked again: nothing was saved
+
+    def test_empty_csv_answer_is_refused_and_not_saved(self):
+        for _ in range(2):
+            with self.assertRaises(httpcache.FetchError):
+                tap.csv_query(self.dir, "k", self.url("/empty"), "SELECT 1")
+        self.assertEqual(Handler.calls, 2)
+
+    def test_csv_without_the_wanted_columns_is_refused_and_not_saved(self):
+        with self.assertRaises(httpcache.FetchError) as ctx:
+            tap.csv_query(self.dir, "k", self.url("/other_columns"), "SELECT 1",
+                          require=["a", "b"])
+        self.assertIn("lacks", str(ctx.exception))
+        self.assertEqual(Handler.calls, 1)  # a refused answer is not retried, and not saved
+
+    def test_csv_with_the_wanted_columns_and_a_byte_order_mark_is_read(self):
+        names, rows, _ = tap.csv_query(self.dir, "k", self.url("/bom"), "SELECT 1",
+                                       require=["a", "b"])
+        self.assertEqual((names, rows), (["a", "b"], [["1", "2"]]))
+
+    def test_a_saved_bad_csv_answer_is_refused_and_says_which_folder_to_delete(self):
+        data = {"REQUEST": "doQuery", "LANG": "ADQL", "FORMAT": "csv", "QUERY": "SELECT 1"}
+        httpcache.fetch(self.dir, "k", self.url("/html"), data=data)  # saved without a check
+        with self.assertRaises(httpcache.FetchError) as ctx:
+            tap.csv_query(self.dir, "k", self.url("/html"), "SELECT 1")
+        self.assertIn("Delete that folder", str(ctx.exception))
+        self.assertEqual(Handler.calls, 1)  # read from the saved copy: nothing new was asked
 
 
 if __name__ == "__main__":

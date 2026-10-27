@@ -7,6 +7,7 @@ All three services are used without any account. Each query goes through httpcac
 so a repeated query reads the saved answer and sends nothing.
 """
 
+import codecs
 import csv
 import io
 import xml.etree.ElementTree as ET
@@ -67,7 +68,8 @@ def parse_votable(body):
 
 
 def parse_csv(body):
-    reader = csv.reader(io.StringIO(body.decode("utf-8")))
+    """Parse a CSV table into (column names, rows). A byte-order mark at the start is dropped."""
+    reader = csv.reader(io.StringIO(body.decode("utf-8-sig")))
     rows = list(reader)
     if not rows:
         raise ValueError("empty CSV answer")
@@ -90,6 +92,17 @@ def check_votable(body, require=()):
     return None
 
 
+def _refuse(problem, url, info):
+    """Raise FetchError for an answer that failed its check. When the answer came from the
+    saved copy, the message names that copy's folder, so that it can be deleted and asked
+    for again."""
+    message = "%s for %s" % (problem, url)
+    if info.get("from_cache"):
+        message += (". The saved copy in %s is refused too, so it is not used. Delete that "
+                    "folder and run the command again." % info["folder"])
+    raise httpcache.FetchError(message)
+
+
 def mast_query(data_dir, kind, adql, offline=False, require=()):
     """Run ADQL on the MAST TIC service. Returns (names, rows, info).
 
@@ -103,30 +116,53 @@ def mast_query(data_dir, kind, adql, offline=False, require=()):
         offline=offline, reject=lambda b: check_votable(b, require))
     problem = check_votable(body, require)  # also covers an answer saved earlier
     if problem:
-        raise httpcache.FetchError("%s for %s" % (problem, MAST_TIC_TAP))
+        _refuse(problem, MAST_TIC_TAP, info)
     names, rows = parse_votable(body)
     return names, rows, info
 
 
-def csv_query(data_dir, kind, url, adql, offline=False):
-    """Run ADQL on a TAP service that can answer in CSV (Gaia archive, SIMBAD)."""
-    def reject(body):
-        head = body.lstrip()[:200].lower()
-        if head.startswith(b"<?xml") or head.startswith(b"<votable"):
-            # The service answered with an error document, not a table.
-            return "service returned XML instead of CSV"
-        return None
+def check_csv(body, require=()):
+    """Return a message if `body` is not a CSV table with the columns in `require`, else None.
 
+    A service that is down or busy can answer with status 200 and an error page instead of a
+    table, and an empty answer is not a table either. None of these may be saved, because a
+    saved copy would be served again on every later run.
+    """
+    text = body[3:] if body.startswith(codecs.BOM_UTF8) else body
+    if not text.strip():
+        return "empty answer"
+    if text.lstrip()[:1] == b"<":
+        return "service returned XML or HTML instead of CSV"
+    try:
+        header = next(csv.reader(io.StringIO(text.decode("utf-8"))))
+    except (UnicodeDecodeError, csv.Error, StopIteration) as exc:
+        return "not readable as CSV (%s)" % exc
+    missing = [c for c in require if c not in header]
+    if missing:
+        return ("the answer lacks column(s) %s, so it is not the table that was asked for"
+                % ", ".join(missing))
+    return None
+
+
+def csv_query(data_dir, kind, url, adql, offline=False, require=()):
+    """Run ADQL on a TAP service that can answer in CSV (Gaia archive, SIMBAD).
+
+    `require` lists the columns the answer must have (see check_csv). A bad answer raises
+    FetchError and is not saved.
+    """
     body, info = httpcache.fetch(
         data_dir, kind, url,
         data={"REQUEST": "doQuery", "LANG": "ADQL", "FORMAT": "csv", "QUERY": adql},
-        offline=offline, reject=reject)
+        offline=offline, reject=lambda b: check_csv(b, require))
+    problem = check_csv(body, require)  # also covers an answer saved earlier
+    if problem:
+        _refuse(problem, url, info)
     names, rows = parse_csv(body)
     return names, rows, info
 
 
-def gaia_query(data_dir, kind, adql, offline=False):
-    return csv_query(data_dir, kind, GAIA_TAP, adql, offline=offline)
+def gaia_query(data_dir, kind, adql, offline=False, require=()):
+    return csv_query(data_dir, kind, GAIA_TAP, adql, offline=offline, require=require)
 
 
 def simbad_query(data_dir, kind, adql, offline=False):

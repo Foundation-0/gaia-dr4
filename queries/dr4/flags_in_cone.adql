@@ -1,7 +1,8 @@
 -- Query: flags_in_cone (DR4 names)
--- Serves: Question B support. Every Gaia source in a circle (a TESS aperture) with its variability flag, and its
---   eclipsing-binary and planetary-transit rows if it has them. Replace @RA@ and @DEC@ (degrees, ICRS) and
---   @RADIUS_DEG@ (degrees; one TESS pixel is 21 arcseconds, 0.00583 degrees).
+-- Serves: Question B support. Every Gaia source in a circle with its variability flag, and its eclipsing-binary and
+--   planetary-transit rows if it has them. Replace @RA@ and @DEC@ (degrees, ICRS) and @RADIUS_DEG@ (degrees). The
+--   run used 0.0175 degrees (63 arcseconds, three TESS pixels of 21 arcseconds each). A real TESS aperture is not a
+--   circle of that size and needs its own radius.
 -- Names: the draft DR4 data model of 26 Jun 2026. The schema name gaiadr4 is taken from that model's own example
 --   query.
 -- DR3 stand-in: dr3/flags_in_cone.adql, made from this file by make_standin.py. DR3 tables: gaiadr3.gaia_source,

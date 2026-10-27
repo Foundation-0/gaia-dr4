@@ -116,14 +116,14 @@ Model types among them: ELLIPSOIDAL 4, ONEGAUSSIAN_WITH_ELLIPSOIDAL 8, TWOGAUSSI
 
 ### Can an eclipse time be carried back to the Harvard plates?
 
-The error on the phase of an eclipse after dt days is about dt times `frequency_error`, in cycles. From the DR3 reference time (about 2016) back to 1950 is about 24106 days, back to 1890 about 46020 days. This uses the formal error only. It ignores aliasing, which makes it a lower bound.
+The error on the phase of an eclipse after dt days is about dt times `frequency_error`, in cycles. dt is counted from each star's own `reference_time` back to 1 January of the plate year. This uses the formal error only. It ignores aliasing, which makes it a lower bound.
 A phase error well below 0.1 cycle is needed to say where an eclipse fell.
 
-| year | days back | median phase error, all (cycles) | all with error < 0.1 | of | median, B-cut stars | B-cut with error < 0.1 | of |
+| year | days back: median (range) | median phase error, all (cycles) | all with error < 0.1 | of | median, B-cut stars | B-cut with error < 0.1 | of |
 |---|---|---|---|---|---|---|---|
-| 1989 | 9861 | 0.28 | 569 | 2588 | 0.20 | 28 | 86 |
-| 1950 | 24106 | 0.67 | 345 | 2588 | 0.50 | 17 | 86 |
-| 1890 | 46020 | 1.28 | 258 | 2588 | 0.95 | 11 | 86 |
+| 1989 | 9981 (9462 to 10352) | 0.28 | 562 | 2588 | 0.20 | 28 | 86 |
+| 1950 | 24226 (23707 to 24597) | 0.68 | 344 | 2588 | 0.50 | 17 | 86 |
+| 1890 | 46140 (45621 to 46511) | 1.29 | 258 | 2588 | 0.95 | 11 | 86 |
 
 ### Mean G against the model's out-of-eclipse level
 
@@ -133,15 +133,15 @@ A phase error well below 0.1 cycle is needed to say where an eclipse fell.
 
 | period (days) | candidates | mean depth (mmag) | mean duration (d) | fewest in-transit obs | most |
 |---|---|---|---|---|---|
-| 0.3 to 0.6 | 15 | 13.3 | 0.050 | 3 | 35 |
-| 0.6 to 1.0 | 66 | 12.4 | 0.062 | 3 | 45 |
-| 1.0 to 1.8 | 55 | 13.8 | 0.096 | 4 | 35 |
-| 1.8 to 3.2 | 40 | 15.4 | 0.119 | 3 | 34 |
-| 3.2 to 5.6 | 21 | 16.3 | 0.153 | 4 | 25 |
-| 5.6 to 10.0 | 13 | 19.0 | 0.188 | 6 | 23 |
-| 10.0 to 17.8 | 2 | 8.2 | 0.308 | 14 | 26 |
-| 17.8 to 31.6 | 1 | 14.4 | 0.261 | 14 | 14 |
-| 31.6 to 56.2 | 1 | 13.1 | 0.125 | 3 | 3 |
+| 0.32 to 0.56 | 15 | 13.3 | 0.050 | 3 | 35 |
+| 0.56 to 1.00 | 66 | 12.4 | 0.062 | 3 | 45 |
+| 1.00 to 1.78 | 55 | 13.8 | 0.096 | 4 | 35 |
+| 1.78 to 3.16 | 40 | 15.4 | 0.119 | 3 | 34 |
+| 3.16 to 5.62 | 21 | 16.3 | 0.153 | 4 | 25 |
+| 5.62 to 10.00 | 13 | 19.0 | 0.188 | 6 | 23 |
+| 10.00 to 17.78 | 2 | 8.2 | 0.308 | 14 | 26 |
+| 17.78 to 31.62 | 1 | 14.4 | 0.261 | 14 | 14 |
+| 31.62 to 56.23 | 1 | 13.1 | 0.125 | 3 | 3 |
 
 Candidates: 214. With a gaia_source row: 214. The neighbourhood stand-in (DR3 to DR2 IDs) returned 218 rows for 214 distinct candidates.
 

@@ -29,7 +29,7 @@ class PolynomialTests(unittest.TestCase):
         self.assertAlmostEqual(12.0 - bc.v_mag(12.0, 0.82), -0.15247, places=4)
 
     def test_riello_coefficients_as_published(self):
-        # Riello et al. 2021, Table C.2, row G - V = f(BP-RP)
+        # Riello et al. 2021, Table 8 of Appendix C (arXiv version), row G - V = f(BP-RP)
         self.assertEqual(bc.GV_FROM_BPRP, (-0.02704, 0.01424, -0.2156, 0.01426))
         self.assertEqual(bc.GVT_FROM_BPRP, (-0.01077, -0.0682, -0.2387, 0.02342))
         self.assertEqual(bc.GBT_FROM_BPRP, (-0.004288, -0.8547, 0.1244, -0.9085, 0.4843, -0.06814))

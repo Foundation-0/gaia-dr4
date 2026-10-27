@@ -6,6 +6,8 @@ import tempfile
 import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import build_queries as bq  # noqa: E402
+import check_columns as cc  # noqa: E402
 import datamodel_columns as dm  # noqa: E402
 import make_standin as ms  # noqa: E402
 import validate_b as vb  # noqa: E402
@@ -138,6 +140,49 @@ class StandInTests(unittest.TestCase):
     def test_trailing_comma_stops(self):
         with self.assertRaises(ValueError):
             self.conv("SELECT b.source_id,\n b.only4,  -- DR4ONLY\nFROM gaiadr4.big AS b")
+
+    def test_table_without_alias_stops(self):
+        with self.assertRaises(ValueError):
+            self.conv("SELECT b.teff\nFROM gaiadr4.big AS b\nJOIN gaiadr4.nb nb ON nb.source_id = b.source_id")
+
+    def test_unknown_qualifier_stops(self):
+        with self.assertRaises(ValueError):
+            self.conv("SELECT zz.teff\nFROM gaiadr4.big AS b")
+
+
+class NameCheckTests(unittest.TestCase):
+    def test_table_without_alias_is_reported(self):
+        problems = cc.name_problems("SELECT gs.ra\nFROM gaiadr3.gaia_source gs")
+        self.assertTrue(any("without an AS alias" in p for p in problems))
+
+    def test_unknown_qualifier_is_reported(self):
+        problems = cc.name_problems("SELECT gs.ra, zz.dec\nFROM gaiadr3.gaia_source AS gs")
+        self.assertEqual(len(problems), 1)
+        self.assertIn("zz.dec", problems[0])
+
+    def test_subquery_alias_and_output_names_are_fine(self):
+        text = ("SELECT gs.ra, t.n\nFROM gaiadr3.gaia_source AS gs\nJOIN (\n    SELECT 1 AS n\n"
+                "    FROM gaiadr3.gaia_source AS x\n) AS t ON 1 = 1")
+        self.assertEqual(cc.name_problems(text), [])
+
+
+class WrapTests(unittest.TestCase):
+    def test_long_word_is_cut_and_the_loop_ends(self):
+        out = bq.wrap(["x" * 130])
+        self.assertTrue(all(len(line) <= bq.WRAP_WIDTH for line in out))
+        rebuilt = out[0] + "".join(line[len(bq.WRAP_PREFIX):] for line in out[1:])
+        self.assertEqual(rebuilt, "x" * 130)
+
+    def test_long_line_breaks_between_words(self):
+        words = ["word%02d" % i for i in range(40)]
+        out = bq.wrap(["-- " + " ".join(words)])
+        self.assertTrue(all(len(line) <= bq.WRAP_WIDTH for line in out))
+        tokens = " ".join(out).split()
+        for w in words:
+            self.assertIn(w, tokens)
+
+    def test_short_line_is_unchanged(self):
+        self.assertEqual(bq.wrap(["-- short"]), ["-- short"])
 
 
 class StatsTests(unittest.TestCase):

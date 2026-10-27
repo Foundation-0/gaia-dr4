@@ -2,9 +2,10 @@
 """Choose the DR3 test sources for the DataLink fetcher test.
 
 It runs four small queries on the Gaia archive's TAP service (the query
-service) and writes two files into sources/:
+service) and writes these files into sources/:
 
-  test_sources.csv  25 sources in four groups (see ROLE below)
+  test_sources.csv  25 sources in four groups (see ROLE below), and whether each
+                    is listed in gaiadr3.vari_eclipsing_binary (in_eb_table)
   ids25.txt         the same 25 IDs with the groups mixed, in a fixed order
   ids40.txt         40 other sources with epoch photometry, for the timing runs
   pool200.txt       200 sources that have epoch photometry, for the
@@ -57,6 +58,11 @@ QUERIES = {
 # They test what the service says about a source that does not exist.
 FAKE_IDS = ["1000000000000000", "4611686018427387904"]
 
+# Which of the 25 test IDs are eclipsing binaries. The pool query does not leave them out,
+# so the 'pool' group can contain one. This query shows which.
+EB_CHECK = ("SELECT source_id FROM gaiadr3.vari_eclipsing_binary "
+            "WHERE source_id IN ({ids}) ORDER BY source_id")
+
 
 def tap(query):
     """Run one query, with an on-disk cache. Returns a list of dict rows."""
@@ -89,14 +95,15 @@ def main():
     if len(pool) < 200 or len(eb) < 5 or len(no_epoch) < 5:
         sys.exit("Unexpected answer sizes: pool %d, eb %d, no_epoch %d" % (len(pool), len(eb), len(no_epoch)))
 
-    # ROLE says what the source is for.
-    #   regular   has epoch photometry, not an eclipsing binary (10, spread over the pool)
-    #   eclipsing has epoch photometry, listed in gaiadr3.vari_eclipsing_binary (8)
+    # ROLE says why the source was picked. It is not a claim about the source (see in_eb_table).
+    #   pool      ten sources from the pool of 200 with epoch photometry (every 20th, by source_id).
+    #             One of them is an eclipsing binary, so 'pool' does not mean 'not an eclipsing binary'.
+    #   eclipsing picked from gaiadr3.vari_eclipsing_binary, with epoch photometry (8)
     #   no_epoch  real DR3 source, has_epoch_photometry is false (5), failure path
     #   not_found valid number that is not a DR3 source (2), failure path
     rows = []
     for r in pool[::20][:10]:
-        rows.append(("regular", r["source_id"], r["phot_g_mean_mag"], r["phot_variable_flag"], r["has_epoch_photometry"]))
+        rows.append(("pool", r["source_id"], r["phot_g_mean_mag"], r["phot_variable_flag"], r["has_epoch_photometry"]))
     for r in eb[:8]:
         rows.append(("eclipsing", r["source_id"], r["phot_g_mean_mag"], r["phot_variable_flag"], r["has_epoch_photometry"]))
     for r in no_epoch[:5]:
@@ -104,13 +111,19 @@ def main():
     for sid in FAKE_IDS:
         rows.append(("not_found", sid, "", "", ""))
 
+    in_eb = {r["source_id"] for r in tap(EB_CHECK.format(ids=",".join(row[1] for row in rows)))}
+    if not all(row[1] in in_eb for row in rows if row[0] == "eclipsing"):
+        sys.exit("an 'eclipsing' source is not in gaiadr3.vari_eclipsing_binary; check the queries")
+
     with open(os.path.join(OUT, "test_sources.csv"), "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["role", "source_id", "phot_g_mean_mag", "phot_variable_flag", "has_epoch_photometry"])
-        w.writerows(rows)
+        w.writerow(["role", "source_id", "phot_g_mean_mag", "phot_variable_flag", "has_epoch_photometry",
+                    "in_eb_table"])
+        for row in rows:
+            w.writerow(list(row) + ["true" if row[1] in in_eb else "false"])
     # The same 25 IDs with the groups mixed (one of each group in turn), so that every batch
     # has sources with and without epoch photometry. This is the file the fetcher is run on.
-    by_role = {r: [row[1] for row in rows if row[0] == r] for r in ("regular", "eclipsing", "no_epoch", "not_found")}
+    by_role = {r: [row[1] for row in rows if row[0] == r] for r in ("pool", "eclipsing", "no_epoch", "not_found")}
     mixed = []
     while any(by_role.values()):
         for r in by_role:

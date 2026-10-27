@@ -111,3 +111,5 @@ Share of stars with APASS B below 13.5 that the cut keeps, and how many fainter 
 |---|---|---|---|---|---|---|
 | 2.0 to 2.5 | 50 | 2.28 | 2.59 | -0.02 | 0.15 | 43 of 43 |
 | 2.5 to 5.0 | 50 | 2.71 | 3.45 | -0.51 | 0.59 | 15 of 15 |
+
+Smallest B - G over all 100 sample stars with BP-RP 2.5 and above (main sample and bright red set): 2.71. Smallest in the main sample alone (50 stars): 2.74. This sets MIN_B_MINUS_G_VERY_RED in b_conversion.py.

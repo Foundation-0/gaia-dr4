@@ -4,7 +4,7 @@ This is the procedure for the last link of the chain, DR3 source ID to DR4 sourc
 `../tic_to_gaia_dr3.csv`. It is step 2 of [RUNBOOK.md](../RUNBOOK.md).
 
 **Nothing here has run against DR4.** The table that links DR3 to DR4, `dr3_neighbourhood`, does not exist until the
-archive reopens on Wednesday 2 December 2026 at about 12:00 CET ([ESA news](https://www.cosmos.esa.int/web/gaia/news),
+archive reopens on Wednesday 2 December 2026 at about 12:00 CET (Central European Time) ([ESA news, the European Space Agency](https://www.cosmos.esa.int/web/gaia/news),
 read 27 Oct 2026). The code is tested on DR3 and on made-up rows. The ADQL query (ADQL is the archive's query
 language, a form of SQL) is written from a draft and is marked untested.
 
@@ -30,7 +30,7 @@ thousandth of an arcsecond.
 - You need your own Gaia archive account (see RUNBOOK.md). The limits are 5 jobs running at once and 50 queued, for
   each user ([ESA news, 14 Oct 2026](https://www.cosmos.esa.int/web/gaia/news)). Expect the archive to be slow.
 - Everything the TIC targets need from the old archive is already in `../snapshots/`. Nothing more has to be
-  downloaded from the Gaia archive before 25 November for this step. (The TIC comes from MAST, and I did not check
+  downloaded from the Gaia archive before 25 November for this step. (The TIC comes from MAST, the Mikulski Archive for Space Telescopes, and I did not check
   whether MAST stays up during the Gaia outage.)
 - Use `python3 -I` for every script, as elsewhere in this project. Answers downloaded from the archive are data, not
   code. Do not run anything from them.
@@ -77,12 +77,12 @@ a position (the flag `dr3_two_parameter_solution`). Find out what DR4 offers in 
 python3 -I release_day/dr4_link.py neighbourhood-queries --out-dir work/route1
 ```
 
-This writes 7 query files, each with 100 DR3 IDs already filled in (651 IDs in all). The query is in
+This writes 7 query files, six with 100 DR3 IDs and one with 51, already filled in (651 IDs in all). The query is in
 [dr3_to_dr4_neighbourhood.adql](dr3_to_dr4_neighbourhood.adql), which also has a second query for the reverse check.
 
 1. Run the 7 files one after the other in the archive. A synchronous query worked for 100 IDs on DR3. (Synchronous
    means the archive answers on the same connection and does not queue a job.)
-2. Save each answer as CSV: `work/route1/answer_000.csv`, `answer_001.csv`, and so on. The number must match the
+2. Save each answer as CSV (a plain text table with commas between values): `work/route1/answer_000.csv`, `answer_001.csv`, and so on. The number must match the
    query file. `match-neighbourhood` stops with a message if a query file in the folder has no answer, so that a
    forgotten batch is not read as "no match".
 3. Build the table:
@@ -154,13 +154,13 @@ Run those files, save the answers as `work/route2_all/answer_000.csv` and so on,
 the two tables on `source_id` and asks for the same columns as before. These are a few rows. Read them by hand.
 `compare-routes` takes one position table, so they are not folded into it.
 
-How far the targets move: the median is 27 mas per year, 17 stars move faster than 200 mas per year, and the fastest
-moves 577 mas per year (0.86 arcsec in 1.5 years). That is inside the 2 arcsec radius even without the move, so a bad
+How far the targets move (650 of the 651 have a DR3 proper motion): the median is 27 mas per year, 17 stars move faster than 200 mas per year, and the fastest
+moves 576.5 mas per year (0.86 arcsec in 1.5 years). That is inside the 2 arcsec radius even without the move, so a bad
 proper motion does not lose a star. The targets span G = 8.5 to 14.8.
 
 ## Step 4. Read the comparison
 
-`work/compare.csv` has one row per target.
+`work/compare.csv` has one row per target. A route can find a star that the other misses. For route 2 one possible reason is that the star is not in `gaia_source`, the subset of DR4 described in Step 3.
 
 | `agreement` | What to do |
 |---|---|

@@ -218,7 +218,7 @@ def _fetch_neighbourhood(query, key_col, ids, kind, data_dir, offline):
     rows, infos = [], []
     for batch in tap.batches(ids):
         names, got, info = tap.gaia_query(data_dir, kind, query.format(ids=tap.id_list(batch)),
-                                          offline=offline)
+                                          offline=offline, require=FWD_COLUMNS)
         if names != FWD_COLUMNS:
             raise ValueError("unexpected columns %r" % names)
         infos.append(info)
@@ -245,7 +245,7 @@ def fetch_src(dr3_ids, data_dir, offline=False):
     rows, infos = [], []
     for batch in tap.batches(dr3_ids):
         names, got, info = tap.gaia_query(data_dir, "dr3src", Q_SRC.format(ids=tap.id_list(batch)),
-                                          offline=offline)
+                                          offline=offline, require=SRC_COLUMNS)
         if names != SRC_COLUMNS:
             raise ValueError("unexpected columns %r" % names)
         infos.append(info)

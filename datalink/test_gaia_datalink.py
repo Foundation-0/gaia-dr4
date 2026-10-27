@@ -9,6 +9,7 @@ That server counts how many requests are open at the same moment, which is how t
 import contextlib
 import csv
 import gzip
+import hashlib
 import http.server
 import io
 import json
@@ -195,6 +196,25 @@ class TestClassify(unittest.TestCase):
         self.assertNotIn("203.0.113.9", raw)
         self.assertNotIn("ABC", raw)
 
+    def test_signed_in_owner_block_is_removed_whatever_its_shape(self):
+        # Shapes a signed-in page might take: nested braces, fields outside the block, cut off, block first.
+        secrets = ("Jane", "jane@example.org", "jdoe")
+        cases = [
+            "Message: x Cannot process request: y, for user: UwsJobOwner{id='42', name='Jane Doe', "
+            "authGroups=[g{a}], mail='jane@example.org', authUsername='jdoe'}",
+            "Message: x UwsJobOwner{id='42'} name='Jane Doe' mail='jane@example.org' authUsername='jdoe'",
+            "UwsJobOwner{id='42', name='Jane Doe', mail='jane@example.org', authUsername='jdoe'} Message: y",
+            "Context: DataRetrieval UwsJobOwner{id='42', name='Jane Doe', mail='jane@example.org'",
+        ]
+        for txt in cases:
+            out = g.scrub_personal(txt)
+            for secret in secrets:
+                self.assertNotIn(secret, out, txt)
+        out = g.page_message(b"<html><body>Linking parameter is null UwsJobOwner{id='42', name='Jane Doe', "
+                             b"mail='jane@example.org', authUsername='jdoe'}</body></html>")
+        for secret in secrets:
+            self.assertNotIn(secret, out)
+
     def test_real_saved_error_page_if_present(self):
         path = os.path.join(HERE, "data", "probe", "single_ds_INDIVIDUAL.body")
         if not os.path.exists(path):
@@ -353,6 +373,19 @@ class TestConfigAndIds(unittest.TestCase):
                 with self.assertRaises(ValueError, msg=bad):
                     g.read_ids(p)
 
+    def test_designation_of_another_release_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = os.path.join(tmp, "ids.txt")
+            with open(p, "w") as f:
+                f.write("Gaia DR2 4295806720\n")
+            with self.assertRaises(ValueError):  # a DR3 run must not quietly fetch a DR2 number
+                g.read_ids(p)
+            with open(p, "w") as f:
+                f.write("Gaia DR4 123\n")
+            self.assertEqual(g.read_ids(p, "Gaia DR4"), ["123"])
+            with self.assertRaises(ValueError):
+                g.read_ids(p, "Gaia DR3")
+
     def test_cli_refuses_old_name(self):
         with tempfile.TemporaryDirectory() as tmp:
             ids = os.path.join(tmp, "ids.txt")
@@ -368,7 +401,7 @@ class TestConfigAndIds(unittest.TestCase):
 class TestExitCodes(unittest.TestCase):
     """main() returns 0 (all done), 2 (some failed), 3 (cannot succeed), 4 (stopped early)."""
 
-    def run_main(self, handler, *extra):
+    def run_main(self, handler, *extra, ids=("1001", "1002")):
         class T:
             def __init__(self, *a, **k):
                 self.fake = FakeTransport(handler)
@@ -376,10 +409,10 @@ class TestExitCodes(unittest.TestCase):
             def get(self, url):
                 return self.fake.get(url)
         with tempfile.TemporaryDirectory() as tmp:
-            ids = os.path.join(tmp, "ids.txt")
-            with open(ids, "w") as fh:
-                fh.write("1001\n1002\n")
-            args = ["fetch", ids, "--out", os.path.join(tmp, "o"), "--min-interval", "0", "--slots-dir",
+            ids_path = os.path.join(tmp, "ids.txt")
+            with open(ids_path, "w") as fh:
+                fh.write("".join(sid + "\n" for sid in ids))
+            args = ["fetch", ids_path, "--out", os.path.join(tmp, "o"), "--min-interval", "0", "--slots-dir",
                     os.path.join(tmp, "slots")] + list(extra)
             with mock.patch.object(g, "Transport", T), contextlib.redirect_stderr(io.StringIO()), \
                     contextlib.redirect_stdout(io.StringIO()):
@@ -416,6 +449,14 @@ class TestExitCodes(unittest.TestCase):
 
     def test_stopped_early(self):
         self.assertEqual(self.run_main(lambda ids, n: good_answer(ids), "--batch-size", "1", "--max-requests", "1"), 4)
+
+    def test_empty_id_file_is_refused(self):
+        self.assertEqual(self.run_main(lambda ids, n: good_answer(ids), ids=()), 3)
+
+    def test_nothing_has_data_in_a_longer_list_warns_with_code_5(self):
+        ids = ["%d" % (7000 + i) for i in range(6)]
+        self.assertEqual(self.run_main(lambda ids_, n: good_answer(ids_, missing=set(ids)), ids=ids), 5)
+        self.assertEqual(self.run_main(lambda ids_, n: good_answer(ids_, missing=set(ids)), ids=ids[:5]), 0)
 
 
 # ---- the fetcher, with a scripted fake archive -------------------------------
@@ -659,6 +700,55 @@ class TestFetcher(unittest.TestCase):
             fh.write(b"extra\n")
         res = g.check_run(self.tmp, "Gaia DR3", "DATAMODEL_STANDARD")
         self.assertEqual([p[0] for p in res["problems"]], ["1002"])
+
+    def test_check_run_reports_a_cell_the_csv_module_cannot_read(self):
+        # A saved GAIA file with one array cell over the csv module's field limit: a problem to report, not a crash.
+        cols = g._DR3_GAIA_COLUMNS
+        big = "(" + ", ".join(["1708.91234567"] * 12000) + ")"
+        buf = io.StringIO()
+        w = csv.writer(buf, lineterminator="\n")
+        w.writerow(cols)
+        row = {c: "(1.0)" for c in cols}
+        row.update(source_id="1001", n_transits="12000", **{c: big for c in g._DR3_GAIA_ARRAYS})
+        w.writerow([row[c] for c in cols])
+        data = buf.getvalue().encode()
+        rel = os.path.join("Gaia_DR3", "DATAMODEL_GAIA", "1001.csv")
+        os.makedirs(os.path.dirname(os.path.join(self.tmp, rel)))
+        with open(os.path.join(self.tmp, rel), "wb") as fh:
+            fh.write(data)
+        ev = {"event": "source", "source_id": "1001", "release": "Gaia DR3", "structure": "DATAMODEL_GAIA",
+              "status": "ok", "file": rel, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+        with open(os.path.join(self.tmp, "events.jsonl"), "w") as fh:
+            fh.write(json.dumps(ev) + "\n")
+        res = g.check_run(self.tmp, "Gaia DR3", "DATAMODEL_GAIA")
+        self.assertEqual((res["files_ok"], [p[0] for p in res["problems"]]), (0, ["1001"]))
+        self.assertIn("cannot read", res["problems"][0][1])
+
+    def test_answers_that_fail_the_checks_stop_the_run(self):
+        # A changed file layout: every answer is well formed but lacks the columns of the release. Without the
+        # count of unusable answers this would retry every batch six times and split down to single sources.
+        f = make_fetcher(self.tmp, lambda ids, n: good_answer(ids), release="Gaia DR4", batch_size=5, abort_after=4)
+        s = f.run(IDS)
+        self.assertEqual(s["ok"], 0)
+        self.assertIsInstance(s["error"], g.Aborted)
+        self.assertLessEqual(s["requests"], 5)
+        self.assertGreater(len(os.listdir(os.path.join(self.tmp, "rejected"))), 0)
+
+    def test_gaia_row_that_fails_its_checks_is_kept_and_its_reason_logged(self):
+        lines = gaia_bytes(["1001", "1002"]).decode().splitlines()
+        rows = {"1001": lines[1], "1002": lines[2].replace("1002,7,", "1002,5,", 1)}  # 1002: n_transits 5, 7 entries
+
+        def handler(ids, n):  # answers only what was asked, as the archive does
+            body = "\n".join([lines[0]] + [rows[sid] for sid in ids]) + "\n"
+            return g.Response(200, {"content-type": "text/csv"}, body.encode())
+        f = make_fetcher(self.tmp, handler, structure="DATAMODEL_GAIA", batch_size=2, max_attempts=2)
+        s = f.run(["1001", "1002"])
+        self.assertEqual((s["ok"], s["failed"]), (1, 1))
+        kept = os.listdir(os.path.join(self.tmp, "rejected"))
+        self.assertTrue(kept and all(name.startswith("1002-") for name in kept), kept)
+        failed = [e for e in events(self.tmp, "source") if e["status"] == "failed"]
+        self.assertEqual(len(failed), 1)
+        self.assertIn("n_transits is 5", failed[0]["message"])
 
     def test_sign_in_refuses_other_hosts(self):
         class T:

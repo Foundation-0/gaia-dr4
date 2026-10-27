@@ -3,12 +3,12 @@
 This folder links each target star of the gaia-dr4 project to its Gaia DR3 source ID. It does the work of
 [issue #1](https://github.com/Foundation-0/gaia-dr4/issues/1).
 
-The targets are the stars of eumemic's TESS planet candidates. TESS is NASA's planet-hunting satellite. Each
-target has a TIC ID, its number in the TESS Input Catalog. Gaia is ESA's star-mapping spacecraft. It publishes its
+The targets are the stars of eumemic's TESS planet candidates. TESS (Transiting Exoplanet Survey Satellite) is a planet-hunting satellite run by NASA, the US space agency. Each
+target has a TIC ID, its number in the TESS Input Catalog. Gaia is a star-mapping spacecraft of ESA, the European Space Agency. It publishes its
 catalogue in numbered data releases, written DR2, DR3 and DR4 (the second, third and fourth). Each release gives its
 stars new numbers, called source IDs. The route from a TIC ID to Gaia DR3 is: TIC ID, then Gaia DR2 source ID (a
 column of the TIC), then Gaia DR3 source ID (through the archive table `gaiadr3.dr2_neighbourhood`). The Gaia archive goes
-offline on Wednesday 25 November 2026 at 12:00 CET until DR4 opens on Wednesday 2 December 2026 at about 12:00 CET
+offline on Wednesday 25 November 2026 at 12:00 CET (Central European Time) until DR4 opens on Wednesday 2 December 2026 at about 12:00 CET
 ([ESA news, 8 Oct 2026, read 27 Oct 2026](https://www.cosmos.esa.int/web/gaia/news)). The mapping for the 14 Oct
 candidate list is done. It has to be run again on the final lists before then.
 
@@ -32,13 +32,13 @@ signals. The table `tic_to_gaia_dr3.csv` has one row per star.
   the targets. All 21 are one-to-one.
 - **The 13 ambiguous stars are not in real doubt.** In each, one DR3 star lies within 0.25 mas of the DR2 position
   (a mas is a thousandth of an arcsecond, and an arcsecond is 1/3600 of a degree). The other neighbour is 1.25 to
-  1.95 arcsec away and 3.5 to 7.9 magnitudes fainter in DR3 (12 of the 13 have a G magnitude to compare, the 13th
+  1.95 arcsec away and 3.6 to 7.9 magnitudes fainter in DR3 (12 of the 13 have a G magnitude to compare, the 13th
   has none). They are flagged because the issue asks for every case with more than one possible match to be flagged.
 - **Position check: all 651 pass.** Stars move, so a position is right for one date only, called its epoch. The
   TIC's positions are for the year 2000 and Gaia DR3's are for 2016.0. Each chosen DR3 star, moved to the TIC's epoch
-  with its own proper motion, lies within 0.2 arcsec of the TIC position. Proper motion is a star's slow drift
-  across the sky, in mas per year. The differences are tiny: the median is 1.7 mas, 90% are under 3.2 mas, 99% are
-  under 4.9 mas, and the largest is 14.4 mas. No star is near the 0.2 arcsec line. Without the move to 2000, 505 of the
+  with its own proper motion (for TIC 370244729, the TIC's, because its DR3 source has none), lies within 0.2 arcsec of the TIC position. Proper motion is a star's slow drift
+  across the sky, in mas per year. The differences are tiny: the median is 1.65 mas, 90% are under 3.14 mas, 99% are
+  under 4.85 mas, and the largest is 14.38 mas. No star is near the 0.2 arcsec line. Without the move to 2000, 505 of the
   651 would differ by more than 0.2 arcsec (median 0.43 arcsec, largest 9.2 arcsec).
 - **Flags** (a star can carry several, the full list is in the `flags` column): 13 `several_dr3_neighbours`,
   11 `dr3_duplicated_source`, 9 `dr3_shared_with_other_dr2`, and 1 each of `dr3_two_parameter_solution`,
@@ -60,14 +60,14 @@ python3 -I ticmap.py build
 # 2. Download everything again from the archives, then rebuild (28 requests, 4 to 7 minutes).
 python3 -I ticmap.py run --targets /path/to/f0/docs/research/exoplanets/candidates.json
 
-# Any other list works: a text file with one TIC ID per line, or a CSV with a `tic` column.
+# Any other list works: a text file with one TIC ID per line, or a CSV (a plain text table with commas between values) with a `tic` column.
 python3 -I ticmap.py run --targets my_tic_ids.txt --out my_table.csv --snap-dir my_snapshots --data-dir my_data
 
 # 3. Checks
 python3 -I simbad_check.py                  # SIMBAD cross-check (7 requests, cached)
 python3 -I check_inputs.py                  # target file against the TIC, no network
 python3 -I release_day/dr4_link.py standin-test   # test of the position fallback (4 requests)
-python3 -m unittest discover tests          # 111 tests, no network
+python3 -m unittest discover tests          # 116 tests, no network
 ```
 
 Without `--out` and `--snap-dir`, `fetch` and `run` replace the committed table and snapshots in this folder. That is
@@ -75,9 +75,9 @@ intended when you re-run on a new final list. For a trial, give your own `--out`
 the last command of step 2.
 
 If a download fails, nothing in the snapshot folder changes. Run the same command again. Answers already received are
-kept in `data/` and are not asked for twice. A temporary failure is tried again twice, after 10 and 30 seconds,
+kept in `data/` and are not asked for twice. Each answer is checked before it is saved. An error page (a service that is down can send one with status 200), an empty answer, or a table without the expected columns is refused, and nothing is saved from it. If a saved answer fails the check later, it is refused too, and the message names its folder in `data/`: delete that folder and run again. A table with the right columns and no rows is accepted, because it means none of the IDs is in the TIC. If many rows then say `not in TIC`, delete that answer's folder in `data/tic/` and run again. A temporary failure is tried again twice, after 10 and 30 seconds,
 before the command gives up. Temporary means a reset connection, a timeout, or one of the HTTP codes 429, 500, 502,
-503 and 504 (the codes a web server sends when it is busy or restarting). A MAST query took about 20 to 85 seconds in
+503 and 504 (the codes a web server sends when it is busy or restarting). A query to MAST (the Mikulski Archive for Space Telescopes, which holds the TIC) took about 20 to 85 seconds in
 the runs so far. The timeout is 300 seconds, and `--timeout` changes it.
 
 Each snapshot file is written to a temporary folder first and moved in only after every download has worked.
@@ -95,7 +95,7 @@ archive, and the queries are written in ADQL, a form of SQL. They are synchronou
 connection and does not queue a job. The exact text is in `ticmap.py` and in
 `snapshots/run_info.json`, which also has the times.
 
-| What | Service | Ran (UTC, 27 Oct 2026) |
+| What | Service | Ran (UTC, Coordinated Universal Time, 27 Oct 2026) |
 |---|---|---|
 | TIC records, table `dbo.catalogrecord` | [MAST TIC TAP](https://mast.stsci.edu/vo-tap/api/v0.1/tic/sync) | 00:27 to 00:30 |
 | `gaiadr3.dr2_neighbourhood` by DR2 ID | [Gaia archive TAP](https://gea.esac.esa.int/tap-server/tap/sync) | 00:30 |
@@ -140,7 +140,7 @@ What the Gaia columns mean. Read from the archive's table description, then test
 
 | Column | Meaning |
 |---|---|
-| `angular_distance` | Distance between the DR2 and DR3 positions in mas, with the DR3 position moved to the DR2 epoch when DR3 has a proper motion. It matches our own calculation to 0.002 mas (median difference). |
+| `angular_distance` | Distance between the DR2 and DR3 positions in mas, with the DR3 position moved to the DR2 epoch when DR3 has a proper motion. It matches our own calculation to 0.002 mas (median difference). The largest difference is 5.4 mas, for TIC 370244729, whose DR3 source has no proper motion, so the archive does not move it. |
 | `magnitude_difference` | G magnitude (Gaia's main brightness band) of the DR3 star minus that of the DR2 star. The archive does not give the sign. It is DR3 minus DR2: against DR3 G minus the TIC's DR2 G the correlation is 1.000 and the median difference is 0. |
 | `proper_motion_propagation` | True if the DR3 star had a proper motion to move it with. False for one star (see below). |
 
@@ -164,7 +164,7 @@ What the Gaia columns mean. Read from the archive's table description, then test
 | `dr3_pmra`, `dr3_pmdec`, `dr3_g`, `dr3_ruwe` | From `gaiadr3.gaia_source`. RUWE is a number that grows when a star's positions do not fit a single star. All are under 1.4 (largest 1.386). One star has no RUWE. |
 
 The TIC step: the TIC column `gaia` holds the DR2 source ID. The TIC `ra` and `dec` are for epoch 2000
-([TIC column schema, STScI, read 27 Oct 2026](https://outerspace.stsci.edu/x/chSeBg)). Our check agrees: the DR3
+([TIC column schema, from STScI (the Space Telescope Science Institute), read 27 Oct 2026](https://outerspace.stsci.edu/x/chSeBg)). Our check agrees: the DR3
 positions only line up with the TIC when moved to 2000. `ra_orig` and `dec_orig` are the positions of the source
 catalogue. For these 651 stars that catalogue is Gaia DR2, and the numbers match DR3 moved to 2015.5.
 
@@ -180,8 +180,9 @@ catalogue. For these 651 stars that catalogue is Gaia DR2, and the numbers match
 | Position check at the TIC epoch | 651 of 651 within 0.2 arcsec. |
 | SIMBAD cross-check (`simbad_check.py`) | See below. No disagreement. |
 | Position fallback test (`release_day/dr4_link.py standin-test`) | 100 of 100 targets gave the same DR3 star as the table, including all 13 ambiguous ones. |
-| Unit tests | 111 pass. They cover the retries, the refusal of a bad MAST answer, the all-or-nothing snapshots and the SIMBAD verdicts. |
-| A second agent (the verifier) checked this folder on 27 Oct 2026 and did not edit it. **Reported to me, not repeated by me. Its scripts are not in this folder.** | A full download from an empty cache gave the same table. A separate route that does not use `dr2_neighbourhood` (the TIC position and proper motion moved to 2016.0, then the nearest DR3 source within 3 arcsec) chose the same DR3 ID for 651 of 651 stars. Of 10 targets listed in the [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu), 9 have Gaia IDs there and all 9 agree with the table on DR2 and DR3. The Tycho-2 star ID that 185 TIC records carry agrees with Gaia's own Tycho-2 match for the chosen DR3 star in 185 of 185 cases. The TIC's original position (`ra_orig`, `dec_orig`) equals the position of the TIC's DR2 ID in the CDS copy of Gaia DR2 for 651 of 651 stars. |
+| Unit tests | 116 pass. They cover the retries, the refusal of a bad MAST or CSV answer (including an error page sent with status 200), the all-or-nothing snapshots and the SIMBAD verdicts. |
+| Re-run after the fixes, from the saved answers only (no requests). The whole pipeline, rebuilt offline, gives every committed file byte for byte. A download that fails midway leaves the snapshots unchanged. The SIMBAD check and the stand-in test give the same files. | Done on 27 Oct 2026. |
+| A second agent (the verifier) checked this folder on 27 Oct 2026 and did not edit it. **Reported to me, not repeated by me. Its scripts are not in this folder.** | A full download from an empty cache gave the same table. A separate route that does not use `dr2_neighbourhood` (the TIC position and proper motion moved to 2016.0, then the nearest DR3 source within 3 arcsec) chose the same DR3 ID for 651 of 651 stars. Of 10 targets listed in the [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu), 9 have Gaia IDs there and all 9 agree with the table on DR2 and DR3. The Tycho-2 star ID (Tycho-2 is an older star catalogue) that 185 TIC records carry agrees with Gaia's own Tycho-2 match for the chosen DR3 star in 185 of 185 cases. The TIC's original position (`ra_orig`, `dec_orig`) equals the position of the TIC's DR2 ID in the copy of Gaia DR2 that CDS (the Strasbourg data centre) holds, for 651 of 651 stars. |
 
 **SIMBAD** is an astronomy database that lists all the names of each object. For each star the script asks SIMBAD
 for the objects named `TIC <id>`, `Gaia DR2 <id>` and `Gaia DR3 <id>`, using the IDs in our table.
@@ -207,7 +208,7 @@ need the check below. **A person has not yet looked at any of the 10.**
 
 To check one, open its link. VizieR (CDS's catalogue service) shows the Gaia DR3 record, including the columns
 `RAJ2000` and `DEJ2000`, which are the DR3 position that CDS has moved to the year 2000. That position should match the
-TIC position in the table to within a few mas. The last column before SIMBAD is our own offset for comparison. I
+TIC position in the table to within a few mas. The last column before SIMBAD is our own offset for comparison. In the SIMBAD column, names in brackets are other catalogue numbers: TYC is Tycho-2, and UCAC4 is another star catalogue. I
 tested the link on the first row only. VizieR gave 72.44924492 and -1.41682391 against the TIC's 72.44924533 and
 -1.41682383, a difference of 1.5 mas, equal to our own 1.5 mas.
 
@@ -249,11 +250,11 @@ The full per-star SIMBAD result is in `snapshots/simbad_crosscheck.csv`.
 - **The table covers neighbours within 2 arcsec of the DR2 star.** It does not list every star inside a TESS
   aperture (a patch of TESS pixels, each about 21 arcsec wide). The blend question B needs that wider list from
   another query.
-- **No Kepler or K2 hosts yet.** The planet-host list of
+- **No Kepler or K2 hosts yet.** Kepler and K2 are NASA's earlier planet-hunting missions. The planet-host list of
   [issue #3](https://github.com/Foundation-0/gaia-dr4/issues/3) does not exist yet. The pipeline takes TIC IDs only.
   Kepler and K2 hosts would need a TIC ID first. The TIC has a `kic` column for Kepler IDs, but no lookup is built.
 - **The candidate list has changed.** This run used the list of 14 Oct 2026 (665 rows, commit `58c6318` of
-  [eumemic/exoplanets](https://github.com/eumemic/exoplanets)). eumemic's README of 22 Oct 2026 counts 645. Run the
+  [eumemic/exoplanets](https://github.com/eumemic/exoplanets)). eumemic's README of 22 Oct 2026 counts 645. The commit and its date come from the candidate file that the run used (`candidates.json`, in f0's docs, which records commit 58c6318 dated 14 Oct 2026). I could not open that commit on GitHub from this session, so it is not checked against GitHub. Run the
   pipeline again on the current list before 25 November.
 - **The Gaia documentation pages did not load** (HTTP 503), as described above.
 - **The fallback by position searches only DR4's `gaia_source`, in the first instance.** The draft DR4 data model says
@@ -262,12 +263,14 @@ The full per-star SIMBAD result is in `snapshots/simbad_crosscheck.csv`.
   2026). A target outside that subset could be missed by the first search. `position-queries --all-sources` repeats
   the search on the complete tables. It is untested, because those tables do not exist yet.
 - **Not tested:** the DR3 to DR4 step. The table `dr3_neighbourhood` does not exist yet.
-- About 90 requests were sent by the scripts (Gaia archive 62, MAST 18 plus 2 early metadata probes, SIMBAD 7, two
-  file downloads), one at a time with at least 1 second between them, anonymous, with the User-Agent
+- The two request logs hold 92 requests: `data/requests.log` has 64 and `data_rerun/requests.log` has 28. Neither is
+  committed. The logs count 62 to the Gaia archive, 18 to MAST, 7 to SIMBAD and 5 to ESA, STScI, AIP and VizieR pages.
+  The last three log rows were added by hand, so they have no status code. The scripts sent their requests one at a
+  time, at least 1 second apart, anonymously, with the User-Agent
   `Foundation0-gaia-dr4/0.1 (+https://github.com/Foundation-0/gaia-dr4)`. Five returned errors (four documentation
-  pages with 503, one TIC query with 504). A web reader also fetched a few ESA, STScI and AIP pages to read them.
-  The round of fixes after the verification added 3 requests, one to the STScI schema page and two to VizieR (one Gaia
-  DR3 record page and one catalogue page), and re-ran everything else from the saved answers. The verifier sent about 88 requests of its own.
+  pages with 503, one TIC query with 504). The round of fixes after the verification added 3 requests (the STScI schema
+  page and two VizieR pages). The later re-run used the saved answers only and sent no requests. The verifier sent
+  about 88 requests of its own.
 
 ## Where a person has to decide
 
@@ -284,7 +287,7 @@ The full per-star SIMBAD result is in `snapshots/simbad_crosscheck.csv`.
    want to look before the DR4 step. TIC IDs: 38680704, 105507572, 139885709, 159884708, 202664116, 256122096,
    322806500, 343942488, 364027765, 402047931, 462737661.
 3. **The 13 ambiguous stars.** Whether to treat them as one-to-one downstream. The reasoning above says yes. Each has
-   a faint neighbour 1.3 to 1.9 arcsec away, which may matter for the blend question B.
+   a faint neighbour 1.25 to 1.95 arcsec away, which may matter for the blend question B.
 4. **The spot check by hand** that the issue asks for (the 10 links above). Six of the ten are not confirmed by
    SIMBAD through all three names, so the by-hand check carries the weight there.
 5. **Before 25 November:** re-run on eumemic's current list and on the planet-host list once it exists. Then a person
@@ -317,7 +320,7 @@ Details and the commands are in [release_day/README.md](release_day/README.md). 
 | `simbad_check.py`, `check_inputs.py` | The two cross-checks. |
 | `snapshots/` | Small CSV copies of every answer the table is built from, plus the check results. |
 | `release_day/` | DR3 to DR4 procedure, ADQL template and the code to run it. |
-| `tests/` | 111 unit tests. |
+| `tests/` | 116 unit tests. |
 | `.gitignore` | Keeps `data/` (raw answers, about 10 MB), `data_rerun/` (the second download) and `work/` (release-day answers) out of git. |
 
 ## Acknowledgements

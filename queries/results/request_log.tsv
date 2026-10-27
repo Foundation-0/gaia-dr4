@@ -105,3 +105,4 @@ utc_time	kind	status	bytes	cache_key	url	note
 2026-10-27T01:37:16Z	TAP	200	41387	bbfcd413631a24ace6e7af01	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates_neighbours full verify
 2026-10-27T01:37:18Z	TAP	200	1547	b6ffc5c4fc7eb895aa7fa699	https://gea.esac.esa.int/tap-server/tap/sync	pt_by_source_ids full verify
 2026-10-27T01:37:20Z	TAP	200	348	fac7b2492ad05ffac1c545cf	https://gea.esac.esa.int/tap-server/tap/sync	flags_in_cone full verify
+2026-10-27T07:07:05Z	TAP	200	23	30242fcb505f7eea160c0c81	https://gea.esac.esa.int/tap-server/tap/sync	check_columns live

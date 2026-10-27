@@ -15,9 +15,16 @@ OUT = os.path.join(HERE, "results", "out")
 FULL = os.path.join(HERE, "data", "full")
 REPORT = os.path.join(HERE, "results", "dr3_checks.md")
 
-# Harvard plates: 1890 to 1989 (DASCH). Days from the DR3 mid-time (about JD 2457400) back to the plate years.
-JD_2016 = 2457388.5
+# Harvard plates: 1890 to 1989 (DASCH), as Julian Dates at 1 January of each year.
+# The table's times are BJD(TCB) minus 2455197.5 (see README.md); each star's own reference_time is used.
+BJD_OFFSET = 2455197.5
 JD_1890, JD_1950, JD_1989 = 2411368.5, 2433282.5, 2447527.5
+
+
+def days_back(row, jd_plate):
+    """Days from the star's own reference_time back to a plate year, or None if reference_time is missing."""
+    t = num(row["reference_time"])
+    return None if t is None else t + BJD_OFFSET - jd_plate
 
 
 def read(path):
@@ -149,18 +156,22 @@ def main():
 
     w("### Can an eclipse time be carried back to the Harvard plates?\n")
     w("The error on the phase of an eclipse after dt days is about dt times `frequency_error`, in cycles. "
-      "From the DR3 reference time (about 2016) back to 1950 is about %d days, back to 1890 about %d days. "
-      "This uses the formal error only. It ignores aliasing, which makes it a lower bound." % (
-          JD_2016 - JD_1950, JD_2016 - JD_1890))
+      "dt is counted from each star's own `reference_time` back to 1 January of the plate year. "
+      "This uses the formal error only. It ignores aliasing, which makes it a lower bound.")
     w("A phase error well below 0.1 cycle is needed to say where an eclipse fell.\n")
     rows = []
     for label, jd in [("1989", JD_1989), ("1950", JD_1950), ("1890", JD_1890)]:
-        dt = JD_2016 - jd
-        allv = sorted(float(r["frequency_error"]) * dt for r in eb if num(r["frequency_error"]) is not None)
-        cutv = sorted(float(r["frequency_error"]) * dt for r in cut if num(r["frequency_error"]) is not None)
-        rows.append([label, int(dt), "%.2f" % pct(allv, 0.5), sum(v < 0.1 for v in allv), len(allv),
+        pa = [(float(r["frequency_error"]), days_back(r, jd)) for r in eb
+              if num(r["frequency_error"]) is not None and days_back(r, jd) is not None]
+        pc = [(float(r["frequency_error"]), days_back(r, jd)) for r in cut
+              if num(r["frequency_error"]) is not None and days_back(r, jd) is not None]
+        allv = sorted(f * d for f, d in pa)
+        cutv = sorted(f * d for f, d in pc)
+        dts = sorted(d for f, d in pa)
+        rows.append([label, "%d (%d to %d)" % (pct(dts, 0.5), dts[0], dts[-1]),
+                     "%.2f" % pct(allv, 0.5), sum(v < 0.1 for v in allv), len(allv),
                      "%.2f" % pct(cutv, 0.5), sum(v < 0.1 for v in cutv), len(cutv)])
-    table(out, ["year", "days back", "median phase error, all (cycles)", "all with error < 0.1", "of",
+    table(out, ["year", "days back: median (range)", "median phase error, all (cycles)", "all with error < 0.1", "of",
                 "median, B-cut stars", "B-cut with error < 0.1", "of"], rows)
 
     w("### Mean G against the model's out-of-eclipse level\n")
@@ -174,7 +185,7 @@ def main():
     rows = []
     for r in read(os.path.join(OUT, "pt_summary_period.csv")):
         lo = float(r["log_period_bin"])
-        rows.append(["%.1f to %.1f" % (10 ** lo, 10 ** (lo + 0.25)), r["n_candidates"], "%.1f" % float(r["mean_depth_mmag"]),
+        rows.append(["%.2f to %.2f" % (10 ** lo, 10 ** (lo + 0.25)), r["n_candidates"], "%.1f" % float(r["mean_depth_mmag"]),
                      "%.3f" % float(r["mean_duration_days"]), r["min_in_transit"], r["max_in_transit"]])
     table(out, ["period (days)", "candidates", "mean depth (mmag)", "mean duration (d)", "fewest in-transit obs", "most"], rows)
     ptf = read(os.path.join(FULL, "pt_candidates.csv"))
