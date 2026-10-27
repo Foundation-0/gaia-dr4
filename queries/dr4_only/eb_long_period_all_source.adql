@@ -1,0 +1,52 @@
+-- Query: eb_long_period_all_source (DR4 names, no DR3 stand-in)
+-- Serves: Question C, fallback. The same as eb_long_period_bcut, but position and magnitudes come from
+--   all_source_astrometry and all_source_photometry, which cover nearly every source, instead of gaia_source, which
+--   holds only sources with high-quality astrometry and photometry. Use it if eb_missing_from_gaia_source is above 0.
+-- Names: the draft DR4 data model of 26 Jun 2026. The schema name gaiadr4 is taken from that model's own example
+--   query.
+-- DR3 stand-in: none. DR3 has no all_source_astrometry or all_source_photometry.
+-- Last ran on DR3: never, for that reason. Last ran on DR4: never. The archive has no DR4 until 2 Dec 2026.
+-- DR4 columns this query relies on:
+--   gaiadr4.vari_eclipsing_binary: derived_primary_ecl_depth, derived_primary_ecl_duration,
+--   derived_primary_ecl_phase, derived_secondary_ecl_depth, derived_secondary_ecl_duration,
+--   derived_secondary_ecl_phase, frequency, frequency_error, model_type, reference_time, source_id
+-- Cannot be tested before release: All of it. DR3 has no all_source_astrometry or all_source_photometry. Table and
+--   column names are only checked against the draft data model.
+SELECT
+    eb.source_id,
+    1.0 / eb.frequency AS period_days,
+    eb.frequency,
+    eb.frequency_error,
+    eb.reference_time,
+    eb.model_type,
+    eb.derived_primary_ecl_phase,
+    eb.derived_primary_ecl_duration,
+    eb.derived_primary_ecl_depth,
+    eb.derived_secondary_ecl_phase,
+    eb.derived_secondary_ecl_duration,
+    eb.derived_secondary_ecl_depth,
+    ast.in_gaia_source,
+    ast.ra,
+    ast.dec,
+    ast.ref_epoch,
+    ast.pmra,
+    ast.pmdec,
+    ast.parallax,
+    ast.parallax_error,
+    ast.ruwe,
+    ph.phot_g_mean_mag,
+    ph.phot_bp_mean_mag,
+    ph.phot_rp_mean_mag,
+    ph.bp_rp,
+    ((ph.phot_g_mean_mag - (-0.02704 + 0.01424*ph.bp_rp - 0.2156*ph.bp_rp*ph.bp_rp + 0.01426*ph.bp_rp*ph.bp_rp*ph.bp_rp)) + (0.85*((-0.01077 - 0.0682*ph.bp_rp - 0.2387*ph.bp_rp*ph.bp_rp + 0.02342*ph.bp_rp*ph.bp_rp*ph.bp_rp) - (-0.004288 - 0.8547*ph.bp_rp + 0.1244*ph.bp_rp*ph.bp_rp - 0.9085*ph.bp_rp*ph.bp_rp*ph.bp_rp + 0.4843*ph.bp_rp*ph.bp_rp*ph.bp_rp*ph.bp_rp - 0.06814*ph.bp_rp*ph.bp_rp*ph.bp_rp*ph.bp_rp*ph.bp_rp)))) AS b_mag_estimate
+FROM gaiadr4.vari_eclipsing_binary AS eb
+LEFT OUTER JOIN gaiadr4.all_source_astrometry AS ast
+    ON ast.source_id = eb.source_id
+LEFT OUTER JOIN gaiadr4.all_source_photometry AS ph
+    ON ph.source_id = eb.source_id
+WHERE eb.frequency < 0.01
+  AND ((ph.bp_rp < 2.0 AND ((ph.phot_g_mean_mag - (-0.02704 + 0.01424*ph.bp_rp - 0.2156*ph.bp_rp*ph.bp_rp + 0.01426*ph.bp_rp*ph.bp_rp*ph.bp_rp)) + (0.85*((-0.01077 - 0.0682*ph.bp_rp - 0.2387*ph.bp_rp*ph.bp_rp + 0.02342*ph.bp_rp*ph.bp_rp*ph.bp_rp) - (-0.004288 - 0.8547*ph.bp_rp + 0.1244*ph.bp_rp*ph.bp_rp - 0.9085*ph.bp_rp*ph.bp_rp*ph.bp_rp + 0.4843*ph.bp_rp*ph.bp_rp*ph.bp_rp*ph.bp_rp - 0.06814*ph.bp_rp*ph.bp_rp*ph.bp_rp*ph.bp_rp*ph.bp_rp)))) < 13.75)
+    OR (ph.bp_rp >= 2.0 AND ph.bp_rp < 2.5 AND ((ph.phot_g_mean_mag - (-0.02704 + 0.01424*ph.bp_rp - 0.2156*ph.bp_rp*ph.bp_rp + 0.01426*ph.bp_rp*ph.bp_rp*ph.bp_rp)) + (0.85*((-0.01077 - 0.0682*ph.bp_rp - 0.2387*ph.bp_rp*ph.bp_rp + 0.02342*ph.bp_rp*ph.bp_rp*ph.bp_rp) - (-0.004288 - 0.8547*ph.bp_rp + 0.1244*ph.bp_rp*ph.bp_rp - 0.9085*ph.bp_rp*ph.bp_rp*ph.bp_rp + 0.4843*ph.bp_rp*ph.bp_rp*ph.bp_rp*ph.bp_rp - 0.06814*ph.bp_rp*ph.bp_rp*ph.bp_rp*ph.bp_rp*ph.bp_rp)))) < 14.0)
+    OR (ph.bp_rp >= 2.5 AND ph.phot_g_mean_mag + 2.5 < 13.5)
+    OR (ph.bp_rp IS NULL AND ph.phot_g_mean_mag + (-0.3) < 13.5))
+ORDER BY eb.source_id

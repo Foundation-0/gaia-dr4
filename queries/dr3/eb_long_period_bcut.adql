@@ -1,0 +1,52 @@
+-- Query: eb_long_period_bcut (DR3 stand-in)
+-- Serves: Question C. The same as eb_long_period, with the cut 'brighter than about B = 13.5' written in ADQL from
+--   G, BP and RP. The cut keeps every star that might pass (margins in README.md), so some stars up to 0.25 mag
+--   fainter get through (0.5 mag for BP-RP from 2.0 to 2.5). Rows with BP-RP above 2.5 are cut by G alone.
+-- Made from dr4/eb_long_period_bcut.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.gaia_source, gaiadr3.vari_eclipsing_binary.
+-- Last ran without error: 2026-10-27, 86 rows (results/run_log.tsv).
+SELECT
+    eb.source_id,
+    1.0 / eb.frequency AS period_days,
+    eb.frequency,
+    eb.frequency_error,
+    eb.reference_time,
+    eb.model_type,
+    eb.global_ranking,
+    eb.reduced_chi2,
+    eb.geom_model_reference_level,
+    eb.derived_primary_ecl_phase,
+    eb.derived_primary_ecl_phase_error,
+    eb.derived_primary_ecl_duration,
+    eb.derived_primary_ecl_depth,
+    eb.derived_secondary_ecl_phase,
+    eb.derived_secondary_ecl_phase_error,
+    eb.derived_secondary_ecl_duration,
+    eb.derived_secondary_ecl_depth,
+    gs.ra,
+    gs.dec,
+    gs.ref_epoch,
+    gs.pmra,
+    gs.pmdec,
+    gs.parallax,
+    gs.parallax_error,
+    gs.ruwe,
+    gs.phot_g_mean_mag,
+    gs.phot_bp_mean_mag,
+    gs.phot_rp_mean_mag,
+    gs.bp_rp,
+    gs.phot_variable_flag,
+    gs.teff_gspphot,
+    (gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) AS v_mag_estimate,
+    (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp))) AS b_minus_v_estimate,
+    ((gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp)))) AS b_mag_estimate,
+    ((eb.geom_model_reference_level - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp)))) AS b_mag_estimate_out_of_eclipse
+FROM gaiadr3.vari_eclipsing_binary AS eb
+LEFT OUTER JOIN gaiadr3.gaia_source AS gs
+    ON gs.source_id = eb.source_id
+WHERE eb.frequency < 0.01
+  AND ((gs.bp_rp < 2.0 AND ((gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp)))) < 13.75)
+    OR (gs.bp_rp >= 2.0 AND gs.bp_rp < 2.5 AND ((gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp)))) < 14.0)
+    OR (gs.bp_rp >= 2.5 AND gs.phot_g_mean_mag + 2.5 < 13.5)
+    OR (gs.bp_rp IS NULL AND gs.phot_g_mean_mag + (-0.3) < 13.5))
+ORDER BY eb.source_id

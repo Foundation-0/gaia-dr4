@@ -1,0 +1,28 @@
+-- Query: pt_candidates_neighbours (DR3 stand-in)
+-- Serves: Planetary-transit candidates with the neighbourhood table that links IDs between releases. In DR4 it links
+--   to DR3 IDs (dr3_neighbourhood). The DR3 stand-in links to DR2 IDs (dr2_neighbourhood), which is the ID the TESS
+--   Input Catalog uses. A candidate can have several rows. A candidate with no row is left out, because a LEFT JOIN
+--   to these billion-row tables ran past the archive's 60 second limit: compare the number of distinct source_id
+--   returned with the count.
+-- Made from dr4/pt_candidates_neighbours.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.dr2_neighbourhood, gaiadr3.gaia_source, gaiadr3.vari_planetary_transit.
+-- Last ran without error: 2026-10-27, 218 rows (results/run_log.tsv).
+SELECT
+    pt.source_id,
+    pt.transit_reference_time,
+    pt.transit_period,
+    pt.transit_duration,
+    pt.transit_depth,
+    gs.ra,
+    gs.dec,
+    gs.phot_g_mean_mag,
+    nb.dr3_source_id AS neighbourhood_source_id,
+    nb.dr2_source_id AS neighbourhood_older_source_id,
+    nb.angular_distance,
+    nb.magnitude_difference
+FROM gaiadr3.vari_planetary_transit AS pt
+LEFT OUTER JOIN gaiadr3.gaia_source AS gs
+    ON gs.source_id = pt.source_id
+JOIN gaiadr3.dr2_neighbourhood AS nb
+    ON nb.dr3_source_id = pt.source_id
+ORDER BY pt.source_id, nb.angular_distance

@@ -1,0 +1,24 @@
+-- Query: pt_summary_period (DR3 stand-in)
+-- Serves: Transit candidates per quarter-decade of period (log10 of the period in days, lower edge), with mean depth
+--   and duration and the range of the number of in-transit observations.
+-- Made from dr4/pt_summary_period.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.vari_planetary_transit.
+-- Last ran without error: 2026-10-27, 9 rows (results/run_log.tsv).
+SELECT
+    t.log_period_bin,
+    COUNT(*) AS n_candidates,
+    AVG(t.depth_mmag) AS mean_depth_mmag,
+    AVG(t.duration_days) AS mean_duration_days,
+    MIN(t.n_in_transit) AS min_in_transit,
+    MAX(t.n_in_transit) AS max_in_transit
+FROM (
+    SELECT
+        FLOOR(LOG10(pt.transit_period) * 4.0) / 4.0 AS log_period_bin,
+        pt.transit_depth AS depth_mmag,
+        pt.transit_duration AS duration_days,
+        pt.num_in_transit AS n_in_transit
+    FROM gaiadr3.vari_planetary_transit AS pt
+    WHERE pt.transit_period > 0.0
+) AS t
+GROUP BY t.log_period_bin
+ORDER BY t.log_period_bin

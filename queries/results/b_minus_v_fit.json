@@ -1,0 +1,18 @@
+{
+ "what": "B - V = sum(c[i] * (BP-RP)**i), fitted to APASS DR9 B-V of the train stars",
+ "coefficients": [
+  -0.00682894245457224,
+  0.6094667012603637,
+  0.280519737165833,
+  -0.08232658600803287
+ ],
+ "degree": 3,
+ "n_train": 200,
+ "n_used": 193,
+ "bp_rp_range": [
+  -0.0034503937,
+  4.105483
+ ],
+ "rms_residual_all_train": 0.1187931783298652,
+ "sample_file": "results/b_sample.csv"
+}

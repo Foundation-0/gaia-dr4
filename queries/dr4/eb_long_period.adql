@@ -1,0 +1,69 @@
+-- Query: eb_long_period (DR4 names)
+-- Serves: Question C. Eclipsing binaries with a period over 100 days, with what is needed to predict eclipse times
+--   (reference_time, frequency, eclipse phases, durations) and gaia_source position, parallax, magnitudes and
+--   colour. No magnitude cut. V and B are estimated from G, BP and RP (README.md).
+-- Names: the draft DR4 data model of 26 Jun 2026. The schema name gaiadr4 is taken from that model's own example
+--   query.
+-- DR3 stand-in: dr3/eb_long_period.adql, made from this file by make_standin.py. DR3 tables: gaiadr3.gaia_source,
+--   gaiadr3.vari_eclipsing_binary.
+-- Last ran without error on the DR3 stand-in: 2026-10-27 (2588 rows; results/run_log.tsv).
+-- Last ran on DR4: never. The archive has no DR4 until 2 Dec 2026.
+-- DR4 columns this query relies on:
+--   gaiadr4.gaia_source: bp_rp, colour_origin, dec, g_photometry_origin, parallax, parallax_error, phot_bp_mean_mag,
+--   phot_g_mean_mag, phot_rp_mean_mag, phot_variable_flag, pmdec, pmra, ra, ref_epoch, ruwe, source_id, teff
+--   gaiadr4.vari_eclipsing_binary: derived_primary_ecl_depth, derived_primary_ecl_duration,
+--   derived_primary_ecl_phase, derived_primary_ecl_phase_error, derived_secondary_ecl_depth,
+--   derived_secondary_ecl_duration, derived_secondary_ecl_phase, derived_secondary_ecl_phase_error, frequency,
+--   frequency_error, frequency_rv_consistency_flag, g_median, g_num_obs, geom_model_reference_level, global_ranking,
+--   model_type, reduced_chi2, reference_time, sample_classification, source_id
+-- Lines tagged DR4ONLY have no DR3 equivalent and are dropped from the stand-in.
+-- Cannot be tested before release: Everything about DR4 values: how many rows, which model types and periods,
+--   whether eclipse phases follow the convention in README.md for DR4, whether DR4 G for eclipsing binaries is a
+--   mean or an out-of-eclipse value.
+SELECT
+    eb.source_id,
+    1.0 / eb.frequency AS period_days,
+    eb.frequency,
+    eb.frequency_error,
+    eb.reference_time,
+    eb.model_type,
+    eb.global_ranking,
+    eb.reduced_chi2,
+    eb.geom_model_reference_level,
+    eb.derived_primary_ecl_phase,
+    eb.derived_primary_ecl_phase_error,
+    eb.derived_primary_ecl_duration,
+    eb.derived_primary_ecl_depth,
+    eb.derived_secondary_ecl_phase,
+    eb.derived_secondary_ecl_phase_error,
+    eb.derived_secondary_ecl_duration,
+    eb.derived_secondary_ecl_depth,
+    eb.g_median,  -- DR4ONLY
+    eb.g_num_obs,  -- DR4ONLY
+    eb.sample_classification,  -- DR4ONLY
+    eb.frequency_rv_consistency_flag,  -- DR4ONLY
+    gs.ra,
+    gs.dec,
+    gs.ref_epoch,
+    gs.pmra,
+    gs.pmdec,
+    gs.parallax,
+    gs.parallax_error,
+    gs.ruwe,
+    gs.phot_g_mean_mag,
+    gs.phot_bp_mean_mag,
+    gs.phot_rp_mean_mag,
+    gs.bp_rp,
+    gs.phot_variable_flag,
+    gs.teff,
+    gs.g_photometry_origin,  -- DR4ONLY
+    gs.colour_origin,  -- DR4ONLY
+    (gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) AS v_mag_estimate,
+    (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp))) AS b_minus_v_estimate,
+    ((gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp)))) AS b_mag_estimate,
+    ((eb.geom_model_reference_level - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp)))) AS b_mag_estimate_out_of_eclipse
+FROM gaiadr4.vari_eclipsing_binary AS eb
+LEFT OUTER JOIN gaiadr4.gaia_source AS gs
+    ON gs.source_id = eb.source_id
+WHERE eb.frequency < 0.01
+ORDER BY eb.source_id

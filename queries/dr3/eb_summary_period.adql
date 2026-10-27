@@ -1,0 +1,16 @@
+-- Query: eb_summary_period (DR3 stand-in)
+-- Serves: Question C. Number of eclipsing binaries per quarter-decade of period (log10 of the period in days, lower
+--   edge).
+-- Made from dr4/eb_summary_period.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.vari_eclipsing_binary.
+-- Last ran without error: 2026-10-27, 15 rows (results/run_log.tsv).
+SELECT
+    t.log_period_bin,
+    COUNT(*) AS n_sources
+FROM (
+    SELECT FLOOR(LOG10(1.0 / eb.frequency) * 4.0) / 4.0 AS log_period_bin
+    FROM gaiadr3.vari_eclipsing_binary AS eb
+    WHERE eb.frequency > 0.0
+) AS t
+GROUP BY t.log_period_bin
+ORDER BY t.log_period_bin

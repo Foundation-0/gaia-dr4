@@ -1,0 +1,450 @@
+table_name,column_name,datatype,unit,ucd,description
+external.apassdr9,recno,long,,meta.record,"Record number assigned by the VizieR team. Should Not be used for identification. However, the lack of a unique ID in APASS has made the VizieR recno the de-facto source identifier. For instance, it is used as such in the Gaia DR2 cross-match tables."
+external.apassdr9,raj2000,double,deg,pos.eq.ra;meta.main,Right ascension in decimal degrees (J2000)
+external.apassdr9,dej2000,double,deg,pos.eq.dec;meta.main,Declination in decimal degrees (J2000)
+external.apassdr9,e_ra,float,arcsec,stat.error;pos.eq.ra,[0/2.4] RA uncertainty
+external.apassdr9,e_dec,float,arcsec,stat.error;pos.eq.dec,[0/2.4] DEC uncertainty
+external.apassdr9,field,long,,meta.id;obs.field,[20110001/9999988888] Field name
+external.apassdr9,nobs,short,,meta.number,[2/387] Number of observed nights
+external.apassdr9,mobs,short,,meta.number,"[2/3476] Number of images for this field, usually nobs*5"
+external.apassdr9,b_v,float,mag,phot.color,[-7.5/13]? B-V color index
+external.apassdr9,e_b_v,float,mag,stat.error;phot.color,[0/10.1]? B-V uncertainty
+external.apassdr9,vmag,float,mag,phot.mag;em.opt.V,[5.5/27.4]? Johnson V-band magnitude
+external.apassdr9,e_vmag,float,mag,stat.error;phot.mag;em.opt.V,[0/7]? Vmag uncertainty
+external.apassdr9,u_e_vmag,short,,meta.code.error,[0/1]? Uncertainty flag on e_Vmag (1)
+external.apassdr9,bmag,float,mag,phot.mag;em.opt.B,[5.4/27.3]? Johnson B-band magnitude
+external.apassdr9,e_bmag,float,mag,stat.error;phot.mag;em.opt.B,[0/10]? Bmag uncertainty
+external.apassdr9,u_e_bmag,short,,meta.code.error,[0/1]? Uncertainty flag on e_Bmag (1)
+external.apassdr9,g_mag,float,mag,phot.mag;em.opt.B,"[5.9/24.2]? g'-band AB magnitude, Sloan filter"
+external.apassdr9,e_g_mag,float,mag,stat.error;phot.mag;em.opt.B,[0/9.7]? g'mag uncertainty
+external.apassdr9,u_e_g_mag,short,,meta.code.error,[0/1]? Uncertainty flag on e_g'mag (1)
+external.apassdr9,r_mag,float,mag,phot.mag;em.opt.R,"[5.1/23.9]? r'-band AB magnitude, Sloan filter"
+external.apassdr9,e_r_mag,float,mag,stat.error;phot.mag;em.opt.R,[0/6.5]? r'mag uncertainty
+external.apassdr9,u_e_r_mag,short,,meta.code.error,[0/1]? Uncertainty flag on e_r'mag (1)
+external.apassdr9,i_mag,float,mag,phot.mag;em.opt.I,"[4.2/29.1]? i'-band AB magnitude, Sloan filter"
+external.apassdr9,e_i_mag,float,mag,stat.error;phot.mag;em.opt.I,[0/9.6]? i'mag uncertainty
+external.apassdr9,u_e_i_mag,short,,meta.code.error,[0/1]? Uncertainty flag on e_i'mag (1)
+gaiadr3.apassdr9_best_neighbour,source_id,long,,meta.id;meta.main,Unique Gaia source identifier
+gaiadr3.apassdr9_best_neighbour,clean_apassdr9_oid,long,,meta.id.cross,External Catalogue source identifier
+gaiadr3.apassdr9_best_neighbour,original_ext_source_id,long,,meta.id.cross,Original External Catalogue source identifier
+gaiadr3.apassdr9_best_neighbour,angular_distance,double,arcsec,pos.angDistance,Angular Distance between the two sources
+gaiadr3.apassdr9_best_neighbour,number_of_neighbours,int,,meta.number,Number of neighbours in External Catalogue
+gaiadr3.apassdr9_best_neighbour,number_of_mates,short,,meta.number,Number of mates in Gaia Catalogue
+gaiadr3.apassdr9_best_neighbour,xm_flag,int,,meta.code.status,Cross-match algorithm flag
+gaiadr3.dr2_neighbourhood,dr2_source_id,long,,meta.id.cross,Source identifier in Gaia DR2
+gaiadr3.dr2_neighbourhood,dr3_source_id,long,,meta.id.cross;meta.main,Source identifier in Gaia E/DR3
+gaiadr3.dr2_neighbourhood,angular_distance,float,mas,pos.angDistance,Angular distance between the two sources
+gaiadr3.dr2_neighbourhood,magnitude_difference,float,mag,phot.mag;arith.diff,G band magnitude difference between the sources
+gaiadr3.dr2_neighbourhood,proper_motion_propagation,boolean,,meta.code.status,Flag indicating whether E/DR3 coordinates were proper motion corrected
+gaiadr3.gaia_source,solution_id,long,,meta.version,Solution Identifier
+gaiadr3.gaia_source,designation,char,,meta.id;meta.main,Unique source designation (unique across all Data Releases)
+gaiadr3.gaia_source,source_id,long,,meta.id,Unique source identifier (unique within a particular Data Release)
+gaiadr3.gaia_source,random_index,long,,meta.code,Random index for use when selecting subsets
+gaiadr3.gaia_source,ref_epoch,double,yr,meta.ref;time.epoch,Reference epoch
+gaiadr3.gaia_source,ra,double,deg,pos.eq.ra;meta.main,Right ascension
+gaiadr3.gaia_source,ra_error,float,mas,stat.error;pos.eq.ra,Standard error of right ascension
+gaiadr3.gaia_source,dec,double,deg,pos.eq.dec;meta.main,Declination
+gaiadr3.gaia_source,dec_error,float,mas,stat.error;pos.eq.dec,Standard error of declination
+gaiadr3.gaia_source,parallax,double,mas,pos.parallax.trig,Parallax
+gaiadr3.gaia_source,parallax_error,float,mas,stat.error;pos.parallax.trig,Standard error of parallax
+gaiadr3.gaia_source,parallax_over_error,float,,stat.snr;pos.parallax.trig,Parallax divided by its standard error
+gaiadr3.gaia_source,pm,float,mas.yr**-1,pos.pm;pos.eq,Total proper motion
+gaiadr3.gaia_source,pmra,double,mas.yr**-1,pos.pm;pos.eq.ra,Proper motion in right ascension direction
+gaiadr3.gaia_source,pmra_error,float,mas.yr**-1,stat.error;pos.pm;pos.eq.ra,Standard error of proper motion in right ascension direction
+gaiadr3.gaia_source,pmdec,double,mas.yr**-1,pos.pm;pos.eq.dec,Proper motion in declination direction
+gaiadr3.gaia_source,pmdec_error,float,mas.yr**-1,stat.error;pos.pm;pos.eq.dec,Standard error of proper motion in declination direction
+gaiadr3.gaia_source,ra_dec_corr,float,,stat.correlation,Correlation between right ascension and declination
+gaiadr3.gaia_source,ra_parallax_corr,float,,stat.correlation,Correlation between right ascension and parallax		
+gaiadr3.gaia_source,ra_pmra_corr,float,,stat.correlation,Correlation between right ascension and proper motion in right ascension
+gaiadr3.gaia_source,ra_pmdec_corr,float,,stat.correlation,Correlation between right ascension and proper motion in declination
+gaiadr3.gaia_source,dec_parallax_corr,float,,stat.correlation,Correlation between declination and parallax
+gaiadr3.gaia_source,dec_pmra_corr,float,,stat.correlation,Correlation between declination and proper motion in right ascension
+gaiadr3.gaia_source,dec_pmdec_corr,float,,stat.correlation,Correlation between declination and proper motion in declination
+gaiadr3.gaia_source,parallax_pmra_corr,float,,stat.correlation,Correlation between parallax and proper motion in right ascension
+gaiadr3.gaia_source,parallax_pmdec_corr,float,,stat.correlation,Correlation between parallax and proper motion in declination
+gaiadr3.gaia_source,pmra_pmdec_corr,float,,stat.correlation,Correlation between proper motion in right ascension and proper motion in declination
+gaiadr3.gaia_source,astrometric_n_obs_al,short,,meta.number,Total number of observations in the along-scan (AL) direction
+gaiadr3.gaia_source,astrometric_n_obs_ac,short,,meta.number,Total number of observations in the across-scan (AC) direction
+gaiadr3.gaia_source,astrometric_n_good_obs_al,short,,meta.number,Number of good observations in the along-scan (AL) direction
+gaiadr3.gaia_source,astrometric_n_bad_obs_al,short,,meta.number,Number of bad observations in the along-scan (AL) direction
+gaiadr3.gaia_source,astrometric_gof_al,float,,stat.fit.goodness,Goodness of fit statistic of model wrt along-scan observations
+gaiadr3.gaia_source,astrometric_chi2_al,float,,stat.fit.chi2,AL chi-square value
+gaiadr3.gaia_source,astrometric_excess_noise,float,mas,stat.value,Excess noise of the source
+gaiadr3.gaia_source,astrometric_excess_noise_sig,float,,stat.value,Significance of excess noise
+gaiadr3.gaia_source,astrometric_params_solved,short,,meta.number,Which parameters have been solved for?
+gaiadr3.gaia_source,astrometric_primary_flag,boolean,,meta.code,Primary or seconday
+gaiadr3.gaia_source,nu_eff_used_in_astrometry,float,um**-1,em.wavenumber,Effective wavenumber of the source used in the astrometric solution
+gaiadr3.gaia_source,pseudocolour,float,um**-1,em.wavenumber,Astrometrically estimated pseudocolour of the source
+gaiadr3.gaia_source,pseudocolour_error,float,um**-1,stat.error;em.wavenumber,Standard error of the pseudocolour of the source
+gaiadr3.gaia_source,ra_pseudocolour_corr,float,,stat.correlation;em.wavenumber;pos.eq.ra,Correlation between right ascension and pseudocolour
+gaiadr3.gaia_source,dec_pseudocolour_corr,float,,stat.correlation;em.wavenumber;pos.eq.dec,Correlation between declination and pseudocolour
+gaiadr3.gaia_source,parallax_pseudocolour_corr,float,,stat.correlation;em.wavenumber;pos.parallax,Correlation between parallax and pseudocolour
+gaiadr3.gaia_source,pmra_pseudocolour_corr,float,,stat.correlation;em.wavenumber;pos.pm;pos.eq.ra,Correlation between proper motion in right asension and pseudocolour
+gaiadr3.gaia_source,pmdec_pseudocolour_corr,float,,stat.correlation;em.wavenumber;pos.pm;pos.eq.dec,Correlation between proper motion in declination and pseudocolour
+gaiadr3.gaia_source,astrometric_matched_transits,short,,meta.number,Matched FOV transits used in the AGIS solution
+gaiadr3.gaia_source,visibility_periods_used,short,,meta.number,Number of visibility periods used in Astrometric solution
+gaiadr3.gaia_source,astrometric_sigma5d_max,float,mas,stat;pos.errorEllipse,The longest semi-major axis of the 5-d error ellipsoid
+gaiadr3.gaia_source,matched_transits,short,,meta.number,The number of transits matched to this source
+gaiadr3.gaia_source,new_matched_transits,short,,meta.number,The number of transits newly incorporated into an existing source in the current cycle
+gaiadr3.gaia_source,matched_transits_removed,short,,meta.number,The number of transits removed from an existing source in the current cycle
+gaiadr3.gaia_source,ipd_gof_harmonic_amplitude,float,,stat.value,Amplitude of the IPD GoF versus position angle of scan
+gaiadr3.gaia_source,ipd_gof_harmonic_phase,float,deg,pos.posAng;stat.value,Phase of the IPD GoF versus position angle of scan
+gaiadr3.gaia_source,ipd_frac_multi_peak,short,,stat.value,Percent of successful-IPD windows with more than one peak
+gaiadr3.gaia_source,ipd_frac_odd_win,short,,stat.value,Percent of transits with truncated windows or multiple gate
+gaiadr3.gaia_source,ruwe,float,,stat.error,Renormalised unit weight error
+gaiadr3.gaia_source,scan_direction_strength_k1,float,,stat.value,Degree of concentration of scan directions across the source
+gaiadr3.gaia_source,scan_direction_strength_k2,float,,stat.value,Degree of concentration of scan directions across the source
+gaiadr3.gaia_source,scan_direction_strength_k3,float,,stat.value,Degree of concentration of scan directions across the source
+gaiadr3.gaia_source,scan_direction_strength_k4,float,,stat.value,Degree of concentration of scan directions across the source
+gaiadr3.gaia_source,scan_direction_mean_k1,float,deg,pos.posAng;stat.mean,Mean position angle of scan directions across the source
+gaiadr3.gaia_source,scan_direction_mean_k2,float,deg,pos.posAng;stat.mean,Mean position angle of scan directions across the source
+gaiadr3.gaia_source,scan_direction_mean_k3,float,deg,pos.posAng;stat.mean,Mean position angle of scan directions across the source
+gaiadr3.gaia_source,scan_direction_mean_k4,float,deg,pos.posAng;stat.mean,Mean position angle of scan directions across the source
+gaiadr3.gaia_source,duplicated_source,boolean,,meta.code.status,Source with multiple source identifiers
+gaiadr3.gaia_source,phot_g_n_obs,short,,meta.number,Number of observations contributing to G photometry
+gaiadr3.gaia_source,phot_g_mean_flux,double,'electron'.s**-1,phot.flux;em.opt,G-band mean flux
+gaiadr3.gaia_source,phot_g_mean_flux_error,float,'electron'.s**-1,stat.error;phot.flux;em.opt,Error on G-band mean flux
+gaiadr3.gaia_source,phot_g_mean_flux_over_error,float,,stat.snr;phot.flux;em.opt,G-band mean flux divided by its error
+gaiadr3.gaia_source,phot_g_mean_mag,float,mag,phot.mag;em.opt,G-band mean magnitude
+gaiadr3.gaia_source,phot_bp_n_obs,short,,meta.number,Number of observations contributing to BP photometry
+gaiadr3.gaia_source,phot_bp_mean_flux,double,'electron'.s**-1,phot.flux;em.opt.B,Integrated BP mean flux
+gaiadr3.gaia_source,phot_bp_mean_flux_error,float,'electron'.s**-1,stat.error;phot.flux;em.opt.B,Error on the integrated BP mean flux
+gaiadr3.gaia_source,phot_bp_mean_flux_over_error,float,,stat.snr;phot.flux;em.opt.B,Integrated BP mean flux divided by its error
+gaiadr3.gaia_source,phot_bp_mean_mag,float,mag,phot.mag;em.opt.B,Integrated BP mean magnitude
+gaiadr3.gaia_source,phot_rp_n_obs,short,,meta.number,Number of observations contributing to RP photometry
+gaiadr3.gaia_source,phot_rp_mean_flux,double,'electron'.s**-1,phot.flux;em.opt.R,Integrated RP mean flux
+gaiadr3.gaia_source,phot_rp_mean_flux_error,float,'electron'.s**-1,stat.error;phot.flux;em.opt.R,Error on the integrated RP mean flux
+gaiadr3.gaia_source,phot_rp_mean_flux_over_error,float,,stat.snr;phot.flux;em.opt.R,Integrated RP mean flux divided by its error
+gaiadr3.gaia_source,phot_rp_mean_mag,float,mag,phot.mag;em.opt.R,Integrated RP mean magnitude
+gaiadr3.gaia_source,phot_bp_rp_excess_factor,float,,arith.factor;phot.flux;em.opt,BP/RP excess factor
+gaiadr3.gaia_source,phot_bp_n_contaminated_transits,short,,meta.number,Number of BP contaminated transits
+gaiadr3.gaia_source,phot_bp_n_blended_transits,short,,meta.number,Number of BP blended transits
+gaiadr3.gaia_source,phot_rp_n_contaminated_transits,short,,meta.number,Number of RP contaminated transits
+gaiadr3.gaia_source,phot_rp_n_blended_transits,short,,meta.number,Number of RP blended transits
+gaiadr3.gaia_source,phot_proc_mode,short,,meta.code,Photometry processing mode
+gaiadr3.gaia_source,bp_rp,float,mag,phot.color;em.opt.B;em.opt.R,BP - RP colour
+gaiadr3.gaia_source,bp_g,float,mag,phot.color;em.opt.B;em.opt,BP - G colour
+gaiadr3.gaia_source,g_rp,float,mag,phot.color;em.opt;em.opt.R,G - RP colour
+gaiadr3.gaia_source,radial_velocity,float,km.s**-1,spect.dopplerVeloc.opt;em.opt.I,Radial velocity 
+gaiadr3.gaia_source,radial_velocity_error,float,km.s**-1,stat.error;spect.dopplerVeloc.opt;em.opt.I,Radial velocity error 
+gaiadr3.gaia_source,rv_method_used,short,,meta.code.class,Method used to obtain the radial velocity
+gaiadr3.gaia_source,rv_nb_transits,short,,meta.number,Number of transits used to compute the radial velocity 
+gaiadr3.gaia_source,rv_nb_deblended_transits,short,,meta.number,Number of valid transits that have undergone deblending
+gaiadr3.gaia_source,rv_visibility_periods_used,short,,meta.number,Number of visibility periods used to estimate the radial velocity
+gaiadr3.gaia_source,rv_expected_sig_to_noise,float,,stat.snr,Expected signal to noise ratio in the combination of the spectra used to obtain the radial velocity
+gaiadr3.gaia_source,rv_renormalised_gof,float,,stat.fit.goodness,Radial velocity renormalised goodness of fit
+gaiadr3.gaia_source,rv_chisq_pvalue,float,,stat.fit.param,P-value for constancy based on a chi-squared criterion
+gaiadr3.gaia_source,rv_time_duration,float,d,time.duration,Time coverage of the radial velocity time series
+gaiadr3.gaia_source,rv_amplitude_robust,float,km.s**-1,stat.error;spect.dopplerVeloc.opt;em.opt.I,Total amplitude in the radial velocity time series after outlier removal
+gaiadr3.gaia_source,rv_template_teff,float,K,stat.fit.param,Teff of the template used to compute the radial velocity 
+gaiadr3.gaia_source,rv_template_logg,float,log(cm.s**-2),stat.fit.param,Logg of the template used to compute the radial velocity 
+gaiadr3.gaia_source,rv_template_fe_h,float,'dex',stat.fit.param,[Fe/H] of the template used to compute the radial velocityy
+gaiadr3.gaia_source,rv_atm_param_origin,short,,meta.code.class,Origin of the atmospheric parameters associated to the template
+gaiadr3.gaia_source,vbroad,float,km.s**-1,spect.dopplerVeloc.opt;em.opt.I,Spectral line broadening parameter
+gaiadr3.gaia_source,vbroad_error,float,km.s**-1,stat.error;spect.dopplerVeloc.opt;em.opt.I,Uncertainty on the spectral line broadening
+gaiadr3.gaia_source,vbroad_nb_transits,short,,meta.number,Number of transits used to compute vbroad
+gaiadr3.gaia_source,grvs_mag,float,mag,phot.mag;em.opt,Integrated Grvs magnitude
+gaiadr3.gaia_source,grvs_mag_error,float,mag,stat.error;phot.mag;em.opt,Grvs magnitude uncertainty
+gaiadr3.gaia_source,grvs_mag_nb_transits,short,,meta.number,Number of transits used to compute Grvs
+gaiadr3.gaia_source,rvs_spec_sig_to_noise,float,,stat.snr,Signal to noise ratio in the mean RVS spectrum
+gaiadr3.gaia_source,phot_variable_flag,char,,meta.code;src.var,Photometric variability flag
+gaiadr3.gaia_source,l,double,deg,pos.galactic.lon,Galactic longitude
+gaiadr3.gaia_source,b,double,deg,pos.galactic.lat,Galactic latitude
+gaiadr3.gaia_source,ecl_lon,double,deg,pos.ecliptic.lon,Ecliptic longitude
+gaiadr3.gaia_source,ecl_lat,double,deg,pos.ecliptic.lat,Ecliptic latitude
+gaiadr3.gaia_source,in_qso_candidates,boolean,,meta.code.status,Flag indicating the availability of additional information in the QSO candidates table
+gaiadr3.gaia_source,in_galaxy_candidates,boolean,,meta.code.status,Flag indicating the availability of additional information in the galaxy candidates table
+gaiadr3.gaia_source,non_single_star,short,,meta.code.status,Flag indicating the availability of additional information in the various Non-Single Star tables
+gaiadr3.gaia_source,has_xp_continuous,boolean,,meta.code.status,Flag indicating the availability of mean BP/RP spectrum in continuous representation for this source
+gaiadr3.gaia_source,has_xp_sampled,boolean,,meta.code.status,Flag indicating the availability of mean BP/RP spectrum in sampled form for this source
+gaiadr3.gaia_source,has_rvs,boolean,,meta.code.status,Flag indicating the availability of mean RVS spectrum for this source
+gaiadr3.gaia_source,has_epoch_photometry,boolean,,meta.code.status,Flag indicating the availability of epoch photometry for this source
+gaiadr3.gaia_source,has_epoch_rv,boolean,,meta.code.status,Flag indicating the availability of epoch radial velocity for this source
+gaiadr3.gaia_source,has_mcmc_gspphot,boolean,,meta.code.status,Flag indicating the availability of GSP-Phot MCMC samples for this source
+gaiadr3.gaia_source,has_mcmc_msc,boolean,,meta.code.status,Flag indicating the availability of MSC MCMC samples for this source
+gaiadr3.gaia_source,in_andromeda_survey,boolean,,meta.code.status,Flag indicating that the source is present in the Gaia Andromeda Photometric Survey (GAPS)
+gaiadr3.gaia_source,classprob_dsc_combmod_quasar,float,,stat.probability,"Probability from DSC-Combmod of being a quasar (data used: BP/RP spectrum, photometry, astrometry)"
+gaiadr3.gaia_source,classprob_dsc_combmod_galaxy,float,,stat.probability,"Probability from DSC-Combmod of being a galaxy (data used: BP/RP spectrum, photometry, astrometry)"
+gaiadr3.gaia_source,classprob_dsc_combmod_star,float,,stat.probability,"Probability from DSC-Combmod of being a single star (but not a white dwarf) (data used: BP/RP spectrum, photometry, astrometry)"
+gaiadr3.gaia_source,teff_gspphot,float,K,phys.temperature.effective,Effective temperature from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,teff_gspphot_lower,float,K,phys.temperature.effective;stat.min,Lower confidence level (16%) of effective temperature from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,teff_gspphot_upper,float,K,phys.temperature.effective;stat.max,Upper confidence level (84%) of effective temperature from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,logg_gspphot,float,log(cm.s**-2),phys.gravity,Surface gravity from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,logg_gspphot_lower,float,log(cm.s**-2),phys.gravity;stat.min,Lower confidence level (16%) of surface gravity from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,logg_gspphot_upper,float,log(cm.s**-2),phys.gravity;stat.max,Upper confidence level (84%) of surface gravity from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,mh_gspphot,float,'dex',phys.abund.Z,Iron abundance from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,mh_gspphot_lower,float,'dex',phys.abund.Z;stat.min,Lower confidence level (16%) of iron abundance from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,mh_gspphot_upper,float,'dex',phys.abund.Z;stat.max,Upper confidence level (84%) of iron abundance from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,distance_gspphot,float,pc,pos.distance;pos.eq,Distance from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,distance_gspphot_lower,float,pc,pos.distance;pos.eq,Lower confidence level (16%) of distance from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,distance_gspphot_upper,float,pc,pos.distance;pos.eq,Upper confidence level (84%) of distance from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,azero_gspphot,float,mag,phys.absorption;em.opt,Monochromatic extinction $A_0$ at 547.7nm from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,azero_gspphot_lower,float,mag,phys.absorption;em.opt,Lower confidence level (16%) of monochromatic extinction $A_0$ at 547.7nm from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,azero_gspphot_upper,float,mag,phys.absorption;em.opt,Upper confidence level (84%) of monochromatic extinction $A_0$ at 547.7nm from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,ag_gspphot,float,mag,phys.absorption;em.opt,Extinction in G band from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,ag_gspphot_lower,float,mag,phys.absorption;em.opt,Lower confidence level (16%) of extinction in G band from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,ag_gspphot_upper,float,mag,phys.absorption;em.opt,Upper confidence level (84%) of extinction in G band from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,ebpminrp_gspphot,float,mag,phot.color.excess,Reddening $E(G_{\rm BP} - G_{\rm RP})$ from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,ebpminrp_gspphot_lower,float,mag,phot.color.excess;stat.min,Lower confidence level (16%) of reddening  $E(G_{\rm BP} - G_{\rm RP})$ from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,ebpminrp_gspphot_upper,float,mag,phot.color.excess;stat.max,Upper confidence level (84%) of reddening  $E(G_{\rm BP} - G_{\rm RP})$ from GSP-Phot Aeneas best library using BP/RP spectra
+gaiadr3.gaia_source,libname_gspphot,char,,meta.note,Name of library that achieves the highest mean log-posterior in MCMC samples and was used to derive GSP-Phot parameters in this table
+gaiadr3.tycho2tdsc_merge,id,char,,meta.id;meta.main,Tycho-2 identifier
+gaiadr3.tycho2tdsc_merge,hip,int,,meta.id.cross,Hipparcos number
+gaiadr3.tycho2tdsc_merge,tyc1,char,,meta.id.part;meta.main,TYC1 component from TYC or GSC
+gaiadr3.tycho2tdsc_merge,tyc2,char,,meta.id.part;meta.main,TYC2 component from TYC or GSC
+gaiadr3.tycho2tdsc_merge,tyc3,char,,meta.id.part;meta.main,TYC3 component from TYC or TDSC
+gaiadr3.tycho2tdsc_merge,id_tycho,long,,meta.id;meta.dataset,Numeric Tycho-2 identifier
+gaiadr3.tycho2tdsc_merge,tyc,char,,meta.code,Tycho-1 star
+gaiadr3.tycho2tdsc_merge,ra,double,deg,pos.eq.ra,"Observed Tycho-2 Right Ascension, ICRS"
+gaiadr3.tycho2tdsc_merge,dec,double,deg,pos.eq.dec;meta.main,"Observed Tycho-2 Declination, ICRS"
+gaiadr3.tycho2tdsc_merge,ra_deg,double,deg,pos.eq.ra,"Observed Tycho-2 Right Ascension, ICRS"
+gaiadr3.tycho2tdsc_merge,de_deg,double,deg,pos.eq.dec,"Observed Tycho-2 Declination, ICRS"
+gaiadr3.tycho2tdsc_merge,ra_mdeg,double,deg,pos.eq.ra,"Mean Right Ascension, ICRS, epoch=J2000"
+gaiadr3.tycho2tdsc_merge,de_mdeg,double,deg,pos.eq.dec,"Mean Declination, ICRS, at epoch=J2000"
+gaiadr3.tycho2tdsc_merge,pm_ra,float,mas/yr,pos.eq.ra;pos.pm,Proper motion in RA*cos(dec)
+gaiadr3.tycho2tdsc_merge,pm_de,float,mas/yr,pos.eq.dec;pos.pm,Proper motion in Dec
+gaiadr3.tycho2tdsc_merge,ep_ra1990,float,yr,time.epoch,Epoch--1990 of raDeg
+gaiadr3.tycho2tdsc_merge,ep_de1990,float,yr,time.epoch,Epoch--1990 of deDeg
+gaiadr3.tycho2tdsc_merge,ep_ra_m,float,yr,time.epoch,Mean epoch of RA.
+gaiadr3.tycho2tdsc_merge,ep_de_m,float,yr,time.epoch,Mean epoch of Dec.
+gaiadr3.tycho2tdsc_merge,num,short,,meta.number,Number of positions used for forming mean data
+gaiadr3.tycho2tdsc_merge,e_ra_deg,double,mas,stat.error,"Uncertainty RA*cos(dec), of observed Tycho-2 RA."
+gaiadr3.tycho2tdsc_merge,e_de_deg,double,mas,stat.error,Uncertainty of observed Tycho-2 Dec.
+gaiadr3.tycho2tdsc_merge,corr,double,,stat.correlation;pos.eq.ra;pos.eq.dec,"Correlation (RAdeg,DEdeg)"
+gaiadr3.tycho2tdsc_merge,e_ra_mdeg,double,mas,stat.error,"Uncertainty RA*cos(dec),at mean epoch."
+gaiadr3.tycho2tdsc_merge,e_de_mdeg,double,mas,stat.error,Uncertainty of Dec at mean epoch.
+gaiadr3.tycho2tdsc_merge,e_pm_ra,float,mas/yr,stat.error,Uncertainty proper motion in RA*cos(dec).
+gaiadr3.tycho2tdsc_merge,e_pm_de,float,mas/yr,stat.error,Uncertainty of proper motion in Dec.
+gaiadr3.tycho2tdsc_merge,q_ra_mdeg,float,,meta.code.qual,Goodness of fit for mean RA
+gaiadr3.tycho2tdsc_merge,q_de_mdeg,float,,meta.code.qual,Goodness of fit for mean Dec
+gaiadr3.tycho2tdsc_merge,q_pm_de,float,,meta.code.qual,Goodness of fit for pmDe
+gaiadr3.tycho2tdsc_merge,q_pm_ra,float,,meta.code.qual,Goodness of fit for pmRa
+gaiadr3.tycho2tdsc_merge,pflag,char,,meta.code,Mean position flag
+gaiadr3.tycho2tdsc_merge,posflg,char,,meta.id;stat.fit,Type of Tycho-2 solution
+gaiadr3.tycho2tdsc_merge,ccdm,char,,meta.code.multip,CCDM component identifier for HIP stars
+gaiadr3.tycho2tdsc_merge,prox,short,mas.100,meta.code,Proximity indicator
+gaiadr3.tycho2tdsc_merge,bt_mag,float,mag,phot.mag;em.opt.B,Tycho-2 BT magnitude
+gaiadr3.tycho2tdsc_merge,vt_mag,float,mag,phot.mag;em.opt.V,Tycho-2 VT magnitude
+gaiadr3.tycho2tdsc_merge,e_bt_mag,float,mag,stat.error,Uncertainty of BT
+gaiadr3.tycho2tdsc_merge,e_vt_mag,float,mag,stat.error,Uncertainty of VT
+gaiadr3.tycho2tdsc_merge,sys_no,int,,meta.id,TDSC identifier for the system
+gaiadr3.tycho2tdsc_merge,cmp,char,,meta.id.part,Component designation
+gaiadr3.tycho2tdsc_merge,n_main,short,,meta.number,Number of components in TDSC main catalogue
+gaiadr3.tycho2tdsc_merge,n_sup,short,,meta.number,Number of components in the TDSC supplement
+gaiadr3.tycho2tdsc_merge,magflg,char,,meta.code,TDSC photometry flag
+gaiadr3.tycho2tdsc_merge,wds,char,,meta.id.cross,WDS identifier for the system
+gaiadr3.tycho2tdsc_merge,note,char,,meta.note,TDSC notes
+gaiadr3.tycho2tdsc_merge,hd,int,,meta.id.cross,HD identifier for TDSC entries
+gaiadr3.tycho2tdsc_merge,rcmp,char,,meta.id.assoc,Reference component for position angle and separation
+gaiadr3.tycho2tdsc_merge,pa,float,deg,pos.posAng,Position angle
+gaiadr3.tycho2tdsc_merge,sep,float,arcsec,pos.angDistance,Separation
+gaiadr3.tycho2tdsc_merge,e_pa,float,deg,stat.error,Uncertainty of the position angle
+gaiadr3.tycho2tdsc_merge,e_pa_sep,short,,stat.error,Uncertainty of the position angle * separation
+gaiadr3.tycho2tdsc_merge,e_sep,short,mas,stat.error,Uncertainty of the separation
+gaiadr3.tycho2tdsc_merge_best_neighbour,source_id,long,,meta.id;meta.main,Unique Gaia source identifier
+gaiadr3.tycho2tdsc_merge_best_neighbour,original_ext_source_id,char,,meta.id.cross,Original External Catalogue source identifier
+gaiadr3.tycho2tdsc_merge_best_neighbour,angular_distance,float,arcsec,pos.angDistance,Angular Distance between the two sources
+gaiadr3.tycho2tdsc_merge_best_neighbour,xm_flag,short,,meta.code.status,Cross-match algorithm flag
+gaiadr3.tycho2tdsc_merge_best_neighbour,tycho2tdsc_merge_oid,int,,meta.id.cross,External Catalogue source identifier
+gaiadr3.tycho2tdsc_merge_best_neighbour,number_of_neighbours,short,,meta.number,Number of neighbours in Gaia Catalogue
+gaiadr3.vari_eclipsing_binary,solution_id,long,,meta.version,Solution Identifier
+gaiadr3.vari_eclipsing_binary,source_id,long,,meta.id;meta.main,Unique source identifier
+gaiadr3.vari_eclipsing_binary,global_ranking,float,,stat.param,Number between 0 (worst) and 1 (best)
+gaiadr3.vari_eclipsing_binary,reference_time,double,d,time.epoch,Reference time used for the geometric model fit
+gaiadr3.vari_eclipsing_binary,frequency,double,d**-1,src.orbital,Frequency of geometric model of the eclipsing binary light curve
+gaiadr3.vari_eclipsing_binary,frequency_error,float,d**-1,stat.error,Uncertainty of \texttt{frequency}
+gaiadr3.vari_eclipsing_binary,geom_model_reference_level,float,mag,phot.mag;em.opt,Magnitude reference level of geometric model
+gaiadr3.vari_eclipsing_binary,geom_model_reference_level_error,float,mag,stat.error;phot.mag;em.opt,Uncertainty of \texttt{geomModelReferenceLevel}
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian1_phase,float,,time.phase,Phase of the Gaussian 1 component
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian1_phase_error,float,,stat.error;time.phase,Uncertainty of \texttt{geomModelGaussian1Phase}
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian1_sigma,float,,stat.stdev,Standard deviation [phase] of Gaussian 1 component
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian1_sigma_error,float,,stat.error,Uncertainty of \texttt{geomModelGaussian1Sigma}
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian1_depth,float,mag,src.var.amplitude,Magnitude depth of Gaussian 1 component
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian1_depth_error,float,mag,stat.error;src.var.amplitude,Uncertainty of \texttt{geomModelGaussian1Depth}
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian2_phase,float,,time.phase,Phase of Gaussian 2 component
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian2_phase_error,float,,stat.error;time.phase,Uncertainty of \texttt{geomModelGaussian2Phase}
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian2_sigma,float,,stat.stdev,Standard deviation [phase] of Gaussian 2 component
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian2_sigma_error,float,,stat.error,Uncertainty of \texttt{geomModelGaussian2Sigma}
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian2_depth,float,mag,src.var.amplitude,Magnitude depth of Gaussian2 component
+gaiadr3.vari_eclipsing_binary,geom_model_gaussian2_depth_error,float,mag,stat.error;src.var.amplitude,Uncertainty of \texttt{geomModelGaussian2Depth}
+gaiadr3.vari_eclipsing_binary,geom_model_cosine_half_period_amplitude,float,mag,src.var.amplitude,Amplitude of the cosine component with half the period of the geometric model
+gaiadr3.vari_eclipsing_binary,geom_model_cosine_half_period_amplitude_error,float,mag,stat.error;src.var.amplitude,Uncertainty of \texttt{geomModelCosineHalfPeriodAmplitude}
+gaiadr3.vari_eclipsing_binary,geom_model_cosine_half_period_phase,float,,time.phase,Reference phase of the cosine component with half the period of the geometric model
+gaiadr3.vari_eclipsing_binary,geom_model_cosine_half_period_phase_error,float,,stat.error;time.phase,Uncertainty of \texttt{geomModelCosineHalfPeriodPhase}
+gaiadr3.vari_eclipsing_binary,model_type,char,,meta.code.class,Type of geometrical model of the light curve
+gaiadr3.vari_eclipsing_binary,num_model_parameters,short,,stat.fit.param,Number of free parameters of the geometric model
+gaiadr3.vari_eclipsing_binary,reduced_chi2,float,,stat.fit.chi2,Reduced Chi2 of the geometrical model fit
+gaiadr3.vari_eclipsing_binary,derived_primary_ecl_phase,float,,time.phase,Primary eclipse: phase at geometrically deepest point 
+gaiadr3.vari_eclipsing_binary,derived_primary_ecl_phase_error,float,,stat.error;time.phase,Primary eclipse: uncertainty of \texttt{derivedPrimaryEclPhase}
+gaiadr3.vari_eclipsing_binary,derived_primary_ecl_duration,float,,time.duration,Primary eclipse: duration [phase fraction]
+gaiadr3.vari_eclipsing_binary,derived_primary_ecl_duration_error,float,,stat.error;time.duration,Primary eclipse: uncertainty of \texttt{derivedPrimaryEclDuration}
+gaiadr3.vari_eclipsing_binary,derived_primary_ecl_depth,float,mag,src.var.amplitude,Primary eclipse: depth
+gaiadr3.vari_eclipsing_binary,derived_primary_ecl_depth_error,float,mag,stat.error;src.var.amplitude,Primary eclipse: uncertainty of \texttt{derivedPrimaryEclDepth}
+gaiadr3.vari_eclipsing_binary,derived_secondary_ecl_phase,float,,time.phase,Secondary eclipse: phase at geometrically second deepest point 
+gaiadr3.vari_eclipsing_binary,derived_secondary_ecl_phase_error,float,,stat.error;time.phase,Secondary eclipse: uncertainty of \texttt{derivedSecondaryEclPhase}
+gaiadr3.vari_eclipsing_binary,derived_secondary_ecl_duration,float,,time.duration,Secondary eclipse: duration [phase fraction]
+gaiadr3.vari_eclipsing_binary,derived_secondary_ecl_duration_error,float,,stat.error;time.duration,Secondary eclipse: uncertainty of \texttt{derivedSecondaryEclDuration}
+gaiadr3.vari_eclipsing_binary,derived_secondary_ecl_depth,float,mag,src.var.amplitude,Secondary eclipse: depth
+gaiadr3.vari_eclipsing_binary,derived_secondary_ecl_depth_error,float,mag,stat.error;src.var.amplitude,Secondary eclipse: uncertainty of \texttt{derivedSecondaryEclDepth}
+gaiadr3.vari_planetary_transit,solution_id,long,,meta.version,Solution Identifier
+gaiadr3.vari_planetary_transit,source_id,long,,meta.id;meta.main,Unique source identifier
+gaiadr3.vari_planetary_transit,transit_reference_time,double,d,time,Mid-transit reference time
+gaiadr3.vari_planetary_transit,transit_period,double,d,time.period,Most probable transit period
+gaiadr3.vari_planetary_transit,transit_depth,float,mmag,phot.mag;src.var.amplitude,Transit depth
+gaiadr3.vari_planetary_transit,transit_duration,float,d,time.duration,Transit duration
+gaiadr3.vari_planetary_transit,num_in_transit,short,,meta.number,Number of in-transit observations
+gaiadr3.vari_planetary_transit_13june2022,solution_id,long,,meta.version,Solution Identifier
+gaiadr3.vari_planetary_transit_13june2022,source_id,long,,meta.id;meta.main,Unique source identifier
+gaiadr3.vari_planetary_transit_13june2022,transit_reference_time,double,d,time,Mid-transit reference time
+gaiadr3.vari_planetary_transit_13june2022,transit_period,double,d,time.period,Most probable transit period
+gaiadr3.vari_planetary_transit_13june2022,transit_depth,float,mmag,phot.mag;src.var.amplitude,Transit depth
+gaiadr3.vari_planetary_transit_13june2022,transit_duration,float,d,time.duration,Transit duration
+gaiadr3.vari_planetary_transit_13june2022,num_in_transit,short,,meta.number,Number of in-transit observations
+gaiadr3.vari_summary,solution_id,long,,meta.version,Solution Identifier
+gaiadr3.vari_summary,source_id,long,,meta.id;meta.main,Unique source identifier
+gaiadr3.vari_summary,num_selected_g_fov,short,,meta.number,Total number of G FOV transits selected for variability analysis
+gaiadr3.vari_summary,mean_obs_time_g_fov,double,d,time.epoch;stat.mean,Mean observation time for G FoV transits
+gaiadr3.vari_summary,time_duration_g_fov,float,d,time.duration,Time duration of the time series for G FoV transits
+gaiadr3.vari_summary,min_mag_g_fov,float,mag,phot.mag;stat.min,Minimum G FoV magnitude
+gaiadr3.vari_summary,max_mag_g_fov,float,mag,phot.mag;stat.max,Maximum G FoV magnitude
+gaiadr3.vari_summary,mean_mag_g_fov,float,mag,phot.mag;stat.mean,Mean G FoV magnitude
+gaiadr3.vari_summary,median_mag_g_fov,float,mag,phot.mag;stat.median,Median G FoV magnitude
+gaiadr3.vari_summary,range_mag_g_fov,float,mag,phot.mag;em.opt;arith.diff,Difference between the highest and lowest G FoV magnitudes
+gaiadr3.vari_summary,trimmed_range_mag_g_fov,float,mag,phot.mag;em.opt;arith.diff,Trimmed difference between the highest and lowest G FoV magnitudes
+gaiadr3.vari_summary,std_dev_mag_g_fov,float,mag,stat.stdev;phot.mag;em.opt,Square root of the unweighted G FoV magnitude variance
+gaiadr3.vari_summary,skewness_mag_g_fov,float,,stat.value;phot.mag;em.opt,Standardized unweighted G FoV magnitude skewness
+gaiadr3.vari_summary,kurtosis_mag_g_fov,float,,stat.value;phot.mag;em.opt,Standardized unweighted G FoV magnitude kurtosis
+gaiadr3.vari_summary,mad_mag_g_fov,float,mag,stat.value;phot.mag;em.opt,Median Absolute Deviation (MAD) for G FoV transits
+gaiadr3.vari_summary,abbe_mag_g_fov,float,,stat.value;phot.mag;em.opt,Abbe value for G FoV transits
+gaiadr3.vari_summary,iqr_mag_g_fov,float,mag,stat.value;phot.mag;em.opt,Interquartile range for G FoV transits
+gaiadr3.vari_summary,stetson_mag_g_fov,float,,src.var.index,Stetson G FoV variability index
+gaiadr3.vari_summary,std_dev_over_rms_err_mag_g_fov,float,,stat.snr,Signal-to-Noise G FoV estimate
+gaiadr3.vari_summary,outlier_median_g_fov,float,,stat.fit.param,Greatest absolute deviation from the G FoV median normalized by the error
+gaiadr3.vari_summary,num_selected_bp,short,,meta.number,Total number of BP observations selected for variability analysis
+gaiadr3.vari_summary,mean_obs_time_bp,double,d,time.epoch;stat.mean,Mean observation time for BP observations
+gaiadr3.vari_summary,time_duration_bp,float,d,time.duration,Time duration of the BP time series
+gaiadr3.vari_summary,min_mag_bp,float,mag,phot.mag;stat.min,Minimum BP magnitude
+gaiadr3.vari_summary,max_mag_bp,float,mag,phot.mag;stat.max,Maximum BP magnitude
+gaiadr3.vari_summary,mean_mag_bp,float,mag,phot.mag;stat.mean,Mean BP magnitude
+gaiadr3.vari_summary,median_mag_bp,float,mag,phot.mag;stat.median,Median BP magnitude
+gaiadr3.vari_summary,range_mag_bp,float,mag,phot.mag;em.opt.B;arith.diff,Difference between the highest and lowest BP magnitudes
+gaiadr3.vari_summary,trimmed_range_mag_bp,float,mag,phot.mag;em.opt.B;arith.diff,Trimmed difference between the highest and lowest BP magnitudes
+gaiadr3.vari_summary,std_dev_mag_bp,float,mag,stat.stdev;phot.mag;em.opt.B,Square root of the unweighted BP magnitude variance
+gaiadr3.vari_summary,skewness_mag_bp,float,,stat.value;phot.mag;em.opt.B,Standardized unweighted BP magnitude skewness
+gaiadr3.vari_summary,kurtosis_mag_bp,float,,stat.value;phot.mag;em.opt.B,Standardized unweighted BP magnitude kurtosis
+gaiadr3.vari_summary,mad_mag_bp,float,mag,stat.value;phot.mag;em.opt.B,Median Absolute Deviation (MAD) for BP observations
+gaiadr3.vari_summary,abbe_mag_bp,float,,stat.value;phot.mag;em.opt.B,Abbe value for BP observations
+gaiadr3.vari_summary,iqr_mag_bp,float,mag,stat.value;phot.mag;em.opt.B,Interquartile BP magnitude range
+gaiadr3.vari_summary,stetson_mag_bp,float,,src.var.index,Stetson BP variability index
+gaiadr3.vari_summary,std_dev_over_rms_err_mag_bp,float,,stat.snr,Signal-to-Noise BP estimate
+gaiadr3.vari_summary,outlier_median_bp,float,,stat.fit.param,Greatest absolute deviation from the BP median normalized by the error
+gaiadr3.vari_summary,num_selected_rp,short,,meta.number,Total number of RP observations selected for variability analysis
+gaiadr3.vari_summary,mean_obs_time_rp,double,d,time.epoch;stat.mean,Mean observation time for RP observations
+gaiadr3.vari_summary,time_duration_rp,float,d,time.duration,Time duration of the RP time series
+gaiadr3.vari_summary,min_mag_rp,float,mag,phot.mag;stat.min,Minimum RP magnitude
+gaiadr3.vari_summary,max_mag_rp,float,mag,phot.mag;stat.max,Maximum RP magnitude
+gaiadr3.vari_summary,mean_mag_rp,float,mag,phot.mag;stat.mean,Mean RP magnitude
+gaiadr3.vari_summary,median_mag_rp,float,mag,phot.mag;stat.median,Median RP magnitude
+gaiadr3.vari_summary,range_mag_rp,float,mag,phot.mag;em.opt.R;arith.diff,Difference between the highest and lowest RP magnitudes
+gaiadr3.vari_summary,trimmed_range_mag_rp,float,mag,phot.mag;em.opt.R;arith.diff,Trimmed difference between the highest and lowest RP magnitudes
+gaiadr3.vari_summary,std_dev_mag_rp,float,mag,stat.stdev;phot.mag;em.opt.R,Square root of the unweighted RP magnitude variance
+gaiadr3.vari_summary,skewness_mag_rp,float,,stat.value;phot.mag;em.opt.R,Standardized unweighted RP magnitude skewness
+gaiadr3.vari_summary,kurtosis_mag_rp,float,,stat.value;phot.mag;em.opt.R,Standardized unweighted RP magnitude kurtosis
+gaiadr3.vari_summary,mad_mag_rp,float,mag,stat.value;phot.mag;em.opt.R,Median Absolute Deviation (MAD) for RP observations
+gaiadr3.vari_summary,abbe_mag_rp,float,,stat.value;phot.mag;em.opt.R,Abbe value for RP observations
+gaiadr3.vari_summary,iqr_mag_rp,float,mag,stat.value;phot.mag;em.opt.R,Interquartile RP magnitude range
+gaiadr3.vari_summary,stetson_mag_rp,float,,src.var.index,Stetson RP variability index
+gaiadr3.vari_summary,std_dev_over_rms_err_mag_rp,float,,stat.snr,Signal-to-Noise RP estimate
+gaiadr3.vari_summary,outlier_median_rp,float,,stat.fit.param,Greatest absolute deviation from the RP median normalized by the error
+gaiadr3.vari_summary,in_vari_classification_result,boolean,,meta.record,Source is present in \texttt{VariClassifierResult}
+gaiadr3.vari_summary,in_vari_rrlyrae,boolean,,meta.record,Source is present in \texttt{VariRrlyrae}
+gaiadr3.vari_summary,in_vari_cepheid,boolean,,meta.record,Source is present in \texttt{VariCepheid}
+gaiadr3.vari_summary,in_vari_planetary_transit,boolean,,meta.record,Source is present in \texttt{VariPlanetaryTransit}
+gaiadr3.vari_summary,in_vari_short_timescale,boolean,,meta.record,Source is present in \texttt{VariShortTimescale}
+gaiadr3.vari_summary,in_vari_long_period_variable,boolean,,meta.record,Source is present in \texttt{VariLongPeriodVariable}
+gaiadr3.vari_summary,in_vari_eclipsing_binary,boolean,,meta.record,Source is present in \texttt{VariEclipsingBinary}
+gaiadr3.vari_summary,in_vari_rotation_modulation,boolean,,meta.record,Source is present in \texttt{VariRotationModulation}
+gaiadr3.vari_summary,in_vari_ms_oscillator,boolean,,meta.record,Source is present in \texttt{VariMsOscillator}
+gaiadr3.vari_summary,in_vari_agn,boolean,,meta.record,Source is present in \texttt{VariAgn}
+gaiadr3.vari_summary,in_vari_microlensing,boolean,,meta.record,Source is present in \texttt{VariMicrolensing}
+gaiadr3.vari_summary,in_vari_compact_companion,boolean,,meta.record,Source is present in \texttt{VariCompactCompanion}
+public.tycho2,id,char,,,"Tycho 2 identifier. The TYC identifier is constructed from the GSC region number    (TYC1), the running number within the region (TYC2) and a component    identifier (TYC3) which is normally 1. Some non-GSC running numbers    were constructed for the first Tycho Catalogue and for Tycho-2.    The recommended star designation contains a hyphen between the    TYC numbers, e.g. TYC 1-13-1."
+public.tycho2,hip,int,,,"[1,120404]? Hipparcos number"
+public.tycho2,tyc1,char,,,"[1,9537]+= TYC1 from TYC or GSC
+
+The TYC identifier is constructed from the GSC region number    (TYC1), the running number within the region (TYC2) and a component    identifier (TYC3) which is normally 1. Some non-GSC running numbers    were constructed for the first Tycho Catalogue and for Tycho-2.    The recommended star designation contains a hyphen between the    TYC numbers, e.g. TYC 1-13-1."
+public.tycho2,tyc2,char,,,"[1,12121]  TYC2 from TYC or GSC
+
+The TYC identifier is constructed from the GSC region number    (TYC1), the running number within the region (TYC2) and a component    identifier (TYC3) which is normally 1. Some non-GSC running numbers    were constructed for the first Tycho Catalogue and for Tycho-2.    The recommended star designation contains a hyphen between the    TYC numbers, e.g. TYC 1-13-1."
+public.tycho2,tyc3,char,,,"[1,3]      TYC3 from TYC
+
+The TYC identifier is constructed from the GSC region number    (TYC1), the running number within the region (TYC2) and a component    identifier (TYC3) which is normally 1. Some non-GSC running numbers    were constructed for the first Tycho Catalogue and for Tycho-2.    The recommended star designation contains a hyphen between the    TYC numbers, e.g. TYC 1-13-1."
+public.tycho2,id_tycho,long,,,"(TYC1,TYC2 and TYC3) are combined into one complete number given by (TYC1*1000000.0d0)+(TYC2*10.0d0)+(TYC3*1.0d0)"
+public.tycho2,tyc,char,,,"[T] Tycho-1 star
+
+' ' = no Tycho-1 star was found within 0.8 arcsec (quality 1-8)          or 2.4 arcsec (quality 9).    'T' = this is a Tycho-1 star. The Tycho-1 identifier is given in the          beginning of the record. For Tycho-1 stars, resolved in          Tycho-2 as a close pair, both components are flagged as          a Tycho-1 star and the Tycho-1 TYC3 is assigned to the          brightest (VT) component.    The HIP-only stars given in Tycho-1 are not flagged as Tycho-1 stars."
+public.tycho2,ra,double,deg,pos.eq.ra;meta.main,"Observed Tycho-2 Right Ascension, ICRS"
+public.tycho2,dec,double,deg,pos.eq.dec;meta.main,"Observed Tycho-2 Declination, ICRS"
+public.tycho2,ra_deg,double,deg,,"Observed Tycho-2 Right Ascension, ICRS"
+public.tycho2,de_deg,double,deg,,"Observed Tycho-2 Declination, ICRS"
+public.tycho2,ra_mdeg,double,deg,,"[]? Mean Right Asc, ICRS, epoch=J2000
+
+The mean position is a weighted mean for the catalogues contributing    to the proper motion determination. This mean has then been brought to    epoch 2000.0 by the computed proper motion. See Note(2) above for    details. Tycho-2 is one of the several catalogues used to determine    the mean position and proper motion. The observed Tycho-2 position is    given in the fields RAdeg and DEdeg."
+public.tycho2,de_mdeg,double,deg,,"[]? Mean Decl, ICRS, at epoch=J2000
+
+The mean position is a weighted mean for the catalogues contributing    to the proper motion determination. This mean has then been brought to    epoch 2000.0 by the computed proper motion. See Note(2) above for    details. Tycho-2 is one of the several catalogues used to determine    the mean position and proper motion. The observed Tycho-2 position is    given in the fields RAdeg and DEdeg."
+public.tycho2,pm_ra,float,mas.yr**-1,,"? Proper motion in RA*cos(dec)
+
+Some Hipparcos stars (having a positive number in the HIP column)     have no proper motions; these are virtually all in multiple systems."
+public.tycho2,pm_de,float,mas.yr**-1,,"? Proper motion in Dec
+
+Some Hipparcos stars (having a positive number in the HIP column)     have no proper motions; these are virtually all in multiple systems."
+public.tycho2,ep_ra1990,float,yr,,"[0.81,2.13]  epoch-1990 of RAdeg"
+public.tycho2,ep_de1990,float,yr,,"[0.72,2.36]  epoch-1990 of DEdeg"
+public.tycho2,ep_ra_m,float,yr,,"[1915.95,1992.53]? mean epoch of RA. The mean epochs are given in Julian years."
+public.tycho2,ep_de_m,float,yr,,"[1911.94,1992.01]? mean epoch of Dec. The mean epochs are given in Julian years."
+public.tycho2,num,short,,,"[2,36]? Number of positions used"
+public.tycho2,e_ra_deg,double,mas,,"s.e.RA*cos(dec), of observed Tycho-2 RA. The errors are based on error models."
+public.tycho2,e_de_deg,double,mas,,s.e. of observed Tycho-2 Dec. The errors are based on error models.
+public.tycho2,corr,double,,,"[-1,1] correlation (RAdeg,DEdeg)"
+public.tycho2,e_ra_mdeg,double,mas,,"[3,183]? s.e. RA*cos(dec),at mean epoch. The errors are based on error models."
+public.tycho2,e_de_mdeg,double,mas,,"[1,184]? s.e. of Dec at mean epoch. The errors are based on error models."
+public.tycho2,e_pm_ra,float,mas.yr**-1,,"[0.2,11.5]? s.e. prop mot in RA*cos(dec).The errors are based on error models."
+public.tycho2,e_pm_de,float,mas.yr**-1,,"[0.2,10.3]? s.e. of proper motion in Dec. The errors are based on error models."
+public.tycho2,q_ra_mdeg,float,,,"[0.0,9.9]? Goodness of fit for mean RA
+
+This goodness of fit is the ratio of the scatter-based and the    model-based error. It is only defined when Num > 2. Values    exceeding 9.9 are truncated to 9.9."
+public.tycho2,q_de_mdeg,float,,,"[0.0,9.9]? Goodness of fit for mean Dec
+
+This goodness of fit is the ratio of the scatter-based and the    model-based error. It is only defined when Num > 2. Values    exceeding 9.9 are truncated to 9.9."
+public.tycho2,q_pm_de,float,,,"[0.0,9.9]? Goodness of fit for pmDE
+
+This goodness of fit is the ratio of the scatter-based and the    model-based error. It is only defined when Num > 2. Values    exceeding 9.9 are truncated to 9.9."
+public.tycho2,q_pm_ra,float,,,"[0.0,9.9]? Goodness of fit for pmRA
+
+This goodness of fit is the ratio of the scatter-based and the    model-based error. It is only defined when Num > 2. Values    exceeding 9.9 are truncated to 9.9."
+public.tycho2,pflag,char,,,"[ PX] mean position flag
+
+    ' ' = normal mean position and proper motion.    'P' = the mean position, proper motion, etc., refer to the          photocentre of two Tycho-2 entries, where the BT magnitudes          were used in weighting the positions.    'X' = no mean position, no proper motion."
+public.tycho2,posflg,char,,,"[ DP] type of Tycho-2 solution
+
+' ' = normal treatment, close stars were subtracted when possible.    'D' = double star treatment. Two stars were found. The companion is          normally included as a separate Tycho-2 entry, but may have          been rejected.    'P' = photocentre treatment, close stars were not subtracted. This          special treatment was applied to known or suspected doubles          which were not successfully (or reliably) resolved in the          Tycho-2 double star processing."
+public.tycho2,ccdm,char,,,"CCDM component identifier for HIP stars
+
+The CCDM component identifiers for double or multiple Hipparcos stars    contributing to this Tycho-2 entry. For photocentre solutions, all    components within 0.8 arcsec contribute. For double star solutions any    unresolved component within 0.8 arcsec contributes. For single star    solutions, the predicted signal from close stars were normally    subtracted in the analysis of the photon counts and such stars    therefore do not contribute to the solution. The components are given    in lexical order."
+public.tycho2,prox,short,mas.100,,"[3,999] proximity indicator
+
+Distance in units of 100 mas to the nearest entry in the Tycho-2    main catalogue or supplement. The distance is computed for the    epoch 1991.25. A value of 999 (i.e. 99.9 arcsec) is given if the    distance exceeds 99.9 arcsec."
+public.tycho2,bt_mag,float,mag,,"[2.183,16.581]? Tycho-2 BT magnitude
+
+Blank when no magnitude is available. Either BTmag or VTmag is    always given. Approximate Johnson photometry may be obtained as:    V   = VT -0.090*(BT-VT)    B-V = 0.850*(BT-VT)    Consult Sect 1.3 of Vol 1 of ""The Hipparcos and Tycho Catalogues"",    ESA SP-1200, 1997, for details."
+public.tycho2,vt_mag,float,mag,,"[1.905,15.193]? Tycho-2 VT magnitude
+
+Blank when no magnitude is available. Either BTmag or VTmag is    always given. Approximate Johnson photometry may be obtained as:    V   = VT -0.090*(BT-VT)    B-V = 0.850*(BT-VT)    Consult Sect 1.3 of Vol 1 of ""The Hipparcos and Tycho Catalogues"",    ESA SP-1200, 1997, for details."
+public.tycho2,e_bt_mag,float,mag,,"[0.014,1.977]? s.e. of BT
+
+Blank when no magnitude is available. Either BTmag or VTmag is    always given. Approximate Johnson photometry may be obtained as:    V   = VT -0.090*(BT-VT)    B-V = 0.850*(BT-VT)    Consult Sect 1.3 of Vol 1 of ""The Hipparcos and Tycho Catalogues"",    ESA SP-1200, 1997, for details."
+public.tycho2,e_vt_mag,float,mag,,"[0.009,1.468]? s.e. of VT
+
+Blank when no magnitude is available. Either BTmag or VTmag is    always given. Approximate Johnson photometry may be obtained as:    V   = VT -0.090*(BT-VT)    B-V = 0.850*(BT-VT)    Consult Sect 1.3 of Vol 1 of ""The Hipparcos and Tycho Catalogues"",    ESA SP-1200, 1997, for details."
+public.tycho2,hip_old,char,,,

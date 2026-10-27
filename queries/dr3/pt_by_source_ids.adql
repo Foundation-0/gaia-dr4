@@ -1,0 +1,33 @@
+-- Query: pt_by_source_ids (DR3 stand-in)
+-- Serves: Questions A and B support. The same columns as pt_candidates for a list of source IDs. Replace
+--   @SOURCE_IDS@ with a comma-separated list of DR4 source IDs.
+-- Made from dr4/pt_by_source_ids.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.gaia_source, gaiadr3.vari_planetary_transit.
+-- Last ran without error: 2026-10-27, 5 rows (results/run_log.tsv).
+-- This is a template: replace the @...@ words before running it.
+SELECT
+    pt.source_id,
+    pt.transit_reference_time,
+    pt.transit_period,
+    pt.transit_duration,
+    pt.transit_depth,
+    pt.num_in_transit,
+    gs.ra,
+    gs.dec,
+    gs.ref_epoch,
+    gs.pmra,
+    gs.pmdec,
+    gs.parallax,
+    gs.parallax_error,
+    gs.ruwe,
+    gs.phot_g_mean_mag,
+    gs.phot_bp_mean_mag,
+    gs.phot_rp_mean_mag,
+    gs.bp_rp,
+    gs.phot_variable_flag,
+    gs.teff_gspphot
+FROM gaiadr3.vari_planetary_transit AS pt
+LEFT OUTER JOIN gaiadr3.gaia_source AS gs
+    ON gs.source_id = pt.source_id
+WHERE pt.source_id IN (@SOURCE_IDS@)
+ORDER BY pt.source_id

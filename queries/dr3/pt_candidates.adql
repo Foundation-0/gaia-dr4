@@ -1,0 +1,32 @@
+-- Query: pt_candidates (DR3 stand-in)
+-- Serves: Planetary-transit candidates with what is needed to predict transit times (transit_reference_time,
+--   transit_period, transit_duration, transit_depth) and gaia_source position, parallax, magnitudes and colour. No
+--   TESS cross-match table exists in the archive: see pt_candidates_neighbours for the link to older Gaia IDs.
+-- Made from dr4/pt_candidates.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.gaia_source, gaiadr3.vari_planetary_transit.
+-- Last ran without error: 2026-10-27, 214 rows (results/run_log.tsv).
+SELECT
+    pt.source_id,
+    pt.transit_reference_time,
+    pt.transit_period,
+    pt.transit_duration,
+    pt.transit_depth,
+    pt.num_in_transit,
+    gs.ra,
+    gs.dec,
+    gs.ref_epoch,
+    gs.pmra,
+    gs.pmdec,
+    gs.parallax,
+    gs.parallax_error,
+    gs.ruwe,
+    gs.phot_g_mean_mag,
+    gs.phot_bp_mean_mag,
+    gs.phot_rp_mean_mag,
+    gs.bp_rp,
+    gs.phot_variable_flag,
+    gs.teff_gspphot
+FROM gaiadr3.vari_planetary_transit AS pt
+LEFT OUTER JOIN gaiadr3.gaia_source AS gs
+    ON gs.source_id = pt.source_id
+ORDER BY pt.source_id

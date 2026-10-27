@@ -1,0 +1,23 @@
+-- Query: eb_missing_from_gaia_source (DR4 names)
+-- Serves: Question C. Number of long-period eclipsing binaries that have no row in gaia_source. They would be lost
+--   by an inner join. Expected 0 in DR3. Limited to long periods because the same join over all 2.2 million rows ran
+--   past the archive's 60 second limit for synchronous queries.
+-- Names: the draft DR4 data model of 26 Jun 2026. The schema name gaiadr4 is taken from that model's own example
+--   query.
+-- DR3 stand-in: dr3/eb_missing_from_gaia_source.adql, made from this file by make_standin.py. DR3 tables:
+--   gaiadr3.gaia_source, gaiadr3.vari_eclipsing_binary.
+-- Last ran without error on the DR3 stand-in: 2026-10-27 (1 rows; results/run_log.tsv).
+-- Last ran on DR4: never. The archive has no DR4 until 2 Dec 2026.
+-- DR4 columns this query relies on:
+--   gaiadr4.gaia_source: source_id
+--   gaiadr4.vari_eclipsing_binary: frequency, source_id
+-- Lines tagged DR4ONLY have no DR3 equivalent and are dropped from the stand-in.
+-- Cannot be tested before release: The DR4 answer. DR4 gaia_source holds only sources with high-quality astrometry
+--   and photometry, so it may be above 0. Then position and magnitudes must come from all_source_astrometry and
+--   all_source_photometry, which DR3 does not have.
+SELECT COUNT(*) AS n_long_period_eb_without_gaia_source_row
+FROM gaiadr4.vari_eclipsing_binary AS eb
+LEFT OUTER JOIN gaiadr4.gaia_source AS gs
+    ON gs.source_id = eb.source_id
+WHERE eb.frequency < 0.01
+  AND gs.source_id IS NULL

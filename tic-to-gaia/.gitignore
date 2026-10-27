@@ -1,0 +1,9 @@
+# Everything downloaded from the archives (and the logs of those downloads) stays out of git.
+data/
+data_*/
+# Scratch folder for release day (query answers saved from the archive).
+work/
+__pycache__/
+*.pyc
+# Left behind only if a fetch is killed half way (see write_snapshots in ticmap.py).
+.snapshots-partial-*/

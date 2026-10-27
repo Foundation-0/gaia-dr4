@@ -1,0 +1,12 @@
+-- Query: eb_count_all (DR4 names)
+-- Serves: Check that the table has the row count ESA publishes (2,392,500 for DR4, 2,184,477 in DR3).
+-- Names: the draft DR4 data model of 26 Jun 2026. The schema name gaiadr4 is taken from that model's own example
+--   query.
+-- DR3 stand-in: dr3/eb_count_all.adql, made from this file by make_standin.py. DR3 tables: .
+-- Last ran without error on the DR3 stand-in: 2026-10-27 (1 rows; results/run_log.tsv).
+-- Last ran on DR4: never. The archive has no DR4 until 2 Dec 2026.
+-- DR4 columns this query relies on:
+-- Lines tagged DR4ONLY have no DR3 equivalent and are dropped from the stand-in.
+-- Cannot be tested before release: The DR4 row count itself (2,392,500 per the Gaia DR4 page of 14 Sep 2026).
+SELECT COUNT(*) AS n_rows
+FROM gaiadr4.vari_eclipsing_binary AS eb

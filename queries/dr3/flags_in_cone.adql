@@ -1,0 +1,27 @@
+-- Query: flags_in_cone (DR3 stand-in)
+-- Serves: Question B support. Every Gaia source in a circle (a TESS aperture) with its variability flag, and its
+--   eclipsing-binary and planetary-transit rows if it has them. Replace @RA@ and @DEC@ (degrees, ICRS) and
+--   @RADIUS_DEG@ (degrees; one TESS pixel is 21 arcseconds, 0.00583 degrees).
+-- Made from dr4/flags_in_cone.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.gaia_source, gaiadr3.vari_eclipsing_binary, gaiadr3.vari_planetary_transit.
+-- Last ran without error: 2026-10-27, 2 rows (results/run_log.tsv).
+-- This is a template: replace the @...@ words before running it.
+SELECT
+    gs.source_id,
+    gs.ra,
+    gs.dec,
+    gs.phot_g_mean_mag,
+    gs.bp_rp,
+    gs.phot_variable_flag,
+    eb.frequency AS eb_frequency,
+    eb.model_type AS eb_model_type,
+    eb.derived_primary_ecl_depth AS eb_primary_depth,
+    pt.transit_period,
+    pt.transit_depth
+FROM gaiadr3.gaia_source AS gs
+LEFT OUTER JOIN gaiadr3.vari_eclipsing_binary AS eb
+    ON eb.source_id = gs.source_id
+LEFT OUTER JOIN gaiadr3.vari_planetary_transit AS pt
+    ON pt.source_id = gs.source_id
+WHERE 1 = CONTAINS(POINT('ICRS', gs.ra, gs.dec), CIRCLE('ICRS', @RA@, @DEC@, @RADIUS_DEG@))
+ORDER BY gs.phot_g_mean_mag

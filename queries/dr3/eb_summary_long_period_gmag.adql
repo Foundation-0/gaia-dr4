@@ -1,0 +1,18 @@
+-- Query: eb_summary_long_period_gmag (DR3 stand-in)
+-- Serves: Question C. Number of long-period eclipsing binaries per magnitude of G (lower edge of a 1 mag bin). The
+--   empty bin is stars with no G in gaia_source.
+-- Made from dr4/eb_summary_long_period_gmag.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.gaia_source, gaiadr3.vari_eclipsing_binary.
+-- Last ran without error: 2026-10-27, 15 rows (results/run_log.tsv).
+SELECT
+    t.g_bin,
+    COUNT(*) AS n_sources
+FROM (
+    SELECT FLOOR(gs.phot_g_mean_mag) AS g_bin
+    FROM gaiadr3.vari_eclipsing_binary AS eb
+    LEFT OUTER JOIN gaiadr3.gaia_source AS gs
+        ON gs.source_id = eb.source_id
+    WHERE eb.frequency < 0.01
+) AS t
+GROUP BY t.g_bin
+ORDER BY t.g_bin

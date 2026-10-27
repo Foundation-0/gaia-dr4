@@ -1,0 +1,4 @@
+# Raw archive answers, downloaded pages and run outputs. Re-made by the commands in README.md.
+data/
+__pycache__/
+*.pyc

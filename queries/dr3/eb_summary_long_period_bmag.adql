@@ -1,0 +1,18 @@
+-- Query: eb_summary_long_period_bmag (DR3 stand-in)
+-- Serves: Question C. Number of long-period eclipsing binaries per estimated B magnitude (published chain, lower
+--   edge of a 1 mag bin). The estimate fails for BP-RP above 2.5 (README.md). The empty bin is stars with no BP-RP.
+-- Made from dr4/eb_summary_long_period_bmag.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.gaia_source, gaiadr3.vari_eclipsing_binary.
+-- Last ran without error: 2026-10-27, 18 rows (results/run_log.tsv).
+SELECT
+    t.b_bin,
+    COUNT(*) AS n_sources
+FROM (
+    SELECT FLOOR(((gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp))))) AS b_bin
+    FROM gaiadr3.vari_eclipsing_binary AS eb
+    LEFT OUTER JOIN gaiadr3.gaia_source AS gs
+        ON gs.source_id = eb.source_id
+    WHERE eb.frequency < 0.01
+) AS t
+GROUP BY t.b_bin
+ORDER BY t.b_bin

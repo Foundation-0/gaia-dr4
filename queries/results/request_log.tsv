@@ -1,0 +1,107 @@
+utc_time	kind	status	bytes	cache_key	url	note
+2026-10-27T01:04:16Z	TAP	200	165224	e6b11c9252c4f7f0f44bbe81	https://gea.esac.esa.int/tap-server/tap/sync	list tables
+2026-10-27T01:04:34Z	TAP	200	51279	d4f1af8d242bfa2c95cab43a	https://gea.esac.esa.int/tap-server/tap/sync	TAP_SCHEMA.columns for DR3 stand-in tables
+2026-10-27T01:06:01Z	GET	200	125855	cd209002a9054b2e1b0300a1	https://www.cosmos.esa.int/web/gaia/dr4	DR4 pages
+2026-10-27T01:06:03Z	GET	200	122993	4527d709fad40a1ff924f1cf	https://www.cosmos.esa.int/web/gaia/dr4-prerelease	DR4 pages
+2026-10-27T01:06:52Z	TAP	200	10	13f2c23a541510aca45d9315	https://gea.esac.esa.int/tap-server/tap/sync	explore counts
+2026-10-27T01:06:54Z	TAP	200	7	3268b77977554352ea3cd99a	https://gea.esac.esa.int/tap-server/tap/sync	explore counts
+2026-10-27T01:06:55Z	TAP	200	6	68e02ee272187973f5f55053	https://gea.esac.esa.int/tap-server/tap/sync	explore counts
+2026-10-27T01:06:57Z	TAP	200	6	af55f8313b1b8b618dba159a	https://gea.esac.esa.int/tap-server/tap/sync	explore counts
+2026-10-27T01:07:24Z	TAP	400	1214	8c00628d77755d640e9e2d9d	https://gea.esac.esa.int/tap-server/tap/sync	syntax test case
+2026-10-27T01:07:25Z	TAP	400	633	b8c62cf831ea963c6d3223f7	https://gea.esac.esa.int/tap-server/tap/sync	syntax test hist
+2026-10-27T01:07:38Z	TAP	400	1214	8c00628d77755d640e9e2d9d	https://gea.esac.esa.int/tap-server/tap/sync	syntax test case | Cannot parse query 'SELECT SUM(CASE WHEN frequency &lt; 0.01 THEN 1 ELSE 0 END) AS n_long, COUNT(*) AS n FROM gaiadr3.vari_eclipsing_binary' for job '
+2026-10-27T01:07:39Z	TAP	400	633	b8c62cf831ea963c6d3223f7	https://gea.esac.esa.int/tap-server/tap/sync	syntax test hist | Cannot parse query 'SELECT FLOOR(LOG10(1.0 / frequency) * 4) AS k, COUNT(*) AS n FROM gaiadr3.vari_eclipsing_binary GROUP BY FLOOR(LOG10(1.0 / frequen
+2026-10-27T01:07:53Z	TAP	200	155	1fa3c955197cd127a7d10f21	https://gea.esac.esa.int/tap-server/tap/sync	syntax test hist
+2026-10-27T01:07:57Z	TAP	200	917	bc901ef1d68a680e9a1b7299	https://gea.esac.esa.int/tap-server/tap/sync	syntax test join
+2026-10-27T01:08:06Z	GET	503	299	752d4126c3a426cdd599d0ec	https://gea.esac.esa.int/archive/documentation/GDR3/Data_processing/chap_cu5pho/cu5pho_sec_photSystem/cu5pho_ssec_photRelations.html	Gaia DR3 doc: photometric relations | <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"> <html><head> <title>503 Service Unavailable</title> </head><body> <h1>Service Unavailable</h1> <p>T
+2026-10-27T01:08:13Z	GET	200	20032919	0c04295f3a5e951bbc165985	https://arxiv.org/pdf/2012.01916	Riello+2021 arXiv pdf
+2026-10-27T01:09:37Z	TAP	200	1036	d6a1aabcfafb686aec7e70b4	https://gea.esac.esa.int/tap-server/tap/sync	test APASS join
+2026-10-27T01:11:23Z	TAP	200	8739	6110f085b829826c20e7ce48	https://gea.esac.esa.int/tap-server/tap/sync	B validation sample, BP-RP bin 2.5..5.0
+2026-10-27T01:11:46Z	TAP	200	8785	7177c5197d6f69e04d2edf6b	https://gea.esac.esa.int/tap-server/tap/sync	B validation sample, BP-RP bin -0.5..0.3
+2026-10-27T01:12:03Z	TAP	200	8755	a2cbe498f51a05a5366e2b17	https://gea.esac.esa.int/tap-server/tap/sync	B validation sample, BP-RP bin 0.3..0.6
+2026-10-27T01:12:24Z	TAP	200	8689	85fc3fcf558f36e428425bf1	https://gea.esac.esa.int/tap-server/tap/sync	B validation sample, BP-RP bin 0.6..0.9
+2026-10-27T01:12:42Z	TAP	200	8679	7100b6ebd6beaacdfca17625	https://gea.esac.esa.int/tap-server/tap/sync	B validation sample, BP-RP bin 0.9..1.2
+2026-10-27T01:12:57Z	TAP	200	8652	42da89684022534baa14a4b9	https://gea.esac.esa.int/tap-server/tap/sync	B validation sample, BP-RP bin 1.2..1.6
+2026-10-27T01:13:11Z	TAP	200	8685	85c3afd5a02e6db762460795	https://gea.esac.esa.int/tap-server/tap/sync	B validation sample, BP-RP bin 1.6..2.0
+2026-10-27T01:13:34Z	TAP	200	8701	5fea54b195ebde896f378b10	https://gea.esac.esa.int/tap-server/tap/sync	B validation sample, BP-RP bin 2.0..2.5
+2026-10-27T01:15:16Z	TAP	200	8702	33740a769f7e051f21b13184	https://gea.esac.esa.int/tap-server/tap/sync	B validation, bright red stars, BP-RP bin 2.0..2.5
+2026-10-27T01:15:21Z	TAP	200	8729	ba56ba7f9583a93497b93fc6	https://gea.esac.esa.int/tap-server/tap/sync	B validation, bright red stars, BP-RP bin 2.5..5.0
+2026-10-27T01:21:11Z	TAP	200	15	9c8094ee7cc090d6cc5f4183	https://gea.esac.esa.int/tap-server/tap/sync	eb_count_all full
+2026-10-27T01:21:12Z	TAP	200	19	1f38166bbf4f5c78a1042e2f	https://gea.esac.esa.int/tap-server/tap/sync	eb_count_long_period full
+2026-10-27T01:21:15Z	TAP	200	22	008b0dd797df03147081b3c3	https://gea.esac.esa.int/tap-server/tap/sync	eb_count_long_period_bcut full
+2026-10-27T01:22:29Z	TAP	408	276	557e284de49a3b7b56b67173	https://gea.esac.esa.int/tap-server/tap/sync	eb_missing_from_gaia_source full | Job timeout/aborted.
+2026-10-27T01:22:31Z	TAP	200	182	af00e529a91c8fcef1f7faa8	https://gea.esac.esa.int/tap-server/tap/sync	eb_summary_period full
+2026-10-27T01:22:32Z	TAP	200	193	7c6c9c9d0773743d7ef3f159	https://gea.esac.esa.int/tap-server/tap/sync	eb_summary_long_period_model_type full
+2026-10-27T01:22:35Z	TAP	200	133	f8a88804b16b4eb05787532f	https://gea.esac.esa.int/tap-server/tap/sync	eb_summary_long_period_gmag full
+2026-10-27T01:22:37Z	TAP	200	156	a96715e7fba43ab425fa8872	https://gea.esac.esa.int/tap-server/tap/sync	eb_summary_long_period_bmag full
+2026-10-27T01:22:41Z	TAP	200	9319	a84139e2c93f8be9ee11e4c7	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period top20
+2026-10-27T01:22:47Z	TAP	200	1163542	c69d5cd6ccbd64bc13943717	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period full
+2026-10-27T01:22:53Z	TAP	200	9670	d80bdf59b427d57a95e1d440	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period_bcut top20
+2026-10-27T01:22:58Z	TAP	200	39245	3a8939c31ea4444b381ca834	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period_bcut full
+2026-10-27T01:23:00Z	TAP	200	2773	e949566db9e5c44f1edf5adf	https://gea.esac.esa.int/tap-server/tap/sync	eb_by_source_ids full
+2026-10-27T01:23:02Z	TAP	200	11	da6956f21eb291026ab97665	https://gea.esac.esa.int/tap-server/tap/sync	pt_count_all full
+2026-10-27T01:23:04Z	TAP	200	551	41e9afc46bd7ebc94337b263	https://gea.esac.esa.int/tap-server/tap/sync	pt_summary_period full
+2026-10-27T01:23:07Z	TAP	200	5439	f151f5d9ab55d5caa4db4408	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates top20
+2026-10-27T01:23:10Z	TAP	200	56077	35b18718bc74a42c0342977d	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates full
+2026-10-27T01:25:14Z	TAP	408	276	e75edf146722f83eb025f639	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates_neighbours top20 | Job timeout/aborted.
+2026-10-27T01:26:18Z	TAP	408	276	865ed1c81be0e477670a7fbb	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates_neighbours full | Job timeout/aborted.
+2026-10-27T01:26:21Z	TAP	200	1547	b6ffc5c4fc7eb895aa7fa699	https://gea.esac.esa.int/tap-server/tap/sync	pt_by_source_ids full
+2026-10-27T01:26:24Z	TAP	200	348	fac7b2492ad05ffac1c545cf	https://gea.esac.esa.int/tap-server/tap/sync	flags_in_cone full
+2026-10-27T01:26:26Z	TAP	200	144	e33f66d93962fd64cb4e611b	https://gea.esac.esa.int/tap-server/tap/sync	sanity_eb_reference_time_range
+2026-10-27T01:26:28Z	TAP	200	210	ceab1a7e310551feb3af6a5a	https://gea.esac.esa.int/tap-server/tap/sync	sanity_eb_model_types
+2026-10-27T01:26:30Z	TAP	200	110	0967bd75baceba31438136fb	https://gea.esac.esa.int/tap-server/tap/sync	sanity_pt_reference_time_range
+2026-10-27T01:26:31Z	TAP	200	23	a21af1f1a3218bd83a8c0a19	https://gea.esac.esa.int/tap-server/tap/sync	sanity_pt_copies_differ
+2026-10-27T01:26:55Z	TAP	200	158	8b348543c13f03fa487e6449	https://gea.esac.esa.int/tap-server/tap/sync	dr2_neighbourhood lookup test
+2026-10-27T01:26:58Z	TAP	200	428	713ec531836555b42c97cf67	https://gea.esac.esa.int/tap-server/tap/sync	dr2_neighbourhood lookup test
+2026-10-27T01:28:10Z	TAP	408	276	20626c3ad4928b1949139da5	https://gea.esac.esa.int/tap-server/tap/sync	neighbour join variant no_nb_order | Job timeout/aborted.
+2026-10-27T01:29:12Z	TAP	408	276	15f5b7816fcb0731e3d95ea5	https://gea.esac.esa.int/tap-server/tap/sync	neighbour join variant nb_before_gs | Job timeout/aborted.
+2026-10-27T01:29:23Z	TAP	200	19553	cfa140bbfa78eda0e2d985eb	https://gea.esac.esa.int/tap-server/tap/sync	neighbour join variant inner_join
+2026-10-27T01:29:42Z	TAP	200	43	05328a740a4bf83b54d2434b	https://gea.esac.esa.int/tap-server/tap/sync	eb_missing_from_gaia_source full
+2026-10-27T01:29:45Z	TAP	200	3912	92c62dfacf5568e5ba9fea6b	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates_neighbours top20
+2026-10-27T01:29:48Z	TAP	200	41387	bbfcd413631a24ace6e7af01	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates_neighbours full
+2026-10-27T01:31:20Z	TAP	200	9721	c24a88679c10cc741a870209	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period top20
+2026-10-27T01:31:24Z	TAP	200	1210820	5d7cebf3ffa4e6b5feca7815	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period full
+2026-10-27T01:31:28Z	TAP	200	10074	52006949f4655323126c4eb7	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period_bcut top20
+2026-10-27T01:31:32Z	TAP	200	40887	f31e794165e85e211ee42887	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period_bcut full
+2026-10-27T01:31:34Z	TAP	200	2896	ab9bc7c3a2eb369548d40837	https://gea.esac.esa.int/tap-server/tap/sync	eb_by_source_ids full
+2026-10-27T01:31:40Z	TAP	200	8603	c2605fb604ffdd9a68b74a2a	https://gea.esac.esa.int/tap-server/tap/sync	check_columns live
+2026-10-27T01:31:42Z	TAP	200	23	cb14a376b986ae01a9d0d5ad	https://gea.esac.esa.int/tap-server/tap/sync	check_columns live
+2026-10-27T01:32:07Z	DataLink	500	1737	f02ab1bb0c37e1729202de48	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+6373877878407762944&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=INDIVIDUAL&FORMAT=csv	epoch photometry test INDIVIDUAL | <html> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> <style type="text/css"> body { background-color: white; color: bla
+2026-10-27T01:32:11Z	DataLink	200	17922	729a54221e92f11d874f2c0a	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+6373877878407762944&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry test DATAMODEL_STANDARD
+2026-10-27T01:32:36Z	DataLink	200	18340	b72ddae1db3b5fca44d98c71	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+3170994425021057664&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:32:39Z	DataLink	200	19199	ac430b40869bb50589e220da	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+4601713589699431680&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:33:25Z	DataLink	200	17444	9b259bf0210dfd83b931ce64	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+6657628225713981312&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:33:27Z	DataLink	200	12052	05fdc64ac19bd3faad8fe03f	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+934991913366424320&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:33:29Z	DataLink	200	6687	1645f5ebc2741b64128aaa00	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+6714545578996082304&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:33:32Z	DataLink	200	14391	ee19dc705b2f29dce27dc2dc	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+4316162208049061888&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:33:35Z	DataLink	200	19021	41eb2e2e25d93d44eb93c4b1	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+6071092098645364224&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:33:38Z	DataLink	200	8859	2e6db7e2cf50b8c449372d32	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+6138160619976665728&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:33:43Z	DataLink	200	17877	c37f280eae5a3b53336df38f	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+1916472857688579712&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:33:48Z	DataLink	200	21159	475e3306f0bc07116af4fb9a	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+3518398798991565184&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:33:50Z	DataLink	200	9890	aadadf11d846d652ca5a0901	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+2720039248534841472&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:33:52Z	DataLink	200	9771	68e822acb7e0ca8ee2fd942d	https://gea.esac.esa.int/data-server/data?ID=Gaia+DR3+3437789340956759552&RETRIEVAL_TYPE=EPOCH_PHOTOMETRY&DATA_STRUCTURE=DATAMODEL_STANDARD&FORMAT=csv	epoch photometry for ephemeris check
+2026-10-27T01:34:23Z	VizieR-TAP	200	94	c6de15cd08dc2e7d754b543a	https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync	APASS spot check
+2026-10-27T01:34:25Z	VizieR-TAP	200	94	13ab6e937dfc0fc4d353f5c0	https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync	APASS spot check
+2026-10-27T01:34:27Z	VizieR-TAP	200	95	e4b48108c7a98c77aaddd001	https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync	APASS spot check
+2026-10-27T01:34:33Z	GET	503	299	752d4126c3a426cdd599d0ec	https://gea.esac.esa.int/archive/documentation/GDR3/Data_processing/chap_cu5pho/cu5pho_sec_photSystem/cu5pho_ssec_photRelations.html	Gaia DR3 doc: photometric relations (retry) | <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"> <html><head> <title>503 Service Unavailable</title> </head><body> <h1>Service Unavailable</h1> <p>T
+2026-10-27T01:36:32Z	TAP	200	15	9c8094ee7cc090d6cc5f4183	https://gea.esac.esa.int/tap-server/tap/sync	eb_count_all full verify
+2026-10-27T01:36:33Z	TAP	200	19	1f38166bbf4f5c78a1042e2f	https://gea.esac.esa.int/tap-server/tap/sync	eb_count_long_period full verify
+2026-10-27T01:36:35Z	TAP	200	22	008b0dd797df03147081b3c3	https://gea.esac.esa.int/tap-server/tap/sync	eb_count_long_period_bcut full verify
+2026-10-27T01:36:37Z	TAP	200	43	05328a740a4bf83b54d2434b	https://gea.esac.esa.int/tap-server/tap/sync	eb_missing_from_gaia_source full verify
+2026-10-27T01:36:39Z	TAP	200	182	af00e529a91c8fcef1f7faa8	https://gea.esac.esa.int/tap-server/tap/sync	eb_summary_period full verify
+2026-10-27T01:36:41Z	TAP	200	193	7c6c9c9d0773743d7ef3f159	https://gea.esac.esa.int/tap-server/tap/sync	eb_summary_long_period_model_type full verify
+2026-10-27T01:36:43Z	TAP	200	133	f8a88804b16b4eb05787532f	https://gea.esac.esa.int/tap-server/tap/sync	eb_summary_long_period_gmag full verify
+2026-10-27T01:36:45Z	TAP	200	156	a96715e7fba43ab425fa8872	https://gea.esac.esa.int/tap-server/tap/sync	eb_summary_long_period_bmag full verify
+2026-10-27T01:36:48Z	TAP	200	9721	c24a88679c10cc741a870209	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period top20 verify
+2026-10-27T01:36:53Z	TAP	200	1210820	5d7cebf3ffa4e6b5feca7815	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period full verify
+2026-10-27T01:36:55Z	TAP	200	10074	52006949f4655323126c4eb7	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period_bcut top20 verify
+2026-10-27T01:36:58Z	TAP	200	40887	f31e794165e85e211ee42887	https://gea.esac.esa.int/tap-server/tap/sync	eb_long_period_bcut full verify
+2026-10-27T01:37:01Z	TAP	200	2896	ab9bc7c3a2eb369548d40837	https://gea.esac.esa.int/tap-server/tap/sync	eb_by_source_ids full verify
+2026-10-27T01:37:03Z	TAP	200	11	da6956f21eb291026ab97665	https://gea.esac.esa.int/tap-server/tap/sync	pt_count_all full verify
+2026-10-27T01:37:05Z	TAP	200	551	41e9afc46bd7ebc94337b263	https://gea.esac.esa.int/tap-server/tap/sync	pt_summary_period full verify
+2026-10-27T01:37:06Z	TAP	200	5439	f151f5d9ab55d5caa4db4408	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates top20 verify
+2026-10-27T01:37:10Z	TAP	200	56077	35b18718bc74a42c0342977d	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates full verify
+2026-10-27T01:37:13Z	TAP	200	3912	92c62dfacf5568e5ba9fea6b	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates_neighbours top20 verify
+2026-10-27T01:37:16Z	TAP	200	41387	bbfcd413631a24ace6e7af01	https://gea.esac.esa.int/tap-server/tap/sync	pt_candidates_neighbours full verify
+2026-10-27T01:37:18Z	TAP	200	1547	b6ffc5c4fc7eb895aa7fa699	https://gea.esac.esa.int/tap-server/tap/sync	pt_by_source_ids full verify
+2026-10-27T01:37:20Z	TAP	200	348	fac7b2492ad05ffac1c545cf	https://gea.esac.esa.int/tap-server/tap/sync	flags_in_cone full verify

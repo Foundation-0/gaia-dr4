@@ -1,0 +1,17 @@
+{
+ "candidate_rows": 665,
+ "distinct_tic_ids": 651,
+ "flagged": [],
+ "position_difference_arcsec": {
+  "max": 2.3939836243334103,
+  "median": 1.1916168540078407
+ },
+ "rounding_limits": {
+  "position_arcsec_at_dec_0": 2.545585412271571,
+  "tmag": 0.005001
+ },
+ "tmag_difference": {
+  "max": 0.005000343322754119,
+  "median": 0.002599945068359588
+ }
+}

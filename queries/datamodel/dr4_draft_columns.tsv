@@ -1,0 +1,568 @@
+table	column	type	unit	title
+vari_eclipsing_binary	solution_id	long		Solution Identifier
+vari_eclipsing_binary	source_id	long		Unique source identifier
+vari_eclipsing_binary	global_ranking	float		Number between 0 (worst) and 1 (best)
+vari_eclipsing_binary	reference_time	double	Barycentric JD in TCB - 2 455 197.5 (day)	Reference time used for the geometric model fit
+vari_eclipsing_binary	frequency	double	day-1	Frequency of geometric model of the eclipsing binary light curve
+vari_eclipsing_binary	frequency_error	float	day-1	Uncertainty of frequency
+vari_eclipsing_binary	geom_model_reference_level	float	mag	Magnitude reference level of geometric model
+vari_eclipsing_binary	geom_model_reference_level_error	float	mag	Uncertainty on magnitude reference level of geometric model
+vari_eclipsing_binary	geom_model_gaussian1_phase	float		Phase of the Gaussian 1 component
+vari_eclipsing_binary	geom_model_gaussian1_phase_error	float		Uncertainty on phase of the Gaussian 1 component
+vari_eclipsing_binary	geom_model_gaussian1_sigma	float		Standard deviation [phase] of Gaussian 1 component
+vari_eclipsing_binary	geom_model_gaussian1_sigma_error	float		Uncertainty on standard deviation [phase] of Gaussian 1 component
+vari_eclipsing_binary	geom_model_gaussian1_depth	float	mag	Magnitude depth of Gaussian 1 component
+vari_eclipsing_binary	geom_model_gaussian1_depth_error	float	mag	Uncertainty on magnitude depth of Gaussian 1 component
+vari_eclipsing_binary	geom_model_gaussian2_phase	float		Phase of Gaussian 2 component
+vari_eclipsing_binary	geom_model_gaussian2_phase_error	float		Uncertainty on phase of Gaussian 2 component
+vari_eclipsing_binary	geom_model_gaussian2_sigma	float		Standard deviation [phase] of Gaussian 2 component
+vari_eclipsing_binary	geom_model_gaussian2_sigma_error	float		Uncertainty on standard deviation [phase] of Gaussian 2 component
+vari_eclipsing_binary	geom_model_gaussian2_depth	float	mag	Magnitude depth of Gaussian2 component
+vari_eclipsing_binary	geom_model_gaussian2_depth_error	float	mag	Uncertainty on magnitude depth of Gaussian2 component
+vari_eclipsing_binary	geom_model_cosine_half_period_amplitude	float	mag	Amplitude of the cosine component with half the period of the geometric model
+vari_eclipsing_binary	geom_model_cosine_half_period_amplitude_error	float	mag	Uncertainty on amplitude of the cosine component
+vari_eclipsing_binary	geom_model_cosine_half_period_phase	float		Reference phase of the cosine component with half the period of the geometric model
+vari_eclipsing_binary	geom_model_cosine_half_period_phase_error	float		Uncertainty on reference phase of the cosine component
+vari_eclipsing_binary	model_type	string		Type of geometrical model of the light curve
+vari_eclipsing_binary	num_model_parameters	byte		Number of free parameters of the geometric model
+vari_eclipsing_binary	reduced_chi2	float		Reduced Chi2 of the geometrical model fit
+vari_eclipsing_binary	derived_primary_ecl_phase	float		Primary eclipse: phase at geometrically deepest point
+vari_eclipsing_binary	derived_primary_ecl_phase_error	float		Primary eclipse: uncertainty on primary eclipse phase
+vari_eclipsing_binary	derived_primary_ecl_duration	float		Primary eclipse: duration [phase fraction]
+vari_eclipsing_binary	derived_primary_ecl_duration_error	float		Primary eclipse: uncertainty on duration of primary eclipse
+vari_eclipsing_binary	derived_primary_ecl_depth	float	mag	Primary eclipse: depth
+vari_eclipsing_binary	derived_primary_ecl_depth_error	float	mag	Primary eclipse: uncertainty on primary eclipse depth
+vari_eclipsing_binary	derived_secondary_ecl_phase	float		Secondary eclipse: phase at geometrically second deepest point
+vari_eclipsing_binary	derived_secondary_ecl_phase_error	float		Secondary eclipse: uncertainty on secondary eclipse phase
+vari_eclipsing_binary	derived_secondary_ecl_duration	float		Secondary eclipse: duration [phase fraction]
+vari_eclipsing_binary	derived_secondary_ecl_duration_error	float		Secondary eclipse: uncertainty on secondary eclipse duration
+vari_eclipsing_binary	derived_secondary_ecl_depth	float	mag	Secondary eclipse: depth
+vari_eclipsing_binary	derived_secondary_ecl_depth_error	float	mag	Secondary eclipse: uncertainty on secondary eclipse depth
+vari_eclipsing_binary	frequency_rv_consistency_flag	byte		Flag if the frequency field is consistent with the dominant frequency found in radial velocity
+vari_eclipsing_binary	sample_classification	String		String-based sample classification
+vari_eclipsing_binary	bp_usable	boolean		True when photometric BP time series seems usable for modelling
+vari_eclipsing_binary	rp_usable	boolean		True when photometric RP time series seems usable for modelling
+vari_eclipsing_binary	delta_global_ranking_bp_min_g	float		BP-G global ranking difference of partial refitted model
+vari_eclipsing_binary	delta_global_ranking_rp_min_g	float		RP-G global ranking difference of partial refitted model in RP
+vari_eclipsing_binary	g_skewness	float		G-band skewness of the input data
+vari_eclipsing_binary	g_signal_to_noise	float		G-band signal-to-noise estimate of the input data
+vari_eclipsing_binary	g_median	float	mag	G-band median magnitude of the input data
+vari_eclipsing_binary	g_num_obs	short		G-band number of observations of the input data
+vari_eclipsing_binary	classification_score	float		Input classification score of classifier that was used to select eclipsing binaries to process
+vari_planetary_transit	solution_id	long		Solution Identifier
+vari_planetary_transit	source_id	long		Unique source identifier
+vari_planetary_transit	transit_reference_time	double	Barycentric JD in TCB - 2 455 197.5 (day)	Mid-transit reference time
+vari_planetary_transit	transit_period	double	day	Most probable transit period
+vari_planetary_transit	transit_depth	float	mmag	Transit depth
+vari_planetary_transit	transit_duration	float	day	Transit duration
+vari_planetary_transit	num_in_transit	byte		Number of in-transit observations
+gaia_source	solution_id	long		Solution Identifier
+gaia_source	designation	string		Unique source designation (unique across all Data Releases)
+gaia_source	source_id	long		Unique source identifier (unique within a particular Data Release)
+gaia_source	winning_source_id_astro	long		Identifier of the source that provided the astrometry
+gaia_source	winning_source_id_phot	long		Identifier of the source that provided the G-band photometry
+gaia_source	random_index	long		Random index for use when selecting subsets
+gaia_source	astrometry_origin	string		Flag indicating which module provided the astrometry for this source
+gaia_source	unreliable_astrometry	boolean		Unreliable AGIS astrometry
+gaia_source	unreliable_g_photometry	boolean		Unreliable G-band mean flux
+gaia_source	ref_epoch	double	Julian Years	Reference epoch
+gaia_source	ra	double	deg	Right ascension
+gaia_source	ra_error	float	mas	Standard error of right ascension
+gaia_source	dec	double	deg	Declination
+gaia_source	dec_error	float	mas	Standard error of declination
+gaia_source	parallax	double	mas	Parallax
+gaia_source	parallax_error	float	mas	Standard error of parallax
+gaia_source	parallax_over_error	float		Parallax divided by its standard error
+gaia_source	pm	float	mas yr-1	Total proper motion
+gaia_source	pmra	double	mas yr-1	Proper motion in right ascension direction
+gaia_source	pmra_error	float	mas yr-1	Standard error of proper motion in right ascension direction
+gaia_source	pmdec	double	mas yr-1	Proper motion in declination direction
+gaia_source	pmdec_error	float	mas yr-1	Standard error of proper motion in declination direction
+gaia_source	pseudocolour	float	µm-1	Astrometrically estimated pseudocolour of the source
+gaia_source	pseudocolour_error	float	µm-1	Standard error of the pseudocolour of the source
+gaia_source	astrometric_params	short		Bitwise code describing which astrometric parameters are provided
+gaia_source	tentative_parallax_bias	double	mas	Parallax bias correction
+gaia_source	blended	byte		Source update flag indicating use of blended transits
+gaia_source	ra_dec_corr	float		Correlation between right ascension and declination
+gaia_source	ra_parallax_corr	float		Correlation between right ascension and parallax
+gaia_source	ra_pmra_corr	float		Correlation between RA and proper motion in RA
+gaia_source	ra_pmdec_corr	float		Correlation between right ascension and proper motion in declination
+gaia_source	dec_parallax_corr	float		Correlation between declination and parallax
+gaia_source	dec_pmra_corr	float		Correlation between declination and proper motion in right ascension
+gaia_source	dec_pmdec_corr	float		Correlation between declination and proper motion in declination
+gaia_source	parallax_pmra_corr	float		Correlation between parallax and proper motion in right ascension
+gaia_source	parallax_pmdec_corr	float		Correlation between parallax and proper motion in declination
+gaia_source	pmra_pmdec_corr	float		Correlation between proper motion in RA and proper motion in Dec
+gaia_source	ra_pseudocolour_corr	float		Correlation between right ascension and pseudocolour
+gaia_source	dec_pseudocolour_corr	float		Correlation between declination and pseudocolour
+gaia_source	parallax_pseudocolour_corr	float		Correlation between parallax and pseudocolour
+gaia_source	pmra_pseudocolour_corr	float		Correlation between proper motion in right asension and pseudocolour
+gaia_source	pmdec_pseudocolour_corr	float		Correlation between proper motion in declination and pseudocolour
+gaia_source	astrometric_n_obs_al	short		Total number of observations in the along-scan (AL) direction
+gaia_source	astrometric_n_obs_ac	short		Total number of observations in the across-scan (AC) direction
+gaia_source	astrometric_n_good_obs_al	short		Number of good observations in the along-scan (AL) direction
+gaia_source	astrometric_gof_al	float		Goodness of fit statistic of model wrt along-scan observations
+gaia_source	astrometric_chi2_al	float		AL chi-square value
+gaia_source	astrometric_excess_noise	float	mas	Rescaled Excess noise of the source
+gaia_source	astrometric_primary_flag	boolean		Primary or secondary
+gaia_source	rv_used_in_astrometry	float	km s-1	Assumed radial velocity used in the astrometric solution
+gaia_source	nu_eff_used_in_astrometry	float	µm-1	Effective wavenumber of the source used in the astrometric solution
+gaia_source	astrometric_matched_transits	short		Matched FOV transits used in the AGIS solution
+gaia_source	visibility_periods_used	short		Number of visibility periods used in Astrometric solution
+gaia_source	astrometric_sigma5d_max	float	mas	The longest semi-major axis of the 5-d error ellipsoid
+gaia_source	ipd_gof_harmonic_amplitude	float		Amplitude of the IPD GoF versus position angle of scan
+gaia_source	ipd_gof_harmonic_phase	float	deg	Phase of the IPD GoF versus position angle of scan
+gaia_source	ipd_frac_multi_peak	byte		Percent of successful-IPD windows with more than one peak
+gaia_source	ipd_frac_odd_win	byte		Percent of transits with truncated windows or multiple gate
+gaia_source	ipd_frac_high_gof	byte		Percent of successful-IPD windows with only one peak but high GoF
+gaia_source	ruwe	float		Renormalised unit weight error
+gaia_source	g_photometry_origin	string		Flag indicating which module provided the G photometry
+gaia_source	phot_g_n_obs	short		Number of observations contributing to G photometry
+gaia_source	phot_g_mean_flux	double	e- s-1	G-band mean flux
+gaia_source	phot_g_mean_flux_error	float	e- s-1	Error on G-band mean flux
+gaia_source	phot_g_mean_flux_over_error	float		G-band mean flux divided by its error
+gaia_source	phot_g_mean_mag	float	mag	G-band mean magnitude
+gaia_source	colour_origin	string		Flag indicating which module provided the XP photometry
+gaia_source	phot_bp_n_obs	short		Number of observations contributing to BP photometry
+gaia_source	phot_bp_mean_flux	double	e- s-1	Integrated BP mean flux
+gaia_source	phot_bp_mean_flux_error	float	e- s-1	Error on the integrated BP mean flux
+gaia_source	phot_bp_mean_flux_over_error	float		Integrated BP mean flux divided by its error
+gaia_source	phot_bp_mean_mag	float	mag	Integrated BP mean magnitude
+gaia_source	phot_rp_n_obs	short		Number of observations contributing to RP photometry
+gaia_source	phot_rp_mean_flux	double	e- s-1	Integrated RP mean flux
+gaia_source	phot_rp_mean_flux_error	float	e- s-1	Error on the integrated RP mean flux
+gaia_source	phot_rp_mean_flux_over_error	float		Integrated RP mean flux divided by its error
+gaia_source	phot_rp_mean_mag	float	mag	Integrated RP mean magnitude
+gaia_source	phot_proc_flag	byte		Source-level processing information for photometry
+gaia_source	bp_rp	float	mag	BP - RP colour
+gaia_source	radial_velocity_origin	string		Flag indicating which module provided the radial velocity
+gaia_source	radial_velocity	float	km s-1	Radial velocity
+gaia_source	radial_velocity_error	float	km s-1	Radial velocity error
+gaia_source	rv_nb_transits	short		Number of transits used to compute the radial velocity
+gaia_source	rv_expected_sig_to_noise	float		Expected signal to noise in the spectrum used for radial velocity
+gaia_source	rv_renormalised_gof	float		Radial velocity renormalised goodness of fit
+gaia_source	rv_invalid_reason	long		The reason why the radial velocity is set as invalid
+gaia_source	rv_single_outlier_probability	float		Probability for radial velocity to be an outlier
+gaia_source	has_systemic_rv	boolean		Indicates whether the source has a systemic radial velocity
+gaia_source	vbroad_origin	string		Flag indicating which module provided the vbroad for this source
+gaia_source	vbroad	float	km s-1	Spectral line broadening parameter
+gaia_source	vbroad_error	float	km s-1	Uncertainty on the spectral line broadening
+gaia_source	vbroad_nb_transits	short		Number of transits used to compute vbroad
+gaia_source	vbroad_invalid_reason	short		The reason why vbroad is set as invalid
+gaia_source	grvs_mag	float	mag	Integrated Grvs magnitude
+gaia_source	grvs_mag_error	float	mag	Grvs magnitude uncertainty
+gaia_source	grvs_mag_nb_transits	short		Number of transits used to compute Grvs
+gaia_source	grvs_mag_invalid_reason	short		The reason why Grvs magnitude is set as invalid
+gaia_source	rvs_spec_sig_to_noise	float		Signal to noise ratio in the mean RVS spectrum
+gaia_source	rv_assumed_sb2	boolean		the star is assumed to be an SB2
+gaia_source	fraction_double_lined	float		Ratio of occurrences of multiple components in radial velocity
+gaia_source	fraction_emission_lines	float		ratio of occurrences of emission lines
+gaia_source	external_apparent_grvs	float	mag	Apparent Grvs obtained from non-RVS data
+gaia_source	external_apparent_grvs_origin	short		Origin of external apparent Grvs
+gaia_source	phot_variable_flag	string		Photometric variability flag
+gaia_source	phot_variable_score	float		Photometric variability score between 0 and 1
+gaia_source	phot_variable_best_class	string		Photometric best variability class
+gaia_source	classprob_dsc_combmod_quasar	float		Probability from DSC-Combmod of being a quasar
+gaia_source	classprob_dsc_combmod_galaxy	float		Probability from DSC-Combmod of being a galaxy
+gaia_source	classprob_dsc_combmod_star	float		Probability from DSC-Combmod of being a single star
+gaia_source	distance_gspphot	float	pc	Distance from GSP-Phot Aeneas best library using BP/RP spectra
+gaia_source	ap_origin	string		Origin of effective temperature, surface gravity, and metallicity
+gaia_source	teff	float	K	Stellar effective temperature
+gaia_source	logg	float	log cgs	Stellar surface gravity
+gaia_source	mh	float	dex	Stellar metallicity
+gaia_source	extinction_origin	string		Origin of extinction in G band and reddening
+gaia_source	ag	float	mag	Extinction in G band
+gaia_source	ebpminrp	float	mag	Reddening in BP minus RP colour
+gaia_source	l	double	deg	Galactic longitude
+gaia_source	b	double	deg	Galactic latitude
+gaia_source	ecl_lon	double	deg	Ecliptic longitude
+gaia_source	ecl_lat	double	deg	Ecliptic latitude
+gaia_source	healpix_id	string		Level 12 HEALPix identification string
+gaia_source	healpix29	long		Level 29 HEALPix index for HATS
+all_source_astrometry	solution_id	long		Solution Identifier
+all_source_astrometry	source_id	long		Source Identifier
+all_source_astrometry	designation	string		Unique source designation (unique across all Data Releases)
+all_source_astrometry	quality_flag	byte		Bitwise code indicating the quality of the astrometry of this source
+all_source_astrometry	spurious_class	byte		Bitwise code indicating the spurious category for this source
+all_source_astrometry	unreliable_astrometry	boolean		Unreliable AGIS astrometry
+all_source_astrometry	random_index_as	long		Random index for use when selecting subsets
+all_source_astrometry	in_gaia_source	boolean		Flag indicating presence in the main Gaia source catalogue
+all_source_astrometry	astro_pipeline	short		Pipeline module that provided the astrometry for this source
+all_source_astrometry	ref_epoch	double	Julian Years	Reference epoch
+all_source_astrometry	ra	double	deg	Right ascension
+all_source_astrometry	ra_error	float	mas	Standard error of right ascension
+all_source_astrometry	dec	double	deg	Declination
+all_source_astrometry	dec_error	float	mas	Standard error of declination
+all_source_astrometry	parallax	double	mas	Parallax
+all_source_astrometry	parallax_error	float	mas	Standard error of parallax
+all_source_astrometry	parallax_over_error	float		Parallax divided by its standard error
+all_source_astrometry	pmra	double	mas yr-1	Proper motion in right ascension direction
+all_source_astrometry	pmra_error	float	mas yr-1	Standard error of proper motion in right ascension direction
+all_source_astrometry	pmdec	double	mas yr-1	Proper motion in declination direction
+all_source_astrometry	pmdec_error	float	mas yr-1	Standard error of proper motion in declination direction
+all_source_astrometry	pm	float	mas yr-1	Total proper motion
+all_source_astrometry	ra_dec_corr	float		Correlation between right ascension and declination
+all_source_astrometry	ra_parallax_corr	float		Correlation between right ascension and parallax
+all_source_astrometry	ra_pmra_corr	float		Correlation between RA and proper motion in RA
+all_source_astrometry	ra_pmdec_corr	float		Correlation between right ascension and proper motion in declination
+all_source_astrometry	dec_parallax_corr	float		Correlation between declination and parallax
+all_source_astrometry	dec_pmra_corr	float		Correlation between declination and proper motion in right ascension
+all_source_astrometry	dec_pmdec_corr	float		Correlation between declination and proper motion in declination
+all_source_astrometry	parallax_pmra_corr	float		Correlation between parallax and proper motion in right ascension
+all_source_astrometry	parallax_pmdec_corr	float		Correlation between parallax and proper motion in declination
+all_source_astrometry	pmra_pmdec_corr	float		Correlation between proper motion in RA and proper motion in Dec
+all_source_astrometry	astrometric_n_obs_al	short		Total number of observations in the along-scan (AL) direction
+all_source_astrometry	astrometric_n_obs_ac	short		Total number of observations in the across-scan (AC) direction
+all_source_astrometry	astrometric_n_good_obs_al	short		Number of good observations in the along-scan (AL) direction
+all_source_astrometry	astrometric_gof_al	float		Goodness of fit statistic of model wrt along-scan observations
+all_source_astrometry	astrometric_chi2_al	float		AL chi-square value
+all_source_astrometry	mean_parallax_factor_al	float		Mean Parallax factor AL
+all_source_astrometry	astrometric_excess_noise	float	mas	Rescaled excess noise of the source
+all_source_astrometry	astrometric_params	short		Bitwise code describing which astrometric parameters are provided
+all_source_astrometry	tentative_parallax_bias	double	mas	Parallax bias correction
+all_source_astrometry	blended	byte		Source update flag indicating use of blended transits
+all_source_astrometry	astrometric_primary_flag	boolean		Primary or secondary
+all_source_astrometry	rv_used_in_astrometry	float	km s-1	Assumed radial velocity used in the astrometric solution
+all_source_astrometry	nu_eff_used_in_astrometry	float	µm-1	Effective wavenumber of the source used in the astrometric solution
+all_source_astrometry	pseudocolour	float	µm-1	Astrometrically estimated pseudocolour of the source
+all_source_astrometry	pseudocolour_error	float	µm-1	Standard error of the pseudocolour of the source
+all_source_astrometry	ra_pseudocolour_corr	float		Correlation between right ascension and pseudocolour
+all_source_astrometry	dec_pseudocolour_corr	float		Correlation between declination and pseudocolour
+all_source_astrometry	parallax_pseudocolour_corr	float		Correlation between parallax and pseudocolour
+all_source_astrometry	pmra_pseudocolour_corr	float		Correlation between proper motion in right asension and pseudocolour
+all_source_astrometry	pmdec_pseudocolour_corr	float		Correlation between proper motion in declination and pseudocolour
+all_source_astrometry	astrometric_matched_transits	short		Matched FOV transits used in the AGIS solution
+all_source_astrometry	visibility_periods_used	short		Number of visibility periods used in Astrometric solution
+all_source_astrometry	astrometric_sigma5d_max	float	mas	The longest semi-major axis of the 5-d error ellipsoid
+all_source_astrometry	matched_transits	short		Number of transits matched to this source
+all_source_astrometry	matched_multi_peak_transits	short		Number of transits matched having more than one DIPD peak
+all_source_astrometry	matched_semesters	byte		Number of semesters having at least one peak matched
+all_source_astrometry	which_matched_semesters	int		Bitwise info on which semesters have at least one matched peak
+all_source_astrometry	verified_transits	short		Number of processable transits matched to this source
+all_source_astrometry	blended_transits	short		Number of transits where this source blended with another source
+all_source_astrometry	matched_transits_sso	short		Number of transits that are also matched to a Solar System Object
+all_source_astrometry	ipd_gof_harmonic_amplitude	float		Amplitude of the IPD GoF versus position angle of scan
+all_source_astrometry	ipd_gof_harmonic_phase	float	deg	Phase of the IPD GoF versus position angle of scan
+all_source_astrometry	ipd_frac_multi_peak	byte		Percent of successful-IPD windows with more than one peak
+all_source_astrometry	ipd_frac_odd_win	byte		Percent of transits with truncated windows or multiple gate
+all_source_astrometry	ipd_frac_high_gof	byte		Percent of successful-IPD windows with only one peak but high GoF
+all_source_astrometry	ruwe	float		Renormalised unit weight error
+all_source_astrometry	scan_direction_strength_k1	float		Degree of concentration of scan directions across the source
+all_source_astrometry	scan_direction_strength_k2	float		Degree of concentration of scan directions across the source
+all_source_astrometry	scan_direction_strength_k3	float		Degree of concentration of scan directions across the source
+all_source_astrometry	scan_direction_strength_k4	float		Degree of concentration of scan directions across the source
+all_source_astrometry	scan_direction_mean_k1	float	deg	Mean position angle of scan directions across the source
+all_source_astrometry	scan_direction_mean_k2	float	deg	Mean position angle of scan directions across the source
+all_source_astrometry	scan_direction_mean_k3	float	deg	Mean position angle of scan directions across the source
+all_source_astrometry	scan_direction_mean_k4	float	deg	Mean position angle of scan directions across the source
+all_source_astrometry	duplicated_source	boolean		Source with multiple source identifiers
+all_source_astrometry	astrometric_duplicate_source_id	long		Duplicate source identifier
+all_source_astrometry	l	double	deg	Galactic longitude
+all_source_astrometry	b	double	deg	Galactic latitude
+all_source_astrometry	ecl_lon	double	deg	Ecliptic longitude
+all_source_astrometry	ecl_lat	double	deg	Ecliptic latitude
+all_source_astrometry	sea_env_flag	byte		Flag indicating the nature of the source environment
+all_source_astrometry	sea_num_detections	int		Number of components found by the image segregation
+all_source_astrometry	sea_num_components	int		Number of components for which parameters are provided
+all_source_astrometry	sea_power_ratio	float		Ratio between the flux levels measured in two apertures by SEAPipe
+all_source_astrometry	sea_power_fraction	float		Fraction of the larger aperture above detection threshold in SEAPipe
+all_source_astrometry	sea_max_gap	float	deg	Maximum angular gap between useable transits of SEAPipe
+all_source_astrometry	sea_num_transits	int		Number of transits which were useable by SEAPipe
+all_source_astrometry	num_components	short		The number of consolidated components found by SEAPipe
+all_source_astrometry	consolidated_num_input_cpts			Number of SEAPipe sources forming each of the compo-
+all_source_astrometry	component_ids	long[num_compone array		Source identifiers for the consolidated components found by SEAPipe
+all_source_astrometry	source_ids_sharing_transits	long[] array		Source identifier related to this one in data processing
+all_source_astrometry	healpix_id	string		Level 12 HEALPix identification string
+all_source_astrometry	raw_g_mean_mag	float	mag	Approximate G magnitude
+all_source_astrometry	healpix29	long		Level 29 HEALPix index for HATS
+all_source_photometry	solution_id	long		Solution Identifier
+all_source_photometry	source_id	long		Source Identifier
+all_source_photometry	designation	string		Unique source designation (unique across all Data Releases)
+all_source_photometry	random_index_as	long		Random index for use when selecting subsets
+all_source_photometry	in_gaia_source	boolean		Flag indicating presence in the main Gaia source catalogue
+all_source_photometry	raw_g_mean_mag	float	mag	Approximate G magnitude
+all_source_photometry	phot_g_n_obs	short		Number of observations contributing to G photometry
+all_source_photometry	phot_g_mean_flux	double	e- s-1	G-band mean flux
+all_source_photometry	phot_g_mean_flux_error	float	e- s-1	Error on G-band mean flux
+all_source_photometry	phot_g_mean_flux_over_error	float		G-band mean flux divided by its error
+all_source_photometry	phot_g_mean_mag	float	mag	G-band mean magnitude
+all_source_photometry	unreliable_g	boolean		Unreliable G-band mean flux
+all_source_photometry	phot_bp_n_obs	short		Number of observations contributing to BP photometry
+all_source_photometry	phot_bp_mean_flux	double	e- s-1	Integrated BP mean flux
+all_source_photometry	phot_bp_mean_flux_error	float	e- s-1	Error on the integrated BP mean flux
+all_source_photometry	phot_bp_mean_flux_over_error	float		Integrated BP mean flux divided by its error
+all_source_photometry	phot_bp_mean_mag	float	mag	Integrated BP mean magnitude
+all_source_photometry	unreliable_bp	boolean		Unreliable BP mean flux
+all_source_photometry	phot_rp_n_obs	short		Number of observations contributing to RP photometry
+all_source_photometry	phot_rp_mean_flux	double	e- s-1	Integrated RP mean flux
+all_source_photometry	phot_rp_mean_flux_error	float	e- s-1	Error on the integrated RP mean flux
+all_source_photometry	phot_rp_mean_flux_over_error	float		Integrated RP mean flux divided by its error
+all_source_photometry	phot_rp_mean_mag	float	mag	Integrated RP mean magnitude
+all_source_photometry	unreliable_rp	boolean		Unreliable RP mean flux
+all_source_photometry	phot_proc_flag	byte		Source-level processing information
+all_source_photometry	bp_rp	float	mag	BP - RP colour
+all_source_photometry	bp_g	float	mag	BP - G colour
+all_source_photometry	g_rp	float	mag	G - RP colour
+all_source_photometry	nu_eff	float	µm-1	Effective wavenumber
+all_source_photometry	nu_eff_error	float	µm-1	Uncertainty on the effective wavenumber
+all_source_photometry	col_const_prob	float		Colour constancy probability
+all_source_photometry	num_noisy_ccd	short		Number of noisy G-band CCD transits
+all_source_photometry	colour_params	float[] array		Colour parameters used to calibrate the epoch photometry
+all_source_photometry	correlation_metric_r	float		Correlation metric R for the G, BP and RP photometry
+all_source_photometry	correlation_metric_diag_dist	float	deg	Correlation metric diagonal distance for the G, BP and RP photometry
+all_source_photometry	phot_bp_n_contaminated_transits	short		Number of BP contaminated transits
+all_source_photometry	phot_bp_n_blended_transits	short		Number of BP blended transits
+all_source_photometry	phot_bp_n_deblended_transits	short		Number of BP deblended transits
+all_source_photometry	phot_bp_n_reconstructed_transits	short		Number of BP reconstructed transits
+all_source_photometry	phot_rp_n_contaminated_transits	short		Number of RP contaminated transits
+all_source_photometry	phot_rp_n_blended_transits	short		Number of RP blended transits
+all_source_photometry	phot_rp_n_deblended_transits	short		Number of RP deblended transits
+all_source_photometry	phot_rp_n_reconstructed_transits	short		Number of RP reconstructed transits
+all_source_photometry	phot_g_n_outlier	int		Number of rejected observations for the G band
+all_source_photometry	phot_g_n_cal	int		Number of calibrated epochs for the G band
+all_source_photometry	phot_g_n_uncal	int		Number of uncalibrated epochs for the G band
+all_source_photometry	phot_g_flux_standard_deviation	float	e- s-1	Standard deviation of the flux distribution for the G band
+all_source_photometry	phot_g_flux_skewness	float		Measure of the skewness of the flux distribution for the G band
+all_source_photometry	phot_g_flux_kurtosis	float		Measure of the kurtosis of the flux distribution for the G band
+all_source_photometry	phot_g_pc05	float	e- s-1	5th percentile of the flux distribution for the G band
+all_source_photometry	phot_g_pc95	float	e- s-1	95th percentile of the flux distribution for the G band
+all_source_photometry	phot_g_flux_uwv	double		Unit weight variance of fluxes for the G band
+all_source_photometry	phot_g_flux_median	float	e- s-1	Median flux in the G band
+all_source_photometry	phot_g_flux_mad	float	e- s-1	Median absolute deviation of the G-band flux distribution
+all_source_photometry	phot_g_flux_min	float	e- s-1	Minimum flux value for the G band
+all_source_photometry	phot_g_flux_max	float	e- s-1	Maximum flux value for the G band
+all_source_photometry	phot_g_flux_first_quartile	float	e- s-1	First quartile of the G-band flux distribution
+all_source_photometry	phot_g_flux_third_quartile	float	e- s-1	Third quartile of the G-band flux distribution
+all_source_photometry	phot_g_stetson_index	float		Stetson variability index for the G band
+all_source_photometry	phot_g_const_prob	float		Constant source probability for the G band
+all_source_photometry	phot_g_abbe_value	float		Abbé value for the G band
+all_source_photometry	phot_g_harmonic_amplitude	float		Amplitude of G photometric residual versus position angle of scan
+all_source_photometry	phot_g_harmonic_phase	float	deg	Phase of the G photometric residual versus position angle of scan
+all_source_photometry	phot_g_proc_flags	byte		Photometric processing flags in the G band
+all_source_photometry	phot_bp_n_outlier	int		Number of rejected observations for the BP band
+all_source_photometry	phot_bp_n_cal	int		Number of calibrated epochs for the BP band
+all_source_photometry	phot_bp_n_uncal	int		Number of uncalibrated epochs for the BP band
+all_source_photometry	phot_bp_neg	int		Number of observations with negative fluxes for the BP band
+all_source_photometry	phot_bp_flux_standard_deviation	float	e- s-1	Standard deviation of the flux distribution for the BP band
+all_source_photometry	phot_bp_flux_skewness	float		Measure of the skewness of the flux distribution for the BP band
+all_source_photometry	phot_bp_flux_kurtosis	float		Measure of the kurtosis of the flux distribution for the BP band
+all_source_photometry	phot_bp_pc05	float	e- s-1	5th percentile of the flux distribution for the BP band
+all_source_photometry	phot_bp_pc95	float	e- s-1	95th percentile of the flux distribution for the BP band
+all_source_photometry	phot_bp_flux_uwv	double		Unit weight variance of fluxes for the BP-band
+all_source_photometry	phot_bp_flux_median	float	e- s-1	Median flux in the BP band
+all_source_photometry	phot_bp_flux_mad	float	e- s-1	Median absolute deviation of the BP-band flux distribution
+all_source_photometry	phot_bp_flux_min	float	e- s-1	Minimum flux value for the BP band
+all_source_photometry	phot_bp_flux_max	float	e- s-1	Maximum flux value for the BP band
+all_source_photometry	phot_bp_flux_first_quartile	float	e- s-1	First quartile of the BP-band flux distribution
+all_source_photometry	phot_bp_flux_third_quartile	float	e- s-1	Third quartile of the BP-band flux distribution
+all_source_photometry	phot_bp_stetson_index	float		Stetson variability index for the BP band
+all_source_photometry	phot_bp_const_prob	float		Constant source probability for the BP band
+all_source_photometry	phot_bp_abbe_value	float		Abbé value for the BP band
+all_source_photometry	phot_bp_harmonic_amplitude	float		Amplitude of BP photometric residual versus position angle of scan
+all_source_photometry	phot_bp_harmonic_phase	float	deg	Phase of BP photometric residual versus position angle of scan
+all_source_photometry	phot_bp_proc_flags	byte		Photometric processing flags in the BP band
+all_source_photometry	phot_rp_n_outlier	int		Number of rejected observations for the RP band
+all_source_photometry	phot_rp_n_cal	int		Number of calibrated epochs for the RP band
+all_source_photometry	phot_rp_n_uncal	int		Number of uncalibrated epochs for the RP band
+all_source_photometry	phot_rp_neg	int		Number of observations with negative fluxes for the RP band
+all_source_photometry	phot_rp_flux_standard_deviation	float	e- s-1	Standard deviation of the flux distribution for the RP band
+all_source_photometry	phot_rp_flux_skewness	float		Measure of the skewness of the flux distribution for the RP band
+all_source_photometry	phot_rp_flux_kurtosis	float		Measure of the kurtosis of the flux distribution for the RP band
+all_source_photometry	phot_rp_pc05	float	e- s-1	5th percentile of the flux distribution for the RP band
+all_source_photometry	phot_rp_pc95	float	e- s-1	95th percentile of the flux distribution for the RP band
+all_source_photometry	phot_rp_flux_uwv	double		Unit weight variance of fluxes for the RP band
+all_source_photometry	phot_rp_flux_median	float	e- s-1	Median flux in the RP band
+all_source_photometry	phot_rp_flux_mad	float	e- s-1	Median absolute deviation of the RP-band flux distribution
+all_source_photometry	phot_rp_flux_min	float	e- s-1	Minimum flux value for the RP band
+all_source_photometry	phot_rp_flux_max	float	e- s-1	Maximum flux value for the RP band
+all_source_photometry	phot_rp_flux_first_quartile	float	e- s-1	First quartile of the RP-band flux distribution
+all_source_photometry	phot_rp_flux_third_quartile	float	e- s-1	Third quartile of the RP-band flux distribution
+all_source_photometry	phot_rp_stetson_index	float		Stetson variability index for the RP band
+all_source_photometry	phot_rp_const_prob	float		Constant source probability for the RP band
+all_source_photometry	phot_rp_abbe_value	float		Abbe value for the RP band
+all_source_photometry	phot_rp_harmonic_amplitude	float		Amplitude of RP photometric residual versus position angle of scan
+all_source_photometry	phot_rp_harmonic_phase	float	deg	Phase of RP photometric residual versus position angle of scan
+all_source_photometry	phot_rp_proc_flags	byte		Photometric processing flags in the RP band
+all_source_photometry	bp_integrated_spectrum	float	e- s-1	Integral of the BP spectrum
+all_source_photometry	rp_integrated_spectrum	float	e- s-1	Integral of the RP spectrum
+all_source_match	solution_id	long		Solution Identifier
+all_source_match	source_id	long		Unique source identifier for IDU-AGIS
+all_source_match	sea_source_id	long		Unique source identifier for Gaia Source Environment (SEA)
+all_source_match	cf_source_id	long		Unique source identifier for crowded fields
+all_source_match	winner	string		Match winner
+all_source_match	rule	string		Rule applied to the astrometric solution selection for this source
+all_source_match	astrometric_error_ratio	float		Ratio between the combined astrometric errors
+all_source_match	separation	float	mas	Distance between sources
+all_source_flags	solution_id	long		Solution Identifier
+all_source_flags	source_id	long		Source Identifier
+all_source_flags	designation	string		Unique source designation (unique across all Data Releases)
+all_source_flags	random_index_as	long		Random index for use when selecting subsets
+all_source_flags	in_gaia_source	boolean		Flag indicating presence in the main Gaia source catalogue
+all_source_flags	phot_variable_flag	string		Photometric variability flag
+all_source_flags	phot_variable_score	float		Photometric variability score between 0 and 1
+all_source_flags	phot_variable_best_class	string		Photometric best variability class
+all_source_flags	in_qso_candidates	boolean		Flag indicating presence in the QSO candidates table
+all_source_flags	in_galaxy_candidates	boolean		Flag indicating presence in the galaxy candidates table
+all_source_flags	lens_num_components	int		Number of components found in the lens candidates table
+all_source_flags	non_single_star	short		Flag indicating presence in the various Non-Single Star tables
+all_source_flags	sea_env_flag	byte		Flag indicating the nature of the source environment
+all_source_flags	has_xp	boolean		Flag indicating the availability of mean BP/RP spectrum
+all_source_flags	has_all_source_rvs_rv	boolean		Flag indicating the availability of mean RV obtained from RVS
+all_source_flags	has_all_source_rvs_vbroad	boolean		Flag indicating the availability of mean vbroad obtained from RVS
+all_source_flags	has_rvs	byte		Flag indicating the availability of mean RVS spectrum
+all_source_flags	has_epoch_astrometry	boolean		Flag indicating the availability of epoch astrometry
+all_source_flags	has_epoch_image	boolean		Flag indicating the availability of epoch images
+all_source_flags	has_epoch_photometry	boolean		Flag indicating the availability of epoch photometry
+all_source_flags	has_epoch_rv	boolean		Flag indicating the availability of epoch radial velocity
+all_source_flags	has_epoch_xp	boolean		Flag indicating the availability of epoch BP/RP spectrum
+all_source_flags	has_epoch_rvs	byte		Flag indicating the availability of epoch RVS spectrum
+all_source_flags	has_mcmc_gspphot	boolean		Flag indicating the availability of GSP-Phot MCMC samples
+all_source_flags	in_ap_class	boolean		Flag for class astrophysical parameters from a Gaia-only processing
+all_source_flags	in_ap_class_ir	boolean		Flag for class astrophysical parameters from a Gaia+IR processing
+all_source_flags	in_ap_xp	boolean		Flag indicating the availability of XP astrophysical parameters
+all_source_flags	in_ap_xp_supp	boolean		Flag for supplementary astrophysical parameters
+all_source_flags	in_ap_rvs	boolean		Flag indicating the availability of RVS astrophysical parameters
+all_source_flags	in_ap_chem	boolean		Flag indicating the availability of chemo astrophysical parameters
+all_source_flags	in_ap_emission	boolean		Flag for emission star astrophysical parameters
+all_source_flags	in_ap_hot	boolean		Flag for hot star astrophysical parameters
+all_source_flags	in_ap_rvs_epoch	boolean		Flag for RVS epoch astrophysical parameters
+all_source_flags	in_ap_xp_epoch	boolean		Flag for XP epoch astrophysical parameters
+all_source_flags	has_residual_image	boolean		Flag indicating presence of reconstructed 2d image data
+dr3_neighbourhood	source_id	long		Source identifier in Gaia DR4
+dr3_neighbourhood	dr3_source_id	long		Source identifier in Gaia E/DR3
+dr3_neighbourhood	angular_distance	float	mas	Angular distance between the two sources
+dr3_neighbourhood	magnitude_difference	float	mag	G band magnitude difference between the sources
+dr3_neighbourhood	proper_motion_propagation	boolean		Have DR4 coordinates been proper motion corrected?
+dr3_neighbourhood	probable_match	boolean		Are both sources probably associated with the same astronomical object?
+vari_summary	solution_id	long		Solution Identifier
+vari_summary	source_id	long		Unique source identifier
+vari_summary	num_selected_g_fov	short		Total number of G FOV transits selected for variability analysis
+vari_summary	mean_obs_time_g_fov	double	Barycentric JD in TCB - 2 455 197.5 (day)	Mean observation time for G FoV transits
+vari_summary	time_duration_g_fov	float	day	Time duration of the time series for G FoV transits
+vari_summary	min_mag_g_fov	float	mag	Minimum G FoV magnitude
+vari_summary	max_mag_g_fov	float	mag	Maximum G FoV magnitude
+vari_summary	mean_mag_g_fov	float	mag	Mean G FoV magnitude
+vari_summary	mean_flux_g_fov	float	e- s-1	Mean G FoV flux
+vari_summary	median_mag_g_fov	float	mag	Median G FoV magnitude
+vari_summary	median_flux_g_fov	float	e- s-1	Median G FoV flux
+vari_summary	range_mag_g_fov	float	mag	Difference between the highest and lowest G FoV magnitudes
+vari_summary	trimmed_range_mag_g_fov	float	mag	Trimmed difference between the highest and lowest G FoV magnitudes
+vari_summary	std_dev_mag_g_fov	float	mag	Square root of the unweighted G FoV magnitude variance
+vari_summary	std_dev_flux_g_fov	float	e- s-1	Square root of the unweighted G FoV flux variance
+vari_summary	skewness_mag_g_fov	float		Standardized unweighted G FoV magnitude skewness
+vari_summary	skewness_flux_g_fov	float		Standardized unweighted G FoV flux skewness
+vari_summary	kurtosis_mag_g_fov	float		Standardized unweighted G FoV magnitude kurtosis
+vari_summary	kurtosis_flux_g_fov	float		Standardized unweighted G FoV flux kurtosis
+vari_summary	mad_mag_g_fov	float	mag	Median Absolute Deviation (MAD) for G FoV transits
+vari_summary	abbe_mag_g_fov	float		Abbe value for G FoV transits
+vari_summary	iqr_mag_g_fov	float	mag	Interquartile range for G FoV transits
+vari_summary	stetson_mag_g_fov	float		Stetson G FoV variability index
+vari_summary	std_dev_over_rms_err_mag_g_fov	float		Signal-to-Noise G FoV estimate
+vari_summary	outlier_median_g_fov	float		Greatest absolute deviation from the G FoV median normalized by the error
+vari_summary	num_selected_bp	short		Total number of BP observations selected for variability analysis
+vari_summary	mean_obs_time_bp	double	Barycentric JD in TCB - 2 455 197.5 (day)	Mean observation time for BP observations
+vari_summary	time_duration_bp	float	day	Time duration of the BP time series
+vari_summary	min_mag_bp	float	mag	Minimum BP magnitude
+vari_summary	max_mag_bp	float	mag	Maximum BP magnitude
+vari_summary	mean_mag_bp	float	mag	Mean BP magnitude
+vari_summary	mean_flux_bp	float	e- s-1	Mean BP flux
+vari_summary	median_mag_bp	float	mag	Median BP magnitude
+vari_summary	median_flux_bp	float	e- s-1	Median BP flux
+vari_summary	range_mag_bp	float	mag	Difference between the highest and lowest BP magnitudes
+vari_summary	trimmed_range_mag_bp	float	mag	Trimmed difference between the highest and lowest BP magnitudes
+vari_summary	std_dev_mag_bp			Square root of the unweighted BP magnitude variance (float, Magni-
+vari_summary	std_dev_flux_bp	float	e- s-1	Square root of the unweighted BP flux variance
+vari_summary	skewness_mag_bp	float		Standardized unweighted BP magnitude skewness
+vari_summary	skewness_flux_bp	float		Standardized unweighted BP flux skewness
+vari_summary	kurtosis_mag_bp	float		Standardized unweighted BP magnitude kurtosis
+vari_summary	kurtosis_flux_bp	float		Standardized unweighted BP flux kurtosis
+vari_summary	mad_mag_bp	float	mag	Median Absolute Deviation (MAD) for BP observations
+vari_summary	abbe_mag_bp	float		Abbe value for BP observations
+vari_summary	iqr_mag_bp	float	mag	Interquartile BP magnitude range
+vari_summary	stetson_mag_bp	float		Stetson BP variability index
+vari_summary	std_dev_over_rms_err_mag_bp	float		Signal-to-Noise BP estimate
+vari_summary	outlier_median_bp	float		Greatest absolute deviation from the BP median normalized by the error
+vari_summary	num_selected_rp	short		Total number of RP observations selected for variability analysis
+vari_summary	mean_obs_time_rp	double	Barycentric JD in TCB - 2 455 197.5 (day)	Mean observation time for RP observations
+vari_summary	time_duration_rp	float	day	Time duration of the RP time series
+vari_summary	min_mag_rp	float	mag	Minimum RP magnitude
+vari_summary	max_mag_rp	float	mag	Maximum RP magnitude
+vari_summary	mean_mag_rp	float	mag	Mean RP magnitude
+vari_summary	mean_flux_rp	float	e- s-1	Mean RP flux
+vari_summary	median_mag_rp	float	mag	Median RP magnitude
+vari_summary	median_flux_rp	float	e- s-1	Median RP flux
+vari_summary	range_mag_rp	float	mag	Difference between the highest and lowest RP magnitudes
+vari_summary	trimmed_range_mag_rp	float	mag	Trimmed difference between the highest and lowest RP magnitudes
+vari_summary	std_dev_mag_rp	float	mag	Square root of the unweighted RP magnitude variance
+vari_summary	std_dev_flux_rp	float	e- s-1	Square root of the unweighted RP flux variance
+vari_summary	skewness_mag_rp	float		Standardized unweighted RP magnitude skewness
+vari_summary	skewness_flux_rp	float		Standardized unweighted RP flux skewness
+vari_summary	kurtosis_mag_rp	float		Standardized unweighted RP magnitude kurtosis
+vari_summary	kurtosis_flux_rp	float		Standardized unweighted RP flux kurtosis
+vari_summary	mad_mag_rp	float	mag	Median Absolute Deviation (MAD) for RP observations
+vari_summary	abbe_mag_rp	float		Abbe value for RP observations
+vari_summary	iqr_mag_rp	float	mag	Interquartile RP magnitude range
+vari_summary	stetson_mag_rp	float		Stetson RP variability index
+vari_summary	std_dev_over_rms_err_mag_rp	float		Signal-to-Noise RP estimate
+vari_summary	outlier_median_rp	float		Greatest absolute deviation from the RP median normalized by the error
+vari_summary	num_selected_grvs	short		Total number of Grvs transits selected for variability analysis
+vari_summary	mean_obs_time_grvs	double	Barycentric JD in TCB - 2 455 197.5 (day)	Mean observation time for Grvs transits
+vari_summary	time_duration_grvs	float	day	Time duration of the time series for Grvs transits
+vari_summary	min_mag_grvs	float	mag	Minimum Grvs magnitude
+vari_summary	max_mag_grvs	float	mag	Maximum Grvs magnitude
+vari_summary	mean_mag_grvs	float	mag	Mean Grvs magnitude
+vari_summary	median_mag_grvs	float	mag	Median Grvs magnitude
+vari_summary	range_mag_grvs	float	mag	Difference between the highest and lowest Grvs magnitudes
+vari_summary	trimmed_range_mag_grvs	float	mag	Trimmed difference between the highest and lowest Grvs magnitudes
+vari_summary	std_dev_mag_grvs	float	mag	Square root of the unweighted Grvs magnitude variance
+vari_summary	skewness_mag_grvs	float		Standardized unweighted Grvs magnitude skewness
+vari_summary	kurtosis_mag_grvs	float		Standardized unweighted Grvs magnitude kurtosis
+vari_summary	mad_mag_grvs	float	mag	Median Absolute Deviation (MAD) for Grvs transits
+vari_summary	abbe_mag_grvs	float		Abbe value for Grvs transits
+vari_summary	iqr_mag_grvs	float	mag	Interquartile range for Grvs transits
+vari_summary	stetson_mag_grvs	float		Stetson Grvs variability index
+vari_summary	std_dev_over_rms_err_mag_grvs	float		Signal-to-Noise Grvs estimate
+vari_summary	outlier_median_grvs	float		Greatest absolute deviation from the Grvs median normalized by the error
+vari_summary	num_selected_gccd	short		Total number of G CCD selected for variability analysis
+vari_summary	mean_obs_time_gccd	double	Barycentric JD in TCB - 2 455 197.5 (day)	Mean observation time for G CCD
+vari_summary	time_duration_gccd	float	day	Time duration of the time series for G CCD
+vari_summary	min_mag_gccd	float	mag	Minimum G CCD magnitude
+vari_summary	max_mag_gccd	float	mag	Maximum G CCD magnitude
+vari_summary	mean_mag_gccd	float	mag	Mean G CCD magnitude
+vari_summary	median_mag_gccd	float	mag	Median G CCD magnitude
+vari_summary	range_mag_gccd	float	mag	Difference between the highest and lowest G CCD magnitudes
+vari_summary	trimmed_range_mag_gccd	float	mag	Trimmed difference between the highest and lowest G CCD magnitudes
+vari_summary	std_dev_mag_gccd	float	mag	Square root of the unweighted G CCD magnitude variance
+vari_summary	skewness_mag_gccd	float		Standardized unweighted G CCD magnitude skewness
+vari_summary	kurtosis_mag_gccd	float		Standardized unweighted G CCD magnitude kurtosis
+vari_summary	mad_mag_gccd	float	mag	Median Absolute Deviation (MAD) for G CCD
+vari_summary	abbe_mag_gccd	float		Abbe value for G CCD
+vari_summary	iqr_mag_gccd	float	mag	Interquartile range for G CCD
+vari_summary	std_dev_over_rms_err_mag_gccd	float		Signal-to-Noise G CCD estimate
+vari_summary	outlier_median_gccd	float		Greatest absolute deviation from the G CCD median normalized by the error
+vari_summary	stetson_mag_g_bp	float		Two-band (G FoV and BP) Stetson variability index
+vari_summary	stetson_mag_g_rp	float		Two-band (G FoV and RP) Stetson variability index
+vari_summary	stetson_mag_bp_rp	float		Two-band (BP and RP) Stetson variability index
+vari_summary	pearson_mag_g_bp	float		Pearson correlation coefficient between G FoV and BP time series
+vari_summary	pearson_mag_g_rp	float		Pearson correlation coefficient between G FoV and RP time series
+vari_summary	pearson_mag_bp_rp	float		Pearson correlation coefficient between BP and RP time series
+vari_summary	spearman_g_bp	float		Spearman rank correlation coefficient between G and BP time series
+vari_summary	spearman_g_rp	float		Spearman rank correlation coefficient between G and RP time series
+vari_summary	spearman_bp_rp	float		Spearman rank correlation coefficient between BP and RP time series
+vari_summary	in_vari_classifier_result	boolean		Source is present in the variability table of classifier results
+vari_summary	in_vari_classifier_feature	boolean		Source is present in the variability table of classifier features
+vari_summary	in_vari_gvd_classifier_feature	boolean		Source is present in the variability table of GVD classifier features
+vari_summary	in_vari_unsupervised	boolean		Source is present in the variability table of unsupervised classification
+vari_summary	in_vari_rrlyrae	boolean		Source is present in the variability table of RR Lyrae stars
+vari_summary	in_vari_cepheid	boolean		Source is present in the variability table of Cepheids
+vari_summary	in_vari_planetary_transit	boolean		Source is present in the variability table of planetary transits
+vari_summary	in_vari_short_timescale	boolean		Source is present in the variability table of short timescales
+vari_summary	in_vari_long_period_variable	boolean		Source is present in the variability table of long-period variables
+vari_summary	in_vari_eclipsing_binary	boolean		Source is present in the variability table of eclipsing binaries
+vari_summary	in_vari_rotation_modulation	boolean		Source is present in the variability table of rotation modulation
+vari_summary	in_vari_flaring_star	boolean		Source is present in the variability table of flaring stars
+vari_summary	in_vari_pms_oscillator	boolean		Source is present in the variability table of pre-main-sequence oscillators
+vari_summary	in_vari_agn	boolean		Source is present in the variability table of AGNs
+vari_summary	in_vari_yso	boolean		Source is present in the variability table of young stellar objects
+vari_summary	in_vari_microlensing	boolean		Source is present in the variability table of microlensing
+vari_summary	in_vari_compact_companion	boolean		Source is present in the variability table of compact companions

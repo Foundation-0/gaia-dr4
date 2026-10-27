@@ -1,0 +1,15 @@
+-- Query: eb_count_long_period_bcut (DR3 stand-in)
+-- Serves: Question C. Number of eclipsing binaries with a period over 100 days that pass the B < 13.5 cut (estimated
+--   from G, BP and RP, with margins; see README.md).
+-- Made from dr4/eb_count_long_period_bcut.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.gaia_source, gaiadr3.vari_eclipsing_binary.
+-- Last ran without error: 2026-10-27, 1 rows (results/run_log.tsv).
+SELECT COUNT(*) AS n_long_period_bcut
+FROM gaiadr3.vari_eclipsing_binary AS eb
+LEFT OUTER JOIN gaiadr3.gaia_source AS gs
+    ON gs.source_id = eb.source_id
+WHERE eb.frequency < 0.01
+  AND ((gs.bp_rp < 2.0 AND ((gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp)))) < 13.75)
+    OR (gs.bp_rp >= 2.0 AND gs.bp_rp < 2.5 AND ((gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp)))) < 14.0)
+    OR (gs.bp_rp >= 2.5 AND gs.phot_g_mean_mag + 2.5 < 13.5)
+    OR (gs.bp_rp IS NULL AND gs.phot_g_mean_mag + (-0.3) < 13.5))

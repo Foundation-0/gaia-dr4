@@ -1,0 +1,96 @@
+{
+ "download": {
+  "batch_size": 100,
+  "dr2_neighbourhood": {
+   "dr2_ids_asked": 651,
+   "first_fetched_utc": "2026-10-27T00:30:28Z",
+   "last_fetched_utc": "2026-10-27T00:30:42Z",
+   "queries": 7,
+   "rows": 664
+  },
+  "dr3_gaia_source": {
+   "first_fetched_utc": "2026-10-27T00:31:00Z",
+   "last_fetched_utc": "2026-10-27T00:31:12Z",
+   "queries": 7,
+   "rows": 664
+  },
+  "dr3_reverse_neighbourhood": {
+   "dr3_ids_asked": 664,
+   "first_fetched_utc": "2026-10-27T00:30:45Z",
+   "last_fetched_utc": "2026-10-27T00:30:58Z",
+   "queries": 7,
+   "rows": 683
+  },
+  "files": {
+   "dr2_neighbourhood.csv": "0a9ed769b9438b4635be68004e409eeef59b92bc7fa95238b23f1b9a37b92bf1",
+   "dr3_gaia_source.csv": "63ab78c3ea2cf8b50d3a3a51b60cc5493721880aadd5072228052f104914f6e0",
+   "dr3_reverse_neighbourhood.csv": "6f4b713f740d36db3ac9e7dac970f1b3d7217d3711d923c3446fc543d9b44c3f",
+   "target_ids.txt": "efabef9b762edb7cf600199cb90ba62263a13f9711b6d8d27b0ecc3009ac3f8a",
+   "tic_records.csv": "b179457024742a40ea36486852d572c1e1591d4efef87aae39dda8180af1ede7"
+  },
+  "n_targets": 651,
+  "queries": {
+   "dr2_neighbourhood": "SELECT dr2_source_id, dr3_source_id, angular_distance, magnitude_difference, proper_motion_propagation FROM gaiadr3.dr2_neighbourhood WHERE dr2_source_id IN ({ids}) ORDER BY dr2_source_id, angular_distance",
+   "dr3_gaia_source": "SELECT source_id, ref_epoch, ra, dec, pmra, pmdec, parallax, phot_g_mean_mag, ruwe, astrometric_params_solved, duplicated_source FROM gaiadr3.gaia_source WHERE source_id IN ({ids}) ORDER BY source_id",
+   "dr3_reverse_neighbourhood": "SELECT dr2_source_id, dr3_source_id, angular_distance, magnitude_difference, proper_motion_propagation FROM gaiadr3.dr2_neighbourhood WHERE dr3_source_id IN ({ids}) ORDER BY dr3_source_id, angular_distance",
+   "tic": "SELECT id, version, gaia, ra, dec, pmra, pmdec, plx, tmag, gaiamag, gaiaqflag, typesrc, objtype, posflag, pmflag, disposition, duplicate_id, ra_orig, dec_orig FROM dbo.catalogrecord WHERE id IN ({ids})"
+  },
+  "services": {
+   "gaia": "https://gea.esac.esa.int/tap-server/tap/sync",
+   "tic": "https://mast.stsci.edu/vo-tap/api/v0.1/tic/sync"
+  },
+  "tic": {
+   "catalog_versions_seen": [
+    "20190415"
+   ],
+   "first_fetched_utc": "2026-10-27T00:27:43Z",
+   "found": 651,
+   "last_fetched_utc": "2026-10-27T00:30:11Z",
+   "queries": 7
+  }
+ },
+ "settings": {
+  "distance_flag_mas": 100.0,
+  "dr2_epoch": 2015.5,
+  "magnitude_cut": 0.1,
+  "position_large_arcsec": 1.0,
+  "position_ok_arcsec": 0.2,
+  "tic_epoch": 2000.0
+ },
+ "summary": {
+  "by_pos_check": {
+   "ok": 651
+  },
+  "by_status": {
+   "ambiguous": 13,
+   "one-to-one": 638
+  },
+  "flags": {
+   "dr3_duplicated_source": 11,
+   "dr3_shared_with_other_dr2": 9,
+   "dr3_two_parameter_solution": 1,
+   "no_proper_motion_correction_in_crossmatch": 1,
+   "proper_motion_from_tic": 1,
+   "several_dr3_neighbours": 13,
+   "tic_gaia_quality_not_passed": 1,
+   "tic_proper_motion_not_from_gaia_dr2": 1
+  },
+  "needs_judgement": 1,
+  "pos_sep_dr2_epoch_arcsec": {
+   "max": 0.01438,
+   "median": 0.00014,
+   "n": 651,
+   "p90": 0.00026,
+   "p99": 0.000305
+  },
+  "pos_sep_tic_epoch_arcsec": {
+   "max": 0.01438,
+   "median": 0.00165,
+   "n": 651,
+   "p90": 0.00314,
+   "p99": 0.004845
+  },
+  "targets": 651
+ },
+ "what": "One row per TIC ID: Gaia DR2 and DR3 source IDs, how the match was chosen, and a position check. Built by ticmap.py from the files in snapshots/."
+}

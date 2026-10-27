@@ -1,0 +1,57 @@
+-- UNTESTED. DO NOT TRUST UNTIL IT HAS RUN ON RELEASE DAY.
+--
+-- The table dr3_neighbourhood does not exist before DR4 is released (Wednesday
+-- 2 December 2026, about 12:00 CET). This query is written from section 7.3 of ESA's draft
+-- DR4 data model (the PDF inside
+-- https://anonftp.cosmos.esa.int/pub/GAIA_PUBLIC_DATA/Gaia_DR4/dr4-prerelease/gaia-dr4-prerelease-draft-data-model_2026-06-26.zip,
+-- read on 27 Oct 2026; the zip name says 2026-06-26, the document's own front page says
+-- "date: 2026-05-20, status: Draft"). ESA says the final data model may differ from the
+-- draft without notice. Before running, check the table and column names against the
+-- published data model.
+--
+-- What the draft says (section 7.3):
+--   source_id                  the DR4 source ID (the key column is source_id, NOT dr4_source_id)
+--   dr3_source_id              the Gaia E/DR3 source ID
+--   angular_distance           mas; the DR4 position is moved to J2016.0 with the DR4 proper
+--                              motion when there is one (a linear move), then compared with
+--                              the DR3 position
+--   magnitude_difference       DR4 G minus DR3 G, later release minus earlier release. This is
+--                              the same sense as in gaiadr3.dr2_neighbourhood, where it is
+--                              DR3 G minus DR2 G (checked on our 651 stars)
+--   proper_motion_propagation  true if the DR4 source had a proper motion to move it with
+--   probable_match             true if angular_distance < 60 mas and
+--                              -0.25 <= magnitude_difference <= 0.35
+--   The table lists pairs closer than 2 arcsec, for DR4 sources that already existed in DR3.
+--   The draft says most sources associated with the same object "can be identified by
+--   sharing the same source_id in both releases", and that different identifiers are
+--   assigned in other cases. ESA's DR4 page (last updated 14 Sep 2026) says the DR4 source
+--   list "should be treated as independent from Gaia DR3". Do not match by equal ID.
+-- Our inference, not stated in the draft: one DR3 source can have several DR4 neighbours and
+-- one DR4 source several DR3 neighbours, because the table is made of all pairs within 2
+-- arcsec. The second query at the end of this file lets you check the second case.
+-- The schema name of this table (gaiadr4) is also an assumption. The draft's own example
+-- query reads gaiadr4.gaia_source and gaiadr3.gaia_source.
+--
+-- How to use: replace {ids} with up to 100 DR3 source IDs from tic_to_gaia_dr3.csv
+-- (column dr3_source_id), separated by commas. release_day/dr4_link.py makes the batches.
+-- Unknown before release: whether dr3_source_id is indexed in this table. If a query is
+-- slow, use smaller batches and wait between jobs (5 jobs at once, 50 queued, per user).
+
+SELECT n.dr3_source_id,
+       n.source_id AS dr4_source_id,
+       n.angular_distance,
+       n.magnitude_difference,
+       n.proper_motion_propagation,
+       n.probable_match
+FROM gaiadr4.dr3_neighbourhood AS n
+WHERE n.dr3_source_id IN ({ids})
+ORDER BY n.dr3_source_id, n.angular_distance
+
+-- Second query, to see whether a chosen DR4 source also belongs to other DR3 sources
+-- (replace {dr4_ids} with the DR4 source IDs found above):
+--
+-- SELECT n.dr3_source_id, n.source_id AS dr4_source_id, n.angular_distance,
+--        n.magnitude_difference, n.proper_motion_propagation, n.probable_match
+-- FROM gaiadr4.dr3_neighbourhood AS n
+-- WHERE n.source_id IN ({dr4_ids})
+-- ORDER BY n.source_id, n.angular_distance;

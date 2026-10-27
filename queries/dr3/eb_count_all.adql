@@ -1,0 +1,7 @@
+-- Query: eb_count_all (DR3 stand-in)
+-- Serves: Check that the table has the row count ESA publishes (2,392,500 for DR4, 2,184,477 in DR3).
+-- Made from dr4/eb_count_all.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: .
+-- Last ran without error: 2026-10-27, 1 rows (results/run_log.tsv).
+SELECT COUNT(*) AS n_rows
+FROM gaiadr3.vari_eclipsing_binary AS eb

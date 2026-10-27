@@ -1,0 +1,12 @@
+-- Query: eb_summary_long_period_model_type (DR3 stand-in)
+-- Serves: Question C. Number of long-period eclipsing binaries per model type. ELLIPSOIDAL models have no eclipse.
+-- Made from dr4/eb_summary_long_period_model_type.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.vari_eclipsing_binary.
+-- Last ran without error: 2026-10-27, 6 rows (results/run_log.tsv).
+SELECT
+    eb.model_type,
+    COUNT(*) AS n_sources
+FROM gaiadr3.vari_eclipsing_binary AS eb
+WHERE eb.frequency < 0.01
+GROUP BY eb.model_type
+ORDER BY eb.model_type

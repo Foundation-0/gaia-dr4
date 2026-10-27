@@ -1,0 +1,255 @@
+kind	dr4_table	dr4_name	dr3_table	dr3_name	dr4_unit	dr3_unit	dr4_type	dr3_type	status	unit_check	notes
+table	gaiadr4.vari_eclipsing_binary	-	gaiadr3.vari_eclipsing_binary	-					same	n/a	DR4 draft: 66 months of data. DR3: 34 months.
+column	vari_eclipsing_binary	solution_id	vari_eclipsing_binary	solution_id			long	long	same	n/a	
+column	vari_eclipsing_binary	source_id	vari_eclipsing_binary	source_id			long	long	same	n/a	
+column	vari_eclipsing_binary	global_ranking	vari_eclipsing_binary	global_ranking			float	float	same	n/a	
+column	vari_eclipsing_binary	reference_time	vari_eclipsing_binary	reference_time	Barycentric JD in TCB - 2 455 197.5 (day)	d	double	double	same	zero_point	Days, BJD in TCB minus 2455197.5. DR3 TAP_SCHEMA gives only 'd'; the DR3 values fall inside the DR3 time span on that scale (results/dr3_checks.md).
+column	vari_eclipsing_binary	frequency	vari_eclipsing_binary	frequency	day-1	d**-1	double	double	same	same	Per day. Period in days = 1 / frequency. Period > 100 d is frequency < 0.01. The table has no period column.
+column	vari_eclipsing_binary	frequency_error	vari_eclipsing_binary	frequency_error	day-1	d**-1	float	float	same	same	Per day. Error on the period grows with the time since reference_time: phase error after dt days is about dt * frequency_error cycles.
+column	vari_eclipsing_binary	geom_model_reference_level	vari_eclipsing_binary	geom_model_reference_level	mag	mag	float	float	same	same	G magnitude outside eclipse, from the model.
+column	vari_eclipsing_binary	geom_model_reference_level_error	vari_eclipsing_binary	geom_model_reference_level_error	mag	mag	float	float	same	same	
+column	vari_eclipsing_binary	geom_model_gaussian1_phase	vari_eclipsing_binary	geom_model_gaussian1_phase			float	float	same	n/a	
+column	vari_eclipsing_binary	geom_model_gaussian1_phase_error	vari_eclipsing_binary	geom_model_gaussian1_phase_error			float	float	same	n/a	
+column	vari_eclipsing_binary	geom_model_gaussian1_sigma	vari_eclipsing_binary	geom_model_gaussian1_sigma			float	float	same	n/a	
+column	vari_eclipsing_binary	geom_model_gaussian1_sigma_error	vari_eclipsing_binary	geom_model_gaussian1_sigma_error			float	float	same	n/a	
+column	vari_eclipsing_binary	geom_model_gaussian1_depth	vari_eclipsing_binary	geom_model_gaussian1_depth	mag	mag	float	float	same	same	
+column	vari_eclipsing_binary	geom_model_gaussian1_depth_error	vari_eclipsing_binary	geom_model_gaussian1_depth_error	mag	mag	float	float	same	same	
+column	vari_eclipsing_binary	geom_model_gaussian2_phase	vari_eclipsing_binary	geom_model_gaussian2_phase			float	float	same	n/a	
+column	vari_eclipsing_binary	geom_model_gaussian2_phase_error	vari_eclipsing_binary	geom_model_gaussian2_phase_error			float	float	same	n/a	
+column	vari_eclipsing_binary	geom_model_gaussian2_sigma	vari_eclipsing_binary	geom_model_gaussian2_sigma			float	float	same	n/a	
+column	vari_eclipsing_binary	geom_model_gaussian2_sigma_error	vari_eclipsing_binary	geom_model_gaussian2_sigma_error			float	float	same	n/a	
+column	vari_eclipsing_binary	geom_model_gaussian2_depth	vari_eclipsing_binary	geom_model_gaussian2_depth	mag	mag	float	float	same	same	
+column	vari_eclipsing_binary	geom_model_gaussian2_depth_error	vari_eclipsing_binary	geom_model_gaussian2_depth_error	mag	mag	float	float	same	same	
+column	vari_eclipsing_binary	geom_model_cosine_half_period_amplitude	vari_eclipsing_binary	geom_model_cosine_half_period_amplitude	mag	mag	float	float	same	same	
+column	vari_eclipsing_binary	geom_model_cosine_half_period_amplitude_error	vari_eclipsing_binary	geom_model_cosine_half_period_amplitude_error	mag	mag	float	float	same	same	
+column	vari_eclipsing_binary	geom_model_cosine_half_period_phase	vari_eclipsing_binary	geom_model_cosine_half_period_phase			float	float	same	n/a	
+column	vari_eclipsing_binary	geom_model_cosine_half_period_phase_error	vari_eclipsing_binary	geom_model_cosine_half_period_phase_error			float	float	same	n/a	
+column	vari_eclipsing_binary	model_type	vari_eclipsing_binary	model_type			string	char	same	n/a	DR4 draft values: ONEGAUSSIAN, ONEGAUSSIAN_WITH_ELLIPSOIDAL, TWOGAUSSIANS, TWOGAUSSIANS_WITH_ELLIPSOIDAL_ON_ECLIPSE1, TWOGAUSSIANS_WITH_ELLIPSOIDAL_ON_ECLIPSE2, ELLIPSOIDAL. ELLIPSOIDAL has no eclipse. DR3 values are listed in results/dr3_checks.md.
+column	vari_eclipsing_binary	num_model_parameters	vari_eclipsing_binary	num_model_parameters			byte	short	same	n/a	Integer type is narrower in DR4 (byte); no effect on queries.
+column	vari_eclipsing_binary	reduced_chi2	vari_eclipsing_binary	reduced_chi2			float	float	same	n/a	
+column	vari_eclipsing_binary	derived_primary_ecl_phase	vari_eclipsing_binary	derived_primary_ecl_phase			float	float	same	n/a	Phase relative to reference_time. DR3 values lie between 0 and 1. Empty when the model has no Gaussian (the 82 long-period ELLIPSOIDAL stars in DR3). The DR4 draft says NaN.
+column	vari_eclipsing_binary	derived_primary_ecl_phase_error	vari_eclipsing_binary	derived_primary_ecl_phase_error			float	float	same	n/a	
+column	vari_eclipsing_binary	derived_primary_ecl_duration	vari_eclipsing_binary	derived_primary_ecl_duration			float	float	same	n/a	A fraction of the period, not days. Days = duration * period.
+column	vari_eclipsing_binary	derived_primary_ecl_duration_error	vari_eclipsing_binary	derived_primary_ecl_duration_error			float	float	same	n/a	
+column	vari_eclipsing_binary	derived_primary_ecl_depth	vari_eclipsing_binary	derived_primary_ecl_depth	mag	mag	float	float	same	same	Magnitudes in G.
+column	vari_eclipsing_binary	derived_primary_ecl_depth_error	vari_eclipsing_binary	derived_primary_ecl_depth_error	mag	mag	float	float	same	same	
+column	vari_eclipsing_binary	derived_secondary_ecl_phase	vari_eclipsing_binary	derived_secondary_ecl_phase			float	float	same	n/a	Phase relative to reference_time. Empty (NaN in the DR4 draft) when there is no second Gaussian.
+column	vari_eclipsing_binary	derived_secondary_ecl_phase_error	vari_eclipsing_binary	derived_secondary_ecl_phase_error			float	float	same	n/a	
+column	vari_eclipsing_binary	derived_secondary_ecl_duration	vari_eclipsing_binary	derived_secondary_ecl_duration			float	float	same	n/a	A fraction of the period, not days.
+column	vari_eclipsing_binary	derived_secondary_ecl_duration_error	vari_eclipsing_binary	derived_secondary_ecl_duration_error			float	float	same	n/a	
+column	vari_eclipsing_binary	derived_secondary_ecl_depth	vari_eclipsing_binary	derived_secondary_ecl_depth	mag	mag	float	float	same	same	
+column	vari_eclipsing_binary	derived_secondary_ecl_depth_error	vari_eclipsing_binary	derived_secondary_ecl_depth_error	mag	mag	float	float	same	same	
+column	vari_eclipsing_binary	frequency_rv_consistency_flag	vari_eclipsing_binary	-			byte		dr4_only	n/a	DR4 only. Compares the model frequency with the radial-velocity period. 3 means the RV frequency is half the model frequency, 2 means double, 1 consistent, 0 inconsistent, -1 and -2 no usable RV.
+column	vari_eclipsing_binary	sample_classification	vari_eclipsing_binary	-			String		dr4_only	n/a	DR4 only. String class from Mowlavi et al. (2023) Table A.1, per the data model.
+column	vari_eclipsing_binary	bp_usable	vari_eclipsing_binary	-			boolean		dr4_only	n/a	
+column	vari_eclipsing_binary	rp_usable	vari_eclipsing_binary	-			boolean		dr4_only	n/a	
+column	vari_eclipsing_binary	delta_global_ranking_bp_min_g	vari_eclipsing_binary	-			float		dr4_only	n/a	
+column	vari_eclipsing_binary	delta_global_ranking_rp_min_g	vari_eclipsing_binary	-			float		dr4_only	n/a	
+column	vari_eclipsing_binary	g_skewness	vari_eclipsing_binary	-			float		dr4_only	n/a	
+column	vari_eclipsing_binary	g_signal_to_noise	vari_eclipsing_binary	-			float		dr4_only	n/a	
+column	vari_eclipsing_binary	g_median	vari_eclipsing_binary	-	mag		float		dr4_only	n/a	DR4 only. Median G of the input light curve. Useful next to gaia_source.phot_g_mean_mag.
+column	vari_eclipsing_binary	g_num_obs	vari_eclipsing_binary	-			short		dr4_only	n/a	DR4 only. Number of G observations in the input light curve.
+column	vari_eclipsing_binary	classification_score	vari_eclipsing_binary	-			float		dr4_only	n/a	DR4 only. Score of the classifier that chose the stars to process.
+table	gaiadr4.vari_planetary_transit	-	gaiadr3.vari_planetary_transit	-					same	n/a	DR3 has two copies, vari_planetary_transit and vari_planetary_transit_13june2022 (214 rows each).
+column	vari_planetary_transit	solution_id	vari_planetary_transit	solution_id			long	long	same	n/a	
+column	vari_planetary_transit	source_id	vari_planetary_transit	source_id			long	long	same	n/a	
+column	vari_planetary_transit	transit_reference_time	vari_planetary_transit	transit_reference_time	Barycentric JD in TCB - 2 455 197.5 (day)	d	double	double	same	zero_point	Days, BJD in TCB minus 2455197.5. A mid-transit time near the middle of the Gaia data. Transit n happens at transit_reference_time + n * transit_period.
+column	vari_planetary_transit	transit_period	vari_planetary_transit	transit_period	day	d	double	double	same	same	Days. The table has no error on the period, so predictions far from transit_reference_time cannot be given an uncertainty from this table.
+column	vari_planetary_transit	transit_depth	vari_planetary_transit	transit_depth	mmag	mmag	float	float	same	same	Milli-magnitudes.
+column	vari_planetary_transit	transit_duration	vari_planetary_transit	transit_duration	day	d	float	float	same	same	Days (not a phase fraction). Data model: a time t is in transit if abs(mod(t - T0 + P/2, P) - P/2) < w/2.
+column	vari_planetary_transit	num_in_transit	vari_planetary_transit	num_in_transit			byte	short	same	n/a	Number of Gaia observations inside transits. Integer type is narrower in DR4.
+table	gaiadr4.gaia_source	-	gaiadr3.gaia_source	-					same	n/a	DR4 gaia_source only holds sources with both high-quality astrometry and photometry (Gaia DR4 page, 14 Sep 2026). In DR3 every variable star is in gaia_source. In DR4 an eclipsing binary can be missing from it: use a LEFT JOIN and check all_source_astrometry and all_source_photometry.
+column	gaia_source	solution_id	gaia_source	solution_id			long	long	same	n/a	
+column	gaia_source	designation	gaia_source	designation			string	char	same	n/a	
+column	gaia_source	source_id	gaia_source	source_id			long	long	same	n/a	
+column	gaia_source	winning_source_id_astro	gaia_source	-			long		dr4_only	n/a	
+column	gaia_source	winning_source_id_phot	gaia_source	-			long		dr4_only	n/a	
+column	gaia_source	random_index	gaia_source	random_index			long	long	same	n/a	
+column	gaia_source	astrometry_origin	gaia_source	-			string		dr4_only	n/a	
+column	gaia_source	unreliable_astrometry	gaia_source	-			boolean		dr4_only	n/a	
+column	gaia_source	unreliable_g_photometry	gaia_source	-			boolean		dr4_only	n/a	
+column	gaia_source	ref_epoch	gaia_source	ref_epoch	Julian Years	yr	double	double	same	same	DR4 reference epoch J2017.5, DR3 J2016.0 (Gaia DR4 page). Positions and proper motions refer to it.
+column	gaia_source	ra	gaia_source	ra	deg	deg	double	double	same	same	
+column	gaia_source	ra_error	gaia_source	ra_error	mas	mas	float	float	same	same	
+column	gaia_source	dec	gaia_source	dec	deg	deg	double	double	same	same	
+column	gaia_source	dec_error	gaia_source	dec_error	mas	mas	float	float	same	same	
+column	gaia_source	parallax	gaia_source	parallax	mas	mas	double	double	same	same	
+column	gaia_source	parallax_error	gaia_source	parallax_error	mas	mas	float	float	same	same	
+column	gaia_source	parallax_over_error	gaia_source	parallax_over_error			float	float	same	n/a	
+column	gaia_source	pm	gaia_source	pm	mas yr-1	mas.yr**-1	float	float	same	same	
+column	gaia_source	pmra	gaia_source	pmra	mas yr-1	mas.yr**-1	double	double	same	same	
+column	gaia_source	pmra_error	gaia_source	pmra_error	mas yr-1	mas.yr**-1	float	float	same	same	
+column	gaia_source	pmdec	gaia_source	pmdec	mas yr-1	mas.yr**-1	double	double	same	same	
+column	gaia_source	pmdec_error	gaia_source	pmdec_error	mas yr-1	mas.yr**-1	float	float	same	same	
+column	gaia_source	pseudocolour	gaia_source	pseudocolour	µm-1	um**-1	float	float	same	same	
+column	gaia_source	pseudocolour_error	gaia_source	pseudocolour_error	µm-1	um**-1	float	float	same	same	
+column	gaia_source	astrometric_params	gaia_source	-			short		dr4_only	n/a	
+column	gaia_source	tentative_parallax_bias	gaia_source	-	mas		double		dr4_only	n/a	
+column	gaia_source	blended	gaia_source	-			byte		dr4_only	n/a	
+column	gaia_source	ra_dec_corr	gaia_source	ra_dec_corr			float	float	same	n/a	
+column	gaia_source	ra_parallax_corr	gaia_source	ra_parallax_corr			float	float	same	n/a	
+column	gaia_source	ra_pmra_corr	gaia_source	ra_pmra_corr			float	float	same	n/a	
+column	gaia_source	ra_pmdec_corr	gaia_source	ra_pmdec_corr			float	float	same	n/a	
+column	gaia_source	dec_parallax_corr	gaia_source	dec_parallax_corr			float	float	same	n/a	
+column	gaia_source	dec_pmra_corr	gaia_source	dec_pmra_corr			float	float	same	n/a	
+column	gaia_source	dec_pmdec_corr	gaia_source	dec_pmdec_corr			float	float	same	n/a	
+column	gaia_source	parallax_pmra_corr	gaia_source	parallax_pmra_corr			float	float	same	n/a	
+column	gaia_source	parallax_pmdec_corr	gaia_source	parallax_pmdec_corr			float	float	same	n/a	
+column	gaia_source	pmra_pmdec_corr	gaia_source	pmra_pmdec_corr			float	float	same	n/a	
+column	gaia_source	ra_pseudocolour_corr	gaia_source	ra_pseudocolour_corr			float	float	same	n/a	
+column	gaia_source	dec_pseudocolour_corr	gaia_source	dec_pseudocolour_corr			float	float	same	n/a	
+column	gaia_source	parallax_pseudocolour_corr	gaia_source	parallax_pseudocolour_corr			float	float	same	n/a	
+column	gaia_source	pmra_pseudocolour_corr	gaia_source	pmra_pseudocolour_corr			float	float	same	n/a	
+column	gaia_source	pmdec_pseudocolour_corr	gaia_source	pmdec_pseudocolour_corr			float	float	same	n/a	
+column	gaia_source	astrometric_n_obs_al	gaia_source	astrometric_n_obs_al			short	short	same	n/a	
+column	gaia_source	astrometric_n_obs_ac	gaia_source	astrometric_n_obs_ac			short	short	same	n/a	
+column	gaia_source	astrometric_n_good_obs_al	gaia_source	astrometric_n_good_obs_al			short	short	same	n/a	
+column	gaia_source	astrometric_gof_al	gaia_source	astrometric_gof_al			float	float	same	n/a	
+column	gaia_source	astrometric_chi2_al	gaia_source	astrometric_chi2_al			float	float	same	n/a	
+column	gaia_source	astrometric_excess_noise	gaia_source	astrometric_excess_noise	mas	mas	float	float	same	same	
+column	gaia_source	astrometric_primary_flag	gaia_source	astrometric_primary_flag			boolean	boolean	same	n/a	
+column	gaia_source	rv_used_in_astrometry	gaia_source	-	km s-1		float		dr4_only	n/a	
+column	gaia_source	nu_eff_used_in_astrometry	gaia_source	nu_eff_used_in_astrometry	µm-1	um**-1	float	float	same	same	
+column	gaia_source	astrometric_matched_transits	gaia_source	astrometric_matched_transits			short	short	same	n/a	
+column	gaia_source	visibility_periods_used	gaia_source	visibility_periods_used			short	short	same	n/a	
+column	gaia_source	astrometric_sigma5d_max	gaia_source	astrometric_sigma5d_max	mas	mas	float	float	same	same	
+column	gaia_source	ipd_gof_harmonic_amplitude	gaia_source	ipd_gof_harmonic_amplitude			float	float	same	n/a	
+column	gaia_source	ipd_gof_harmonic_phase	gaia_source	ipd_gof_harmonic_phase	deg	deg	float	float	same	same	
+column	gaia_source	ipd_frac_multi_peak	gaia_source	ipd_frac_multi_peak			byte	short	same	n/a	
+column	gaia_source	ipd_frac_odd_win	gaia_source	ipd_frac_odd_win			byte	short	same	n/a	
+column	gaia_source	ipd_frac_high_gof	gaia_source	-			byte		dr4_only	n/a	
+column	gaia_source	ruwe	gaia_source	ruwe			float	float	same	n/a	
+column	gaia_source	g_photometry_origin	gaia_source	-			string		dr4_only	n/a	DR4 only. Names the table that gave the G magnitude. vari_eclipsing_binary means the EB model. Select it to know which G you have.
+column	gaia_source	phot_g_n_obs	gaia_source	phot_g_n_obs			short	short	same	n/a	
+column	gaia_source	phot_g_mean_flux	gaia_source	phot_g_mean_flux	e- s-1	'electron'.s**-1	double	double	same	same	
+column	gaia_source	phot_g_mean_flux_error	gaia_source	phot_g_mean_flux_error	e- s-1	'electron'.s**-1	float	float	same	same	
+column	gaia_source	phot_g_mean_flux_over_error	gaia_source	phot_g_mean_flux_over_error			float	float	same	n/a	
+column	gaia_source	phot_g_mean_mag	gaia_source	phot_g_mean_mag	mag	mag	float	float	same	same	In DR4 the G value of an eclipsing binary can come from the eclipsing-binary model (see g_photometry_origin). Then phot_g_n_obs is 0. What the model value stands for (mean or out of eclipse) is not stated in the draft.
+column	gaia_source	colour_origin	gaia_source	-			string		dr4_only	n/a	DR4 only. Names the table that gave BP and RP.
+column	gaia_source	phot_bp_n_obs	gaia_source	phot_bp_n_obs			short	short	same	n/a	
+column	gaia_source	phot_bp_mean_flux	gaia_source	phot_bp_mean_flux	e- s-1	'electron'.s**-1	double	double	same	same	
+column	gaia_source	phot_bp_mean_flux_error	gaia_source	phot_bp_mean_flux_error	e- s-1	'electron'.s**-1	float	float	same	same	
+column	gaia_source	phot_bp_mean_flux_over_error	gaia_source	phot_bp_mean_flux_over_error			float	float	same	n/a	
+column	gaia_source	phot_bp_mean_mag	gaia_source	phot_bp_mean_mag	mag	mag	float	float	same	same	
+column	gaia_source	phot_rp_n_obs	gaia_source	phot_rp_n_obs			short	short	same	n/a	
+column	gaia_source	phot_rp_mean_flux	gaia_source	phot_rp_mean_flux	e- s-1	'electron'.s**-1	double	double	same	same	
+column	gaia_source	phot_rp_mean_flux_error	gaia_source	phot_rp_mean_flux_error	e- s-1	'electron'.s**-1	float	float	same	same	
+column	gaia_source	phot_rp_mean_flux_over_error	gaia_source	phot_rp_mean_flux_over_error			float	float	same	n/a	
+column	gaia_source	phot_rp_mean_mag	gaia_source	phot_rp_mean_mag	mag	mag	float	float	same	same	
+column	gaia_source	phot_proc_flag	gaia_source	-			byte		dr4_only	n/a	
+column	gaia_source	bp_rp	gaia_source	bp_rp	mag	mag	float	float	same	same	Same definition. In DR4 BP and RP can also come from variability models (Cepheids, RR Lyrae).
+column	gaia_source	radial_velocity_origin	gaia_source	-			string		dr4_only	n/a	
+column	gaia_source	radial_velocity	gaia_source	radial_velocity	km s-1	km.s**-1	float	float	same	same	
+column	gaia_source	radial_velocity_error	gaia_source	radial_velocity_error	km s-1	km.s**-1	float	float	same	same	
+column	gaia_source	rv_nb_transits	gaia_source	rv_nb_transits			short	short	same	n/a	
+column	gaia_source	rv_expected_sig_to_noise	gaia_source	rv_expected_sig_to_noise			float	float	same	n/a	
+column	gaia_source	rv_renormalised_gof	gaia_source	rv_renormalised_gof			float	float	same	n/a	
+column	gaia_source	rv_invalid_reason	gaia_source	-			long		dr4_only	n/a	
+column	gaia_source	rv_single_outlier_probability	gaia_source	-			float		dr4_only	n/a	
+column	gaia_source	has_systemic_rv	gaia_source	-			boolean		dr4_only	n/a	
+column	gaia_source	vbroad_origin	gaia_source	-			string		dr4_only	n/a	
+column	gaia_source	vbroad	gaia_source	vbroad	km s-1	km.s**-1	float	float	same	same	
+column	gaia_source	vbroad_error	gaia_source	vbroad_error	km s-1	km.s**-1	float	float	same	same	
+column	gaia_source	vbroad_nb_transits	gaia_source	vbroad_nb_transits			short	short	same	n/a	
+column	gaia_source	vbroad_invalid_reason	gaia_source	-			short		dr4_only	n/a	
+column	gaia_source	grvs_mag	gaia_source	grvs_mag	mag	mag	float	float	same	same	
+column	gaia_source	grvs_mag_error	gaia_source	grvs_mag_error	mag	mag	float	float	same	same	
+column	gaia_source	grvs_mag_nb_transits	gaia_source	grvs_mag_nb_transits			short	short	same	n/a	
+column	gaia_source	grvs_mag_invalid_reason	gaia_source	-			short		dr4_only	n/a	
+column	gaia_source	rvs_spec_sig_to_noise	gaia_source	rvs_spec_sig_to_noise			float	float	same	n/a	
+column	gaia_source	rv_assumed_sb2	gaia_source	-			boolean		dr4_only	n/a	
+column	gaia_source	fraction_double_lined	gaia_source	-			float		dr4_only	n/a	
+column	gaia_source	fraction_emission_lines	gaia_source	-			float		dr4_only	n/a	
+column	gaia_source	external_apparent_grvs	gaia_source	-	mag		float		dr4_only	n/a	
+column	gaia_source	external_apparent_grvs_origin	gaia_source	-			short		dr4_only	n/a	
+column	gaia_source	phot_variable_flag	gaia_source	phot_variable_flag			string	char	same	n/a	Values VARIABLE, POSSIBLE, NON_VARIABLE or empty in the DR4 draft.
+column	gaia_source	phot_variable_score	gaia_source	-			float		dr4_only	n/a	
+column	gaia_source	phot_variable_best_class	gaia_source	-			string		dr4_only	n/a	
+column	gaia_source	classprob_dsc_combmod_quasar	gaia_source	classprob_dsc_combmod_quasar			float	float	same	n/a	
+column	gaia_source	classprob_dsc_combmod_galaxy	gaia_source	classprob_dsc_combmod_galaxy			float	float	same	n/a	
+column	gaia_source	classprob_dsc_combmod_star	gaia_source	classprob_dsc_combmod_star			float	float	same	n/a	
+column	gaia_source	distance_gspphot	gaia_source	distance_gspphot	pc	pc	float	float	same	same	
+column	gaia_source	ap_origin	gaia_source	-			string		dr4_only	n/a	DR4 only. Which module gave teff, logg and mh.
+column	gaia_source	teff	gaia_source	teff_gspphot	K	K	float	float	renamed	same	Renamed and changed in meaning. DR4 teff is the value from the module named in ap_origin (GSP-Phot, GSP-Spec and others). DR3 teff_gspphot is GSP-Phot only. Not the same quantity.
+column	gaia_source	logg	gaia_source	-	log cgs		float		dr4_only	n/a	
+column	gaia_source	mh	gaia_source	-	dex		float		dr4_only	n/a	
+column	gaia_source	extinction_origin	gaia_source	-			string		dr4_only	n/a	
+column	gaia_source	ag	gaia_source	-	mag		float		dr4_only	n/a	
+column	gaia_source	ebpminrp	gaia_source	-	mag		float		dr4_only	n/a	
+column	gaia_source	l	gaia_source	l	deg	deg	double	double	same	same	
+column	gaia_source	b	gaia_source	b	deg	deg	double	double	same	same	
+column	gaia_source	ecl_lon	gaia_source	ecl_lon	deg	deg	double	double	same	same	
+column	gaia_source	ecl_lat	gaia_source	ecl_lat	deg	deg	double	double	same	same	
+column	gaia_source	healpix_id	gaia_source	-			string		dr4_only	n/a	
+column	gaia_source	healpix29	gaia_source	-			long		dr4_only	n/a	
+column	gaia_source	-	gaia_source	astrometric_n_bad_obs_al				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	astrometric_excess_noise_sig				float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	astrometric_params_solved				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	matched_transits				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	new_matched_transits				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	matched_transits_removed				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	scan_direction_strength_k1				float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	scan_direction_strength_k2				float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	scan_direction_strength_k3				float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	scan_direction_strength_k4				float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	scan_direction_mean_k1		deg		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	scan_direction_mean_k2		deg		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	scan_direction_mean_k3		deg		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	scan_direction_mean_k4		deg		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	duplicated_source				boolean	dr3_only	n/a	Not in DR4 gaia_source. The draft lists it in all_source_astrometry.
+column	gaia_source	-	gaia_source	phot_bp_rp_excess_factor				float	dr3_only	n/a	Not in DR4 gaia_source (the draft lists no such column there).
+column	gaia_source	-	gaia_source	phot_bp_n_contaminated_transits				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	phot_bp_n_blended_transits				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	phot_rp_n_contaminated_transits				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	phot_rp_n_blended_transits				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	phot_proc_mode				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	bp_g		mag		float	dr3_only	n/a	Not in DR4 gaia_source. Compute phot_bp_mean_mag - phot_g_mean_mag.
+column	gaia_source	-	gaia_source	g_rp		mag		float	dr3_only	n/a	Not in DR4 gaia_source. Compute phot_g_mean_mag - phot_rp_mean_mag.
+column	gaia_source	-	gaia_source	rv_method_used				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	rv_nb_deblended_transits				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	rv_visibility_periods_used				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	rv_chisq_pvalue				float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	rv_time_duration		d		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	rv_amplitude_robust		km.s**-1		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	rv_template_teff		K		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	rv_template_logg		log(cm.s**-2)		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	rv_template_fe_h		'dex'		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	rv_atm_param_origin				short	dr3_only	n/a	
+column	gaia_source	-	gaia_source	in_qso_candidates				boolean	dr3_only	n/a	
+column	gaia_source	-	gaia_source	in_galaxy_candidates				boolean	dr3_only	n/a	
+column	gaia_source	-	gaia_source	non_single_star				short	dr3_only	n/a	Not in DR4 gaia_source. The draft lists it in all_source_flags.
+column	gaia_source	-	gaia_source	has_xp_continuous				boolean	dr3_only	n/a	
+column	gaia_source	-	gaia_source	has_xp_sampled				boolean	dr3_only	n/a	
+column	gaia_source	-	gaia_source	has_rvs				boolean	dr3_only	n/a	
+column	gaia_source	-	gaia_source	has_epoch_photometry				boolean	dr3_only	n/a	Not in DR4 gaia_source. The draft lists has_epoch_photometry in all_source_flags.
+column	gaia_source	-	gaia_source	has_epoch_rv				boolean	dr3_only	n/a	
+column	gaia_source	-	gaia_source	has_mcmc_gspphot				boolean	dr3_only	n/a	
+column	gaia_source	-	gaia_source	has_mcmc_msc				boolean	dr3_only	n/a	
+column	gaia_source	-	gaia_source	in_andromeda_survey				boolean	dr3_only	n/a	
+column	gaia_source	-	gaia_source	teff_gspphot_lower		K		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	teff_gspphot_upper		K		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	logg_gspphot		log(cm.s**-2)		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	logg_gspphot_lower		log(cm.s**-2)		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	logg_gspphot_upper		log(cm.s**-2)		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	mh_gspphot		'dex'		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	mh_gspphot_lower		'dex'		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	mh_gspphot_upper		'dex'		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	distance_gspphot_lower		pc		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	distance_gspphot_upper		pc		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	azero_gspphot		mag		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	azero_gspphot_lower		mag		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	azero_gspphot_upper		mag		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	ag_gspphot		mag		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	ag_gspphot_lower		mag		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	ag_gspphot_upper		mag		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	ebpminrp_gspphot		mag		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	ebpminrp_gspphot_lower		mag		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	ebpminrp_gspphot_upper		mag		float	dr3_only	n/a	
+column	gaia_source	-	gaia_source	libname_gspphot				char	dr3_only	n/a	
+table	gaiadr4.dr3_neighbourhood	-	gaiadr3.dr2_neighbourhood	-					renamed	n/a	Stand-in for one step of the ID chain. DR4 dr3_neighbourhood links DR4 to DR3 IDs. DR3 dr2_neighbourhood links DR3 to DR2 IDs. The TESS Input Catalog uses DR2 IDs.
+column	dr3_neighbourhood	source_id	dr2_neighbourhood	dr3_source_id			long	long	renamed	n/a	DR4 ID. Stand-in column is the DR3 ID in dr2_neighbourhood.
+column	dr3_neighbourhood	dr3_source_id	dr2_neighbourhood	dr2_source_id			long	long	renamed	n/a	The older ID. Stand-in column is the DR2 ID, which the TESS Input Catalog uses.
+column	dr3_neighbourhood	angular_distance	dr2_neighbourhood	angular_distance	mas	mas	float	float	same	same	Milli-arcseconds in both.
+column	dr3_neighbourhood	magnitude_difference	dr2_neighbourhood	magnitude_difference	mag	mag	float	float	same	same	
+column	dr3_neighbourhood	proper_motion_propagation	dr2_neighbourhood	proper_motion_propagation			boolean	boolean	same	n/a	
+column	dr3_neighbourhood	probable_match	dr2_neighbourhood	-			boolean		dr4_only	n/a	DR4 only. True if both sources probably are the same object.

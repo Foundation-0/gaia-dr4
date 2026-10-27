@@ -1,0 +1,27 @@
+By number of IDs in the request (answers with data only):
+ n_ids    n sec_median  sec_min-max  rows_median     rows/s
+     1    8        2.0      1.7-2.2           23       11.8
+     3    4        3.0      2.5-4.5           86       26.4
+     5   15        4.9      3.9-9.2          132       24.0
+    10   10       14.3    11.5-24.6          420       26.4
+    20    2       34.9    27.0-42.8          858       24.6
+    50    2       67.4    59.4-75.3         1994       29.6
+
+Line through all requests with data: seconds = 1.25 + 0.0342 * rows  (41 requests, R squared 0.979)
+  so about 29.3 rows per second once a request is running
+Line against number of IDs:          seconds = 0.19 + 1.41 * ids  (R squared 0.932)
+Seconds per ID in requests of 10 or more: median 1.43, range 1.15 to 2.46
+Rows per ID in these answers: mean 37.3 (12505 rows, 335 IDs)
+
+Requests that came back empty (no epoch photometry): 12, median 0.65 s, range 0.54 to 0.90 s
+
+Whole runs (wall-clock seconds, including pauses and the second look for missing sources):
+run                structure           jobs  batch sources   ok  requests  seconds sources/min
+final_gaia         DATAMODEL_GAIA         2      5      25   18         9     23.1        64.9
+final_std          DATAMODEL_STANDARD     2      5      25   18         9     19.9        75.4
+run40_b10_j1       DATAMODEL_STANDARD     1     10      40   40         4     64.1        37.4
+run40_b10_j2       DATAMODEL_STANDARD     2     10      40   40         4     39.9        60.2
+run40_b20_j2       DATAMODEL_STANDARD     2     20      40   40         2     43.9        54.7
+run_gaia_j2        DATAMODEL_GAIA         2      5      25   18         5     19.3        77.7
+run_std_j1         DATAMODEL_STANDARD     1      5      25   18         5     28.4        52.8
+run_std_j2         DATAMODEL_STANDARD     2      5      25   18         5     18.9        79.4

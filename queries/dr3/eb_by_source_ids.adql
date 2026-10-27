@@ -1,0 +1,49 @@
+-- Query: eb_by_source_ids (DR3 stand-in)
+-- Serves: Questions A and B support. The same columns as eb_long_period for a list of source IDs, with no period
+--   cut. Replace @SOURCE_IDS@ with a comma-separated list of DR4 source IDs. DR4 IDs differ from DR3 IDs: map them
+--   through dr3_neighbourhood first.
+-- Made from dr4/eb_by_source_ids.adql by make_standin.py using column_map.tsv. Do not edit by hand.
+-- DR3 tables used: gaiadr3.gaia_source, gaiadr3.vari_eclipsing_binary.
+-- Last ran without error: 2026-10-27, 5 rows (results/run_log.tsv).
+-- This is a template: replace the @...@ words before running it.
+SELECT
+    eb.source_id,
+    1.0 / eb.frequency AS period_days,
+    eb.frequency,
+    eb.frequency_error,
+    eb.reference_time,
+    eb.model_type,
+    eb.global_ranking,
+    eb.reduced_chi2,
+    eb.geom_model_reference_level,
+    eb.derived_primary_ecl_phase,
+    eb.derived_primary_ecl_phase_error,
+    eb.derived_primary_ecl_duration,
+    eb.derived_primary_ecl_depth,
+    eb.derived_secondary_ecl_phase,
+    eb.derived_secondary_ecl_phase_error,
+    eb.derived_secondary_ecl_duration,
+    eb.derived_secondary_ecl_depth,
+    gs.ra,
+    gs.dec,
+    gs.ref_epoch,
+    gs.pmra,
+    gs.pmdec,
+    gs.parallax,
+    gs.parallax_error,
+    gs.ruwe,
+    gs.phot_g_mean_mag,
+    gs.phot_bp_mean_mag,
+    gs.phot_rp_mean_mag,
+    gs.bp_rp,
+    gs.phot_variable_flag,
+    gs.teff_gspphot,
+    (gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) AS v_mag_estimate,
+    (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp))) AS b_minus_v_estimate,
+    ((gs.phot_g_mean_mag - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp)))) AS b_mag_estimate,
+    ((eb.geom_model_reference_level - (-0.02704 + 0.01424*gs.bp_rp - 0.2156*gs.bp_rp*gs.bp_rp + 0.01426*gs.bp_rp*gs.bp_rp*gs.bp_rp)) + (0.85*((-0.01077 - 0.0682*gs.bp_rp - 0.2387*gs.bp_rp*gs.bp_rp + 0.02342*gs.bp_rp*gs.bp_rp*gs.bp_rp) - (-0.004288 - 0.8547*gs.bp_rp + 0.1244*gs.bp_rp*gs.bp_rp - 0.9085*gs.bp_rp*gs.bp_rp*gs.bp_rp + 0.4843*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp - 0.06814*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp*gs.bp_rp)))) AS b_mag_estimate_out_of_eclipse
+FROM gaiadr3.vari_eclipsing_binary AS eb
+LEFT OUTER JOIN gaiadr3.gaia_source AS gs
+    ON gs.source_id = eb.source_id
+WHERE eb.source_id IN (@SOURCE_IDS@)
+ORDER BY eb.source_id

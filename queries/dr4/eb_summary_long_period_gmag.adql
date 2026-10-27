@@ -1,0 +1,26 @@
+-- Query: eb_summary_long_period_gmag (DR4 names)
+-- Serves: Question C. Number of long-period eclipsing binaries per magnitude of G (lower edge of a 1 mag bin). The
+--   empty bin is stars with no G in gaia_source.
+-- Names: the draft DR4 data model of 26 Jun 2026. The schema name gaiadr4 is taken from that model's own example
+--   query.
+-- DR3 stand-in: dr3/eb_summary_long_period_gmag.adql, made from this file by make_standin.py. DR3 tables:
+--   gaiadr3.gaia_source, gaiadr3.vari_eclipsing_binary.
+-- Last ran without error on the DR3 stand-in: 2026-10-27 (15 rows; results/run_log.tsv).
+-- Last ran on DR4: never. The archive has no DR4 until 2 Dec 2026.
+-- DR4 columns this query relies on:
+--   gaiadr4.gaia_source: phot_g_mean_mag, source_id
+--   gaiadr4.vari_eclipsing_binary: frequency, source_id
+-- Lines tagged DR4ONLY have no DR3 equivalent and are dropped from the stand-in.
+-- Cannot be tested before release: The DR4 magnitude distribution.
+SELECT
+    t.g_bin,
+    COUNT(*) AS n_sources
+FROM (
+    SELECT FLOOR(gs.phot_g_mean_mag) AS g_bin
+    FROM gaiadr4.vari_eclipsing_binary AS eb
+    LEFT OUTER JOIN gaiadr4.gaia_source AS gs
+        ON gs.source_id = eb.source_id
+    WHERE eb.frequency < 0.01
+) AS t
+GROUP BY t.g_bin
+ORDER BY t.g_bin
