@@ -1,0 +1,6 @@
+-- Preparation only; last successful run: not yet run; returned rows: unknown.
+-- DR3 stand-in for target-list eclipsing-binary membership.
+-- Verify release-day DR4 table and column names separately.
+SELECT t.source_id, e.frequency, e.reference_time
+FROM tap_upload.targets AS t
+LEFT OUTER JOIN gaiadr3.vari_eclipsing_binary AS e ON t.source_id=e.source_id
