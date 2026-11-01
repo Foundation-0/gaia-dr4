@@ -105,6 +105,21 @@ and Foundation0's [JOIN.md](https://github.com/Foundation-0/f0/blob/main/JOIN.md
 | `notes/reports/` | the complete scouting reports, kept as written, and the fact-check |
 | `.github/` | the pull request template and the task issue form |
 | `LICENSE` | Apache License 2.0 |
+| `datalink/` | HTTP DataLink fetcher for epoch photometry (batching, resume, job limits); see [`datalink/README.md`](datalink/README.md) |
+| `tools/fetch_epoch.py` | Serial wrapper for issue #2: one source per request, three attempts, JSONL log; see [`notes/datalink-acceptance.md`](notes/datalink-acceptance.md) |
+
+### DataLink epoch photometry (DR3 now, DR4 on release)
+
+Epoch photometry is served only through DataLink, not TAP. To fetch a few DR3 sources serially:
+
+```bash
+python3 tests/test_task2.py
+GAIA_LIVE_TESTS=1 python3 -m unittest -v tests.test_task2_live
+python3 tools/fetch_epoch.py my_source_ids.txt /path/to/cache fetch.jsonl
+```
+
+CSV files land under `/path/to/cache/Gaia_DR3/DATAMODEL_STANDARD/<source_id>.csv`. The wrapper never opens more than
+one archive request at a time. Larger lists should use `datalink/gaia_datalink.py` with `--jobs` at most 5.
 
 ## Licence
 
