@@ -1,0 +1,27 @@
+{
+    "creators": [
+        {
+            "name": "Arifuddin, Ahraz"
+        }
+    ],
+    "title": "gaia-dr4",
+    "description": "<p>This repository prepares to check earlier claims once Gaia's fourth data release (DR4) is out, on three questions: planets validated by machine learning alone, blends among the 665 TESS candidates of eumemic/exoplanets (as of 14 Oct 2026), and old eclipses of long-period DR4 binaries on the Harvard plates.</p><p>Status: preparing. No results yet.</p><p>The Gaia ESA Archive is scheduled to go down on Wednesday 25 November 2026, 12:00 CET, until DR4 is released on Wednesday 2 December 2026, about 12:00 CET.</p><p>Directed by Ahraz Arifuddin</p><p>Researched and verified by different model families across Gemini, Claude, Grok, OpenAI, and Muse</p>",
+    "upload_type": "software",
+    "license": "Apache-2.0",
+    "keywords": [
+        "astronomy",
+        "eclipsing-binaries",
+        "exoplanets",
+        "foundation0",
+        "gaia",
+        "tess"
+    ],
+    "related_identifiers": [
+        {
+            "identifier": "https://github.com/Foundation-0/gaia-dr4",
+            "relation": "isSupplementTo",
+            "scheme": "url",
+            "resource_type": "software"
+        }
+    ]
+}
