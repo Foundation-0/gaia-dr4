@@ -1,0 +1,7 @@
+-- Preparation only; last successful run: not yet run; returned rows: unknown.
+-- DR3 periods are inverse frequency (days), not a period column.
+-- A G-magnitude cut is deliberately not substituted for B < 13.5.
+SELECT e.source_id, e.frequency, g.phot_g_mean_mag, g.bp_rp
+FROM gaiadr3.vari_eclipsing_binary AS e
+JOIN gaiadr3.gaia_source AS g ON e.source_id=g.source_id
+WHERE e.frequency > 0 AND e.frequency < 0.01
