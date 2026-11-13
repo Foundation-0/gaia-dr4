@@ -1,0 +1,7 @@
+-- Preparation only. Last successful archive run: not yet run.
+-- Upload a deduplicated table targets with dr2_source_id as an integer column.
+-- Source schema: https://gaia.aip.de/metadata/gaiadr3/dr2_neighbourhood/
+SELECT t.dr2_source_id, n.dr3_source_id, n.angular_distance
+FROM tap_upload.targets AS t
+LEFT OUTER JOIN gaiadr3.dr2_neighbourhood AS n
+ON t.dr2_source_id = n.dr2_source_id
